@@ -1,0 +1,64 @@
+{
+  "name": "rentalprocessmanagement",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/material": "^5.14.1",
+    "@mui/styles": "^5.14.1",
+    "@mui/x-data-grid": "^6.18.7",
+    "@mui/x-data-grid-generator": "^6.18.7",
+    "@mui/x-date-pickers": "^5.0.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.8.2",
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.1",
+    "cookies": "^0.8.0",
+    "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.10",
+    "env-cmd": "^10.1.0",
+    "file-saver": "^2.0.5",
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-csv": "^2.2.2",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.12.0",
+    "react-router-dom": "^6.14.2",
+    "react-scripts": "5.0.1",
+    "react-toast-notifications": "^2.5.1",
+    "recharts": "^2.10.3",
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "start": "set PORT=3001 && env-cmd -f .env.local react-scripts start",
+    "build": "env-cmd -f .env.local react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
