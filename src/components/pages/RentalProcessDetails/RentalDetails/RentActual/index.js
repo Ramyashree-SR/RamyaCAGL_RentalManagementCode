@@ -494,6 +494,7 @@ const RentActual = (props) => {
                       >
                         <InputBoxComponent
                           label="Amount"
+                          type="number"
                           placeholder="Enter Amount"
                           sx={{ width: 200 }}
                           name="sdAmount"
@@ -501,6 +502,7 @@ const RentActual = (props) => {
                           onChange={(e) => {
                             updatedChange(e);
                           }}
+                          // required
                         />
                         <Button
                           className="d-flex"

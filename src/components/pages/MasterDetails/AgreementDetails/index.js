@@ -15,6 +15,7 @@ import SwitchComponent from "../../../atoms/SwitchComponent";
 import { uploadFileApi } from "../../../services/UploadDoucmentApi";
 import { deepOrange, green } from "@mui/material/colors";
 import { IFSCCodeDetails } from "../../../services/IfscCodeApi";
+import { getTenureDetails } from "../../../services/AddContractApi";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -511,9 +512,38 @@ const AgreementDetails = ({
       ...allNewContractDetails,
       agreementEndDate: val,
     });
+    getTenureBasedOnDate(new Date(val));
     // Call the function to update tenure when either date changes
     handleDateChange(allNewContractDetails?.agreementStartDate, val);
     handleRenewalDateChange(allNewContractDetails.agreementStartDate, val);
+  };
+
+  useEffect(() => {
+    getTenureBasedOnDate();
+  }, []);
+
+  // const getTenureBasedOnDate = async (startDate, endDate) => {
+  //   const { data } = await getTenureDetails(startDate, endDate);
+  //   if (data) {
+  //     let getData = data;
+  //     setAllNewContractDetails(getData);
+  //   } else {
+  //     setAllNewContractDetails([]);
+  //   }
+  // };
+
+  const getTenureBasedOnDate = async () => {
+    let payload = {
+      startDate: new Date(allNewContractDetails?.agreementStartDate),
+      endDate: new Date(allNewContractDetails?.agreementEndDate),
+    };
+    const { data } = await getTenureDetails(payload);
+    if (data) {
+      let getData = data;
+      setAllNewContractDetails(getData);
+    } else {
+      setAllNewContractDetails([]);
+    }
   };
 
   const handleRenewalDateChange = (startDate, endDate) => {
@@ -677,6 +707,7 @@ const AgreementDetails = ({
                     ...allNewContractDetails,
                     agreementStartDate: val,
                   });
+                  getTenureBasedOnDate(new Date(val));
                   // Call the function to update tenure when either date changes
                   handleDateChange(
                     new Date(val),
@@ -1142,7 +1173,9 @@ const AgreementDetails = ({
                                       ?.lessorAccountNumber &&
                                     allNewContractDetails?.recipiants?.[index]
                                       ?.lessorAccountNumber
-                                  : reEnteredData?.[index]  && reEnteredData?.[index]|| ""
+                                  : (reEnteredData?.[index] &&
+                                      reEnteredData?.[index]) ||
+                                    ""
                               }
                               onChange={(e) =>
                                 handleReEnteredDataChange(e, index)

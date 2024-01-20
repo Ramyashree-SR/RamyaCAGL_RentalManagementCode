@@ -257,7 +257,7 @@ const PaymentReportDetails = (props) => {
             </Grid>
           </Grid>
 
-          {/* {selectedMonth && ( */}
+          {selectedMonth && (
             <PaymentReportTable
               data={[getPaymentReport]}
               columns={paymentColumn}
@@ -268,7 +268,7 @@ const PaymentReportDetails = (props) => {
                 mt: 4,
               }}
             />
-          {/* )} */}
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.close} variant="contained">

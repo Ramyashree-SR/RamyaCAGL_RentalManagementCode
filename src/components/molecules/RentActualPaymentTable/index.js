@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -71,12 +71,26 @@ const RentActualPaymentTable = ({
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+   // Load edited data from localStorage on component mount
+   useEffect(() => {
+    const storedEditedData = localStorage.getItem("editedData");
+    if (storedEditedData) {
+      setEditedData(JSON.parse(storedEditedData));
+    }
+  }, []);
+
+  // Save edited data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("editedData", JSON.stringify(editedData));
+  }, [editedData]);
+
 
   const handleEdit = (id, field, value) => {
     const updatedData = data?.map((item) =>
       item.info?.uniqueID === id ? { ...item, [field]: value } : item
     );
     setTableData(updatedData);
+
     // Update editedData state with edited values
     setEditedData((prevEditedData) => ({
       ...prevEditedData,
@@ -149,7 +163,7 @@ const RentActualPaymentTable = ({
                         )
                       }
                     >
-                      {row?.tds}
+                      {editedData?.[row?.info?.uniqueID]?.tds || row?.tds}
                     </StyledTableCell>
                     <StyledTableCell>{row?.net}</StyledTableCell>
                     <StyledTableCell>{row?.gstamt}</StyledTableCell>
@@ -158,12 +172,12 @@ const RentActualPaymentTable = ({
                       onBlur={(e) =>
                         handleEdit(
                           row?.info?.uniqueID,
-                          "actualAmount",
+                          "actualamount",
                           e.target.innerText
                         )
                       }
                     >
-                      {row?.actualAmount}
+                     {editedData?.[row?.info?.uniqueID]?.actualAmount || row?.actualAmount}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
@@ -236,8 +250,8 @@ const RentActualPaymentTable = ({
                       <StyledTableCell>{row?.net}</StyledTableCell>
                       <StyledTableCell>{row?.gstamt}</StyledTableCell>
                       <StyledTableCell>
-                        {editedData?.[row?.info?.uniqueID]?.actualAmount ||
-                          row?.actualAmount}
+                        {editedData?.[row?.info?.uniqueID]?.actualamount ||
+                          row?.actualamount}
                       </StyledTableCell>
                     </TableRow>
                   ))}

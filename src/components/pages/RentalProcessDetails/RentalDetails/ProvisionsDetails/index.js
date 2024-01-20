@@ -43,10 +43,6 @@ const ProvisionsDetails = (props) => {
   };
   const action = (
     <React.Fragment>
-      {/* <Button color="warning" size="small" onClick={handleClose}>
-        UNDO
-      </Button> */}
-
       <IconButton
         size="small"
         aria-label="close"
@@ -57,12 +53,13 @@ const ProvisionsDetails = (props) => {
       </IconButton>
     </React.Fragment>
   );
-
+  const [selectedYear, setSelectedYear] = useState(null);
   const handleChange = (name, newValue) => {
     setAddProvisions({
       ...addProvisions,
       [name]: newValue,
     });
+    setSelectedYear(newValue);
   };
 
   const months = [
@@ -80,6 +77,7 @@ const ProvisionsDetails = (props) => {
     { id: 12, label: "December" },
   ];
   const [selectedMonth, setSelectedMonth] = useState(null);
+
   const handleMonthChange = (name, newValue) => {
     setAddProvisions({
       ...addProvisions,
@@ -106,7 +104,6 @@ const ProvisionsDetails = (props) => {
   ];
 
   const handleTypeChange = (value) => {
-    // console.log(value, "value");
     let val = value?.label;
     setTypeProvisionsData(val);
   };
@@ -335,15 +332,21 @@ const ProvisionsDetails = (props) => {
                 anchorOrigin={{ vertical, horizontal }}
                 autoHideDuration={1000}
                 onClose={handleClose}
-                message={
-                  typeProvisionsData === "Make"
-                    ? "Provision Made Successfully"
-                    : "Provision Reversed Successfully"
-                }
                 action={action}
                 key={vertical + horizontal}
                 variant="success"
-              />
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="success"
+                  variant="filled"
+                  sx={{ width: "30%" }}
+                >
+                  {typeProvisionsData === "Make"
+                    ? "Provision Made Successfully"
+                    : "Provision Reversed Successfully"}
+                </Alert>
+              </Snackbar>
             </Row>
           </Container>
         </Modal.Body>

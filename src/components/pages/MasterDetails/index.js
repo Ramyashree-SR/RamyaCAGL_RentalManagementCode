@@ -2093,6 +2093,7 @@ const MasterDetails = (props) => {
             value={
               props.type === "edit"
                 ? allNewContractDetails?.contractStatus?.label &&
+                
                   allNewContractDetails?.contractStatus?.label
                 : allNewContractDetails?.contractStatus?.label || null
             }

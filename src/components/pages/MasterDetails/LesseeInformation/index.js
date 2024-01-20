@@ -321,6 +321,8 @@ const LesseeInformation = ({
                         <Typography>No Options Available</Typography>
                       )
                     }
+                    disableCloseOnSelect={false}
+                    disableClearable={false}
                   />
                 )}
               </Grid>

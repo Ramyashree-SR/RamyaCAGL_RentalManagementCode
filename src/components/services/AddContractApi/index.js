@@ -16,4 +16,17 @@ const AddRentContractDetails = (payload) => {
     });
 };
 
-export { AddRentContractDetails };
+const getTenureDetails = (payload) => {
+  return serviceUtil
+    .post(`getenure`,payload)
+    .then((res) => {
+      // console.log(res, "BranchDatares");
+      const data = res.data;
+      return { data };
+    })
+    .catch((err) => {
+      const errRes = err;
+      return { errRes };
+    });
+};
+export { AddRentContractDetails,getTenureDetails };

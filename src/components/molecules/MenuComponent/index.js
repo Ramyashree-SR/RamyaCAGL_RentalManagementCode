@@ -13,7 +13,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import EditIcon from "@mui/icons-material/Edit";
 import { styled } from "@mui/styles";
-import { Alert, Button, Icon, TextField } from "@mui/material";
+import { Alert, Button, Icon, Snackbar, TextField } from "@mui/material";
 import { blue, deepOrange, green, pink, red } from "@mui/material/colors";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import PanToolIcon from "@mui/icons-material/PanTool";
@@ -34,6 +34,7 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import { getRentPaymentReportDetails } from "../../services/PaymentReportApi";
 import ProvisionsDetails from "../../pages/RentalProcessDetails/RentalDetails/ProvisionsDetails";
 import { useToasts } from "react-toast-notifications";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ColorIcon = styled(Icon)(({ theme }) => ({
   //   color: theme.palette?.getContrastText(pink[900]),
@@ -90,6 +91,32 @@ export default function MenuComponent({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [state, setState] = useState({
+    open: false,
+    vertical: "bottom",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, opened } = state;
+
+  const handleClicked = (newState) => {
+    setState({ ...newState, opened: true });
+  };
+
+  const handleClosed = () => {
+    setState({ ...state, opened: false });
+  };
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClosed}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   useEffect(() => {
     getAllRentDueDetailsByUniqueID();
@@ -120,7 +147,7 @@ export default function MenuComponent({
       typeProvisionsData,
       payload
     );
-    if (data?.error) {
+    if (data) {
       setAddProvisions({
         provisionID: "",
         provisiontype: "",
@@ -132,26 +159,43 @@ export default function MenuComponent({
         remark: "",
         dateTime: "",
       });
-
       if (typeProvisionsData === "Make") {
-        addToast("Provision Made Successfully", {
-          appearance: "success",
-        });
-      } else {
-        addToast("Provision Reversed Successfully", {
+        addToast("Provision Successfully Made......", { appearance: "success" });
+      } else if (typeProvisionsData === "Reverse") {
+        addToast("Provision Successfully Reversed.......", {
           appearance: "success",
         });
       }
     } else if (!data?.error) {
       if (typeProvisionsData === "Make") {
-        addToast("Provision Already Made...", { appearance: "error" });
+        // addToast(errRes?.msg, { appearance: "error" });
+        addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, { appearance: "error",autoClose: 6000 });
+        // const formattedError = JSON.stringify(errRes, null, 2);
+        // addToast(formattedError, { appearance: "error" });
+        // alert( JSON.stringify(errRes, null, 2))
       } else if (typeProvisionsData === "Reverse") {
-        addToast("Provision Already Reversed...", {
+        addToast(errRes?.msg, {
           appearance: "error",
         });
+        addToast(JSON.stringify(errRes, null, 2), { appearance: "error" });
       }
     }
   };
+
+  // <Snackbar
+  //         open={open}
+  //         anchorOrigin={{ vertical, horizontal }}
+  //         autoHideDuration={1000}
+  //         onClose={handleClosed}
+  //         message={
+  //           typeProvisionsData === "Make"
+  //             ? "Provision Already Exist...."
+  //             : "Provision Already Exist...."
+  //         }
+  //         action={action}
+  //         key={vertical + horizontal}
+  //         variant="error"
+  //       />;
 
   return (
     <React.Fragment>

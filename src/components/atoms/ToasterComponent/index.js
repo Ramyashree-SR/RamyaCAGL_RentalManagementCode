@@ -4,7 +4,7 @@ import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 400,
+    width: 500,
     height: 300,
     zIndex: 2,
   },
@@ -14,7 +14,7 @@ const ToasterComponent = ({ children, appearance }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Alert severity={appearance} variant="filled">
+      <Alert severity={appearance} variant="filled" >
         <strong>{children}</strong>
       </Alert>
     </div>
