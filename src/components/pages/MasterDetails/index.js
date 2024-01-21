@@ -1378,6 +1378,7 @@ const MasterDetails = (props) => {
       payload
     );
     if (data) {
+      setBranchDetails(data)
       setIFSCCodes(Array(recipientCount).fill(""));
       setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
       props.getContractDetails();

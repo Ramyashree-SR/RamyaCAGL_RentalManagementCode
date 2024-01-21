@@ -1039,7 +1039,6 @@ const AgreementDetails = ({
                             errorText={
                               allNewContractDetailsErr?.lessorRentAmount
                             }
-                            // readOnly={false}
                           />
                         </Grid>
                         <Grid item className="d-flex m-2" md={12}>

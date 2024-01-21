@@ -270,7 +270,7 @@ const RentActualDetails = (props) => {
               mr: 2,
             }}
           >
-            {selectedRows ? (
+            {selectedMonth ? (
               <Button
                 variant="contained"
                 onClick={() => {

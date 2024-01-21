@@ -341,7 +341,8 @@ const LesseeInformation = ({
                     //   : allNewContractDetails?.branchName
 
                     type === "edit"
-                      ? allNewContractDetails?.lesseeBranchName
+                      ? allNewContractDetails?.lesseeBranchName ||
+                        allNewContractDetails?.branchName
                       : allNewContractDetails?.lesseeBranchName ||
                         allNewContractDetails?.branchName ||
                         ""
@@ -363,7 +364,8 @@ const LesseeInformation = ({
                     //   : allNewContractDetails?.areaName || ""
 
                     type === "edit"
-                      ? allNewContractDetails?.lesseeAreaName
+                      ? allNewContractDetails?.lesseeAreaName ||
+                        allNewContractDetails?.areaName
                       : allNewContractDetails?.lesseeAreaName ||
                         allNewContractDetails?.areaName ||
                         ""
@@ -384,7 +386,8 @@ const LesseeInformation = ({
                     //     allNewContractDetails?.region
                     //   : allNewContractDetails?.region || ""
                     type === "edit"
-                      ? allNewContractDetails?.lesseeDivision
+                      ? allNewContractDetails?.lesseeDivision ||
+                        allNewContractDetails?.region
                       : allNewContractDetails?.lesseeDivision ||
                         allNewContractDetails?.region ||
                         ""
@@ -408,7 +411,8 @@ const LesseeInformation = ({
                     //   : allNewContractDetails?.zone || ""
 
                     type === "edit"
-                      ? allNewContractDetails?.lesseeZone
+                      ? allNewContractDetails?.lesseeZone ||
+                        allNewContractDetails?.zone
                       : allNewContractDetails?.lesseeZone ||
                         allNewContractDetails?.zone ||
                         ""
@@ -429,7 +433,8 @@ const LesseeInformation = ({
                     //     allNewContractDetails?.state
                     //   : allNewContractDetails?.state || ""
                     type === "edit"
-                      ? allNewContractDetails?.lesseeState
+                      ? allNewContractDetails?.lesseeState ||
+                        allNewContractDetails?.state
                       : allNewContractDetails?.lesseeState ||
                         allNewContractDetails?.state ||
                         ""
