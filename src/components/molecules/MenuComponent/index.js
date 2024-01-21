@@ -91,32 +91,7 @@ export default function MenuComponent({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [state, setState] = useState({
-    open: false,
-    vertical: "bottom",
-    horizontal: "center",
-  });
-  const { vertical, horizontal, opened } = state;
 
-  const handleClicked = (newState) => {
-    setState({ ...newState, opened: true });
-  };
-
-  const handleClosed = () => {
-    setState({ ...state, opened: false });
-  };
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleClosed}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   useEffect(() => {
     getAllRentDueDetailsByUniqueID();
@@ -181,21 +156,6 @@ export default function MenuComponent({
       }
     }
   };
-
-  // <Snackbar
-  //         open={open}
-  //         anchorOrigin={{ vertical, horizontal }}
-  //         autoHideDuration={1000}
-  //         onClose={handleClosed}
-  //         message={
-  //           typeProvisionsData === "Make"
-  //             ? "Provision Already Exist...."
-  //             : "Provision Already Exist...."
-  //         }
-  //         action={action}
-  //         key={vertical + horizontal}
-  //         variant="error"
-  //       />;
 
   return (
     <React.Fragment>

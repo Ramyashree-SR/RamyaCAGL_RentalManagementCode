@@ -28,43 +28,43 @@ const ViewDetailsModal = (props) => {
               <Grid className="d-flex m-2"> */}
         {/* {Array.from({ length: recipientCount }, (_, index) =>( */}
 
-        {props?.selectedItem?.recipiants?.map((recipient, index) => (
-          <Grid className="d-flex flex-column m-2" key={index}>
-            <InputBoxComponent
-              label="Bank Name"
-              placeholder=" Bank Name"
-              sx={{ width: 400 }}
-              value={recipient?.lessorBankName}
-              readonly={true}
-            />
+        {/* {props?.selectedItem?.recipiants?.map((recipient, index) => (key={index} */}
+        <Grid className="d-flex flex-column m-2" >   
+          <InputBoxComponent
+            label="Bank Name"
+            placeholder=" Bank Name"
+            sx={{ width: 400 }}
+            value={props?.selectedItem?.lessorBankName}
+            readonly={true}
+          />
 
-            <InputBoxComponent
-              label="Branch Name"
-              placeholder=" Branch Name"
-              sx={{ width: 400 }}
-              value={recipient?.lessorBranchName}
-              readonly
-              // onChange={(e) => updatChange(e)}
-            />
+          <InputBoxComponent
+            label="Branch Name"
+            placeholder=" Branch Name"
+            sx={{ width: 400 }}
+            value={props?.selectedItem?.lessorBranchName}
+            readonly
+            // onChange={(e) => updatChange(e)}
+          />
 
-            <InputBoxComponent
-              label="Account Number"
-              placeholder=" Account Number"
-              sx={{ width: 400 }}
-              value={recipient?.lessorAccountNumber}
-              readonly
-              // onChange={(e) => updatChange(e)}
-            />
-            <InputBoxComponent
-              label="IFSC Code"
-              placeholder=" IFSC Code"
-              sx={{ width: 400 }}
-              value={recipient?.lessorIfscNumber}
-              readonly={true}
-              // onChange={(e) => updatChange(e)}
-            />
-          </Grid>
-        ))}
+          <InputBoxComponent
+            label="Account Number"
+            placeholder=" Account Number"
+            sx={{ width: 400 }}
+            value={props?.selectedItem?.lessorAccountNumber}
+            readonly
+            // onChange={(e) => updatChange(e)}
+          />
+          <InputBoxComponent
+            label="IFSC Code"
+            placeholder=" IFSC Code"
+            sx={{ width: 400 }}
+            value={props?.selectedItem?.lessorIfscNumber}
+            readonly={true}
+            // onChange={(e) => updatChange(e)}
+          />
+        </Grid>
+        {/* ))} */}
         {/* ))} */}
         {/* </Grid>
             </Col>

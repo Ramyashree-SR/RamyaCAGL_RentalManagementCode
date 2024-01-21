@@ -244,7 +244,7 @@ const LesseeInformation = ({
                 name="lesseeBranchType"
                 value={
                   type === "edit"
-                    ? allNewContractDetails?.lesseeBranchType
+                    ? allNewContractDetails?.lesseeBranchType || null
                     : allNewContractDetails?.lesseeBranchType || null
                 }
                 onChange={(val) => handleBranchType("lesseeBranchType", val)}
@@ -482,8 +482,8 @@ const LesseeInformation = ({
                   name="lesseeEntityDetails"
                   value={
                     type === "edit"
-                      ? allNewContractDetails?.lesseeEntityDetails
-                      : allNewContractDetails?.lesseeEntityDetails || ""
+                      ? allNewContractDetails?.lesseeEntityDetails || null
+                      : allNewContractDetails?.lesseeEntityDetails || null
                   }
                   // onSelect={handleEntityDetails}
                   onChange={(val) =>
@@ -498,8 +498,8 @@ const LesseeInformation = ({
                   // onSelect={handleLocationChange}
                   value={
                     type === "edit"
-                      ? allNewContractDetails?.premesisLocation
-                      : allNewContractDetails?.premesisLocation || ""
+                      ? allNewContractDetails?.premesisLocation || null
+                      : allNewContractDetails?.premesisLocation || null
                   }
                   onChange={(val) =>
                     handleLocationChange("premesisLocation", val)
@@ -512,8 +512,8 @@ const LesseeInformation = ({
                   name="premesisBuildingType"
                   value={
                     type === "edit"
-                      ? allNewContractDetails?.premesisBuildingType
-                      : allNewContractDetails?.premesisBuildingType || ""
+                      ? allNewContractDetails?.premesisBuildingType || null
+                      : allNewContractDetails?.premesisBuildingType || null
                   }
                   // onSelect={handleBulidingType}
                   onChange={(val) =>

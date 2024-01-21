@@ -13,9 +13,7 @@ import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import { deepOrange, green, pink, purple, red } from "@mui/material/colors";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import ExcelExport from "../../../../../ExcelExport";
 import PaymentTableComponent from "../../../../molecules/PaymentTableComponent";
-
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import {
   AddRentActualDetails,
@@ -27,7 +25,6 @@ import { useToasts } from "react-toast-notifications";
 import RentActualDetails from "../RentActualDetails";
 import CloseIcon from "@mui/icons-material/Close";
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
-import { paymentColumn } from "../../../../../constants/PaymentReport";
 
 const RentActual = (props) => {
   const { addToast } = useToasts();
@@ -154,7 +151,7 @@ const RentActual = (props) => {
       }
     }
   };
-  console.log(getPaymentReport, "getPaymentReport");
+  // console.log(getPaymentReport, "getPaymentReport");
 
   const getAllRentActualDetailsByUniqueID = async () => {
     const { data } = await getAllRentContractDetailsByContractID(RentActualIDs);
@@ -176,10 +173,13 @@ const RentActual = (props) => {
       remark: "Amount Settled",
     };
     const { data, errRes } = await addSDSettlementDetails(payload);
-    console.log(data, "data");
+    // console.log(data, "data");
     if (data) {
       setSettlementAmt(data);
-      props.close();
+      addToast("SD Amount Settled", { appearance: "success" });
+      // props.close();
+    } else if (!data?.error) {
+      addToast(errRes?.msg, { appearance: "error" });
     }
   };
 
@@ -502,46 +502,51 @@ const RentActual = (props) => {
                           onChange={(e) => {
                             updatedChange(e);
                           }}
-                          // required
+                          // errorText={settlementAmt.sdAmount}
+                          // required={true}
                         />
-                        <Button
-                          className="d-flex"
-                          variant="contained"
-                          size="small"
-                          onClick={() => {
-                            addSDSettlement();
-                            handleClick({
-                              vertical: "bottom",
-                              horizontal: "center",
-                            });
-                          }}
-                          sx={{
-                            width: 150,
-                            fontSize: 10,
-                            height: 30,
-                            mt: 2,
-                            backgroundColor: green[900],
-                          }}
-                        >
-                          Made Settlement
-                        </Button>
+
+                        {settlementAmt.sdAmount ? (
+                          <Button
+                            className="d-flex"
+                            variant="contained"
+                            size="small"
+                            onClick={() => {
+                              addSDSettlement();
+                              handleClick({
+                                vertical: "bottom",
+                                horizontal: "center",
+                              });
+                            }}
+                            sx={{
+                              width: 150,
+                              fontSize: 10,
+                              height: 30,
+                              mt: 2,
+                              backgroundColor: green[900],
+                            }}
+                          >
+                            Make Settlement
+                          </Button>
+                        ) : null}
 
                         <Snackbar
                           open={open}
                           anchorOrigin={{ vertical, horizontal }}
-                          autoHideDuration={6000}
+                          autoHideDuration={1000}
                           onClose={handleClose}
-                          // message="Note: Please Change the Rent End Date for Tenure Close"
                           action={action}
                           key={vertical + horizontal}
+                          variant="success"
                         >
                           <Alert
                             onClose={handleClose}
-                            severity="warning"
-                            sx={{ width: "100%" }}
+                            severity="success"
+                            variant="filled"
+                            sx={{ width: "30%" }}
                           >
-                            Note: Please Change the Rent End Date for Contract
-                            Close!
+                            Note :CHange the Rent End Date to close the
+                            Agreement!
                           </Alert>
                         </Snackbar>
                       </Grid>

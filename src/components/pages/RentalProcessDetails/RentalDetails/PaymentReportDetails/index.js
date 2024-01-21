@@ -99,31 +99,29 @@ const PaymentReportDetails = (props) => {
     }
   };
 
-  const getPaymentReportData = Object.values([getPaymentReport])?.map(
-    (item) => ({
-      ID: item.info?.uniqueID,
-      MonthYear: item.monthYear,
-      LessorName: item.info?.lessorName,
-      BranchID: item.info?.branchID,
-      BranchName: item.info?.lesseeBranchName,
-      AreaName: item.info?.lesseeAreaName,
-      Division: item.lesseeDivision,
-      Zone: item.info?.lesseeZone,
-      State: item.info?.lesseeState,
-      BankName: item.info?.lessorBankName,
-      IFSCNumber: item.info?.lessorIfscNumber,
-      AccountNumber: item.info?.lessorAccountNumber,
-      RentStartDate: item.info?.rentStartDate,
-      RentEndDate: item.info?.rentEndDate,
-      MonthlyRent: item.info?.monthlyRent,
-      Due: item.due,
-      Provision: item.provision,
-      Gross: item.gross,
-      Tds: item.tds,
-      net: item.net,
-      gst: item.gst,
-    })
-  );
+  const getPaymentReportData = Object.values(getPaymentReport)?.map((item) => ({
+    ID: item?.info?.uniqueID,
+    MonthYear: item?.monthYear,
+    LessorName: item?.info?.lessorName,
+    BranchID: item?.info?.branchID,
+    BranchName: item?.info?.lesseeBranchName,
+    AreaName: item?.info?.lesseeAreaName,
+    Division: item?.lesseeDivision,
+    Zone: item?.info?.lesseeZone,
+    State: item?.info?.lesseeState,
+    BankName: item?.info?.lessorBankName,
+    IFSCNumber: item?.info?.lessorIfscNumber,
+    AccountNumber: item?.info?.lessorAccountNumber,
+    RentStartDate: item?.info?.rentStartDate,
+    RentEndDate: item?.info?.rentEndDate,
+    MonthlyRent: item?.info?.lessorRentAmount,
+    Due: item?.due,
+    Provision: item?.provision,
+    Gross: item?.gross,
+    Tds: item?.tds,
+    Net: item?.net,
+    Gst: item?.gst,
+  }));
 
   // console.log(Report, "Report");
   return (

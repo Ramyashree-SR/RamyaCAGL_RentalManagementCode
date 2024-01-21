@@ -84,6 +84,7 @@ const PaymentTableComponent = ({
   data,
   columns,
   sx,
+  searchText,
   showTotal,
   withCheckbox,
 }) => {
@@ -161,6 +162,26 @@ const PaymentTableComponent = ({
             {data &&
               data?.length &&
               data
+                ?.filter((value) => {
+                  if (searchText === "") {
+                    return value;
+                  } else if (
+                    value?.info?.lesseeBranchName
+                      ?.toString()
+                      .toLowerCase()
+                      ?.includes?.(searchText) ||
+                    value?.info?.uniqueID
+                      ?.toString()
+                      .toLowerCase()
+                      ?.includes?.(searchText) ||
+                    value?.info?.branchID
+                      ?.toString()
+                      .toLowerCase()
+                      ?.includes?.(searchText)
+                  ) {
+                    return value;
+                  }
+                })
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row, index) => (
                   <StyledTableRow key={index}>

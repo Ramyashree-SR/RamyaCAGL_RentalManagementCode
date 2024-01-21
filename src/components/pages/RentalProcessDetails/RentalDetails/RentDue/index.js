@@ -205,14 +205,14 @@ const RentDue = (props) => {
                   }
                 />
 
-                <DropDownComponent
+                {/* <DropDownComponent
                   label="Months"
                   placeholder="Months"
                   size="small"
                   options={months}
                   sx={{ width: 200, ml: 1, mt: 0 }}
                   value={lesseeBranchName}
-                />
+                /> */}
               </Grid>
               <Grid
                 item
@@ -243,18 +243,18 @@ const RentDue = (props) => {
               }}
             >
               {branchIDforDue && (
-              <ReusableTable
-                data={rentDueDataByBranchId}
-                columns={rentDueData}
-                sx={{
-                  height: 360,
-                  width: "100%",
-                  overFlowX: "scroll",
-                  overFlowY: "scroll",
-                }}
-                showTotal={true}
-              />
-               )} 
+                <ReusableTable
+                  data={rentDueDataByBranchId}
+                  columns={rentDueData}
+                  sx={{
+                    height: 360,
+                    width: "100%",
+                    overFlowX: "scroll",
+                    overFlowY: "scroll",
+                  }}
+                  showTotal={true}
+                />
+              )}
             </Box>
           </Box>
         </Modal.Body>

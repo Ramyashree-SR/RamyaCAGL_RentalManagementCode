@@ -71,8 +71,8 @@ const RentActualPaymentTable = ({
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-   // Load edited data from localStorage on component mount
-   useEffect(() => {
+  // Load edited data from localStorage on component mount
+  useEffect(() => {
     const storedEditedData = localStorage.getItem("editedData");
     if (storedEditedData) {
       setEditedData(JSON.parse(storedEditedData));
@@ -83,7 +83,6 @@ const RentActualPaymentTable = ({
   useEffect(() => {
     localStorage.setItem("editedData", JSON.stringify(editedData));
   }, [editedData]);
-
 
   const handleEdit = (id, field, value) => {
     const updatedData = data?.map((item) =>
@@ -172,12 +171,13 @@ const RentActualPaymentTable = ({
                       onBlur={(e) =>
                         handleEdit(
                           row?.info?.uniqueID,
-                          "actualamount",
+                          "actualAmount",
                           e.target.innerText
                         )
                       }
                     >
-                     {editedData?.[row?.info?.uniqueID]?.actualAmount || row?.actualAmount}
+                      {editedData?.[row?.info?.uniqueID]?.actualAmount ||
+                        row?.actualAmount}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
@@ -250,8 +250,8 @@ const RentActualPaymentTable = ({
                       <StyledTableCell>{row?.net}</StyledTableCell>
                       <StyledTableCell>{row?.gstamt}</StyledTableCell>
                       <StyledTableCell>
-                        {editedData?.[row?.info?.uniqueID]?.actualamount ||
-                          row?.actualamount}
+                        {editedData?.[row?.info?.uniqueID]?.actualAmount ||
+                          row?.actualAmount}
                       </StyledTableCell>
                     </TableRow>
                   ))}

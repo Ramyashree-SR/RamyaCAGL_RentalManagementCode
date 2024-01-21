@@ -16,6 +16,7 @@ import { uploadFileApi } from "../../../services/UploadDoucmentApi";
 import { deepOrange, green } from "@mui/material/colors";
 import { IFSCCodeDetails } from "../../../services/IfscCodeApi";
 import { getTenureDetails } from "../../../services/AddContractApi";
+import { formatDateToBackEndReqirement } from "../../../CommonFunction/CommonFunction";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -58,15 +59,6 @@ const AgreementDetails = ({
   const [currentRent, setCurrentRent] = useState(
     allNewContractDetails?.lessorRentAmount
   );
-
-  // const [ifscCodes, setIFSCCodes] = useState(Array(recipientCount).fill(""));
-  // // console.log(ifscCodes, "ifscCodes");
-  // const [bankAndBranch, setBankAndBranch] = useState(
-  //   Array(recipientCount).fill({
-  //     bank: "",
-  //     branch: "",
-  //   })
-  // );
   const [tdsRate, setTdsRate] = useState(null);
   // const [escalationRate, setEscalationRate] = useState(null);
   // console.log(tdsRate, "tdsRate");
@@ -78,21 +70,6 @@ const AgreementDetails = ({
   const [reEnteredData, setReEnteredData] = useState([]);
   // console.log(reEnteredData, "reEnteredData");
   const [dataMatch, setDataMatch] = useState(true);
-
-  // useEffect(() => {
-  //   // Check if allNewContractDetails is defined and has the 'tds' property
-  //   if (
-  //     allNewContractDetails?.tds !== undefined &&
-  //     allNewContractDetails?.tds !== null
-  //   ) {
-  //     setTdsRate(allNewContractDetails.tds);
-  //   }
-
-  //   // Check if allNewContractDetails is defined and has the 'escalation' property
-  //   if (allNewContractDetails?.escalation !== undefined) {
-  //     setEscalationRate(allNewContractDetails.escalation);
-  //   }
-  // }, [allNewContractDetails]);
 
   const AgreementfileInput = useRef();
   const [agreementfile, setagreementFile] = useState({
@@ -173,6 +150,17 @@ const AgreementDetails = ({
     }));
 
     // Assuming e.target.name is 'escalationRate' for setEscalationRate
+  };
+  const handleTenureChange = (e) => {
+    const { name, value } = e.target;
+    // console.log(value, "value");
+    if (name === "agreementTenure") {
+      // let Tenurevalue = getTenureBasedOnDate(value);
+      setAllNewContractDetails((prevDetails) => ({
+        ...prevDetails,
+        agreementTenure: value,
+      }));
+    }
   };
 
   const handleEscalationChange = (e) => {
@@ -354,6 +342,7 @@ const AgreementDetails = ({
       ...allNewContractDetails,
       rentStartDate: val,
     });
+    // getTenureBasedOnDate(val);
   };
 
   const handleRentEndDate = (val) => {
@@ -361,6 +350,7 @@ const AgreementDetails = ({
       ...allNewContractDetails,
       rentEndDate: val,
     });
+    // getTenureBasedOnDate(val);
   };
 
   const handlePaymentDate = (val) => {
@@ -491,36 +481,36 @@ const AgreementDetails = ({
   //   // You can adjust this calculation based on your specific logic
   //   return monthsDifference;
   // };
-  const calculateTenureInMonths = () => {
-    const start = new Date(allNewContractDetails?.agreementStartDate);
-    const end = allNewContractDetails?.agreementEndDate
-      ? new Date(allNewContractDetails?.agreementEndDate)
-      : new Date(); // If no end date is provided, use the current date
+  // const calculateTenureInMonths = () => {
+  //   const start = new Date(allNewContractDetails?.agreementStartDate);
+  //   const end = allNewContractDetails?.agreementEndDate
+  //     ? new Date(allNewContractDetails?.agreementEndDate)
+  //     : new Date(); // If no end date is provided, use the current date
 
-    const diffInMilliseconds = end - start;
-    const diffInYears = diffInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+  //   const diffInMilliseconds = end - start;
+  //   const diffInYears = diffInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
 
-    // You can further format the tenure as needed (e.g., months, days, etc.)
-    const years = Math.floor(diffInYears);
-    const remainingMonths = Math.floor((diffInYears - years) * 12);
+  //   // You can further format the tenure as needed (e.g., months, days, etc.)
+  //   const years = Math.floor(diffInYears);
+  //   const remainingMonths = Math.floor((diffInYears - years) * 12);
 
-    return remainingMonths;
-  };
+  //   return remainingMonths;
+  // };
 
   const handleAgreementEndDate = (val) => {
     setAllNewContractDetails({
       ...allNewContractDetails,
       agreementEndDate: val,
     });
-    getTenureBasedOnDate(new Date(val));
+
     // Call the function to update tenure when either date changes
     handleDateChange(allNewContractDetails?.agreementStartDate, val);
     handleRenewalDateChange(allNewContractDetails.agreementStartDate, val);
   };
 
-  useEffect(() => {
-    getTenureBasedOnDate();
-  }, []);
+  // useEffect(() => {
+  //   getTenureBasedOnDate();
+  // }, []);
 
   // const getTenureBasedOnDate = async (startDate, endDate) => {
   //   const { data } = await getTenureDetails(startDate, endDate);
@@ -534,13 +524,16 @@ const AgreementDetails = ({
 
   const getTenureBasedOnDate = async () => {
     let payload = {
-      startDate: new Date(allNewContractDetails?.agreementStartDate),
-      endDate: new Date(allNewContractDetails?.agreementEndDate),
+      startDate: formatDateToBackEndReqirement(
+        allNewContractDetails?.rentStartDate
+      ),
+      endDate: formatDateToBackEndReqirement(
+        allNewContractDetails?.rentEndDate
+      ),
     };
     const { data } = await getTenureDetails(payload);
     if (data) {
-      let getData = data;
-      setAllNewContractDetails(getData);
+      setAllNewContractDetails(data);
     } else {
       setAllNewContractDetails([]);
     }
@@ -548,21 +541,21 @@ const AgreementDetails = ({
 
   const handleRenewalDateChange = (startDate, endDate) => {
     // Calculate Tenure
-    const tenureValue = calculateTenureInMonths(startDate, endDate);
+    // const tenureValue = calculateTenureInMonths(startDate, endDate);
     // Update the state with the calculated Tenure value
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
-      renewalTenure: tenureValue,
+      // renewalTenure: tenureValue,
     }));
   };
 
   const handleDateChange = (startDate, endDate) => {
     // Calculate Tenure
-    const tenureValue = calculateTenureInMonths(startDate, endDate);
+    // const tenureValue = calculateTenureInMonths(startDate, endDate);
     // Update the state with the calculated Tenure value
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
-      agreementTenure: tenureValue,
+      // agreementTenure: tenureValue,
     }));
   };
 
@@ -635,7 +628,7 @@ const AgreementDetails = ({
                 size="small"
                 options={activationStatus}
                 name="agreementActivationStatus"
-                value={allNewContractDetails?.agreementActivationStatus}
+                value={allNewContractDetails?.agreementActivationStatus || null}
                 onChange={(val) =>
                   handleActivationStatus("agreementActivationStatus", val)
                 }
@@ -707,7 +700,7 @@ const AgreementDetails = ({
                     ...allNewContractDetails,
                     agreementStartDate: val,
                   });
-                  getTenureBasedOnDate(new Date(val));
+                  // getTenureBasedOnDate(new Date(val));
                   // Call the function to update tenure when either date changes
                   handleDateChange(
                     new Date(val),
@@ -728,17 +721,6 @@ const AgreementDetails = ({
                 name="agreementEndDate"
                 value={allNewContractDetails?.agreementEndDate}
                 onChange={handleAgreementEndDate}
-              />
-
-              <InputBoxComponent
-                label="Tenure (in months)"
-                placeholder="Enter Tenure "
-                sx={{ width: 300, mt: -1.5, ml: 1 }}
-                name="agreementTenure"
-                value={allNewContractDetails?.agreementTenure}
-                onChange={(e) => updateChange(e)}
-                errorText={allNewContractDetailsErr?.agreementTenure}
-                readOnly
               />
             </Grid>
 
@@ -764,6 +746,16 @@ const AgreementDetails = ({
                 value={allNewContractDetails?.rentEndDate}
                 onChange={handleRentEndDate}
                 // disabled
+              />
+
+              <InputBoxComponent
+                label="Tenure (in months)"
+                placeholder="Enter Tenure "
+                sx={{ width: 300, mt: -1.5, ml: 1 }}
+                name="agreementTenure"
+                value={allNewContractDetails?.agreementTenure}
+                onChange={(e) => handleTenureChange(e)}
+                errorText={allNewContractDetailsErr?.agreementTenure}
               />
             </Grid>
           </Grid>
@@ -1047,7 +1039,7 @@ const AgreementDetails = ({
                             errorText={
                               allNewContractDetailsErr?.lessorRentAmount
                             }
-                            readOnly={false}
+                            // readOnly={false}
                           />
                         </Grid>
                         <Grid item className="d-flex m-2" md={12}>

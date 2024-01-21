@@ -93,11 +93,18 @@ const CustomModal = (props) => {
                   value={props.selectedItem?.rentAmount}
                   readOnly
                 />
-                <InputBoxComponent
+                {/* <InputBoxComponent
                   label="First Month Value"
                   placeholder="First Month Value"
                   sx={{ width: 200 }}
                   value={props.selectedItem?.firstMonthvalue}
+                  readOnly
+                /> */}
+                 <InputBoxComponent
+                  label="Standard Deduction"
+                  placeholder=" Standard Deduction"
+                  sx={{ width: 200 }}
+                  value={props.selectedItem?.standardDeducition}
                   readOnly
                 />
               </Grid>
@@ -105,20 +112,20 @@ const CustomModal = (props) => {
 
             <Col xs={12}>
               <Grid className="d-flex m-2">
-                <InputBoxComponent
+                {/* <InputBoxComponent
                   label="Last Month Value"
                   placeholder="Last Month Value"
                   sx={{ width: 200 }}
                   value={props.selectedItem?.lastMonthvalue}
                   readOnly
-                />
-                <InputBoxComponent
+                /> */}
+                {/* <InputBoxComponent
                   label="Standard Deduction"
                   placeholder=" Standard Deduction"
                   sx={{ width: 200 }}
                   value={props.selectedItem?.standardDeducition}
                   readOnly
-                />
+                /> */}
                 <InputBoxComponent
                   label="TDS (%)"
                   placeholder=" TDS %"
@@ -130,7 +137,7 @@ const CustomModal = (props) => {
             </Col>
             <Col xs={12}>
               <Grid className="d-flex m-2">
-                <InputBoxComponent
+                {/* <InputBoxComponent
                   label="First Rent Date."
                   placeholder=" First Rent Date"
                   sx={{ width: 200 }}
@@ -150,7 +157,7 @@ const CustomModal = (props) => {
                   sx={{ width: 200 }}
                   value={props.selectedItem?.escalation}
                   readOnly
-                />
+                /> */}
               </Grid>
             </Col>
           </Row>

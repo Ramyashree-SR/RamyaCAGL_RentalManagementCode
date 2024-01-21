@@ -32,6 +32,8 @@ import {
   getAllRentContractDetails,
   getAllRentContractDetailsByBranchID,
   getBranchID,
+  getBranchNameDetails,
+  getRentContractDetailsByBranchName,
   getRentContractDetailsOnBranchID,
 } from "../../../services/RentContractsApi";
 import {
@@ -148,7 +150,7 @@ const RentalDetails = (props) => {
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
   const [rentRenewContract, setRentRenewContract] = useState([]);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
-  console.log(uniqueIDs,"uniqueIDs");
+  console.log(uniqueIDs, "uniqueIDs");
   const handleStateChange = (value) => {
     // console.log(value.target.outerText, "newValue");
     setFilterState({
@@ -250,10 +252,9 @@ const RentalDetails = (props) => {
       let getData = data?.data;
       setRentContractDetails(getData);
       setbranchIDforDue(getData);
-      setUniqueIDs(getData)
+      setUniqueIDs(getData);
     }
   };
-
 
   useEffect(() => {
     getBranchId();
@@ -290,15 +291,46 @@ const RentalDetails = (props) => {
     if (data?.data) {
       let getData = data?.data;
       setRentContractDetails(getData);
-      setUniqueIDs(getData)
+      setUniqueIDs(getData);
     }
   };
+
+  useEffect(() => {
+    getBranchName();
+  }, []);
 
   const handleBranchName = (value) => {
     setFilterBranchName({
       ...filterBranchName,
-      branchName: value.target.outerText,
+      lesseeBranchName: value.target.outerText,
     });
+    getAllContractDetailsByBranchName(value.target.outerText);
+  };
+
+  const getBranchName = async () => {
+    const { data } = await getBranchNameDetails();
+    if (data) {
+      if (data) {
+        let branchNameData = [];
+        data?.data?.map((val) => {
+          branchNameData.push([val]);
+        });
+        setBranchNameFilter(branchNameData);
+      } else {
+        setBranchNameFilter([]);
+      }
+    }
+  };
+
+  const getAllContractDetailsByBranchName = async (branchName) => {
+    const { data } = await getRentContractDetailsByBranchName(branchName);
+    // console.log(data?.data?.data, "BRanchNAmedata");
+    if (data) {
+      if (data) {
+        let getData = data?.data;
+        setRentContractDetails(getData);
+      }
+    }
   };
 
   const handleBranchTypeFilterChange = (value) => {
@@ -782,7 +814,6 @@ const RentalDetails = (props) => {
           onClick={() => {
             handleClose();
             setOpenRentActualModal(true);
-
           }}
         >
           Rent Actual

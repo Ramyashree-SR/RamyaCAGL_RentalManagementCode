@@ -1265,7 +1265,7 @@ const MasterDetails = (props) => {
       //   })
       // ),
       nationality: allNewContractDetails?.nationality,
-      contractStatus: allNewContractDetails?.contractStatus?.label,
+      contractStatus: allNewContractDetails?.contractStatus,
       recipiantsID: allNewContractDetails?.recipiantsID,
       lessorRecipiantsName: allNewContractDetails?.lessorRecipiantsName,
       lessorBankName: allNewContractDetails?.lessorBankName,
@@ -1294,9 +1294,6 @@ const MasterDetails = (props) => {
       lesseeDivision: allNewContractDetails?.lesseeDivision,
       lesseeZone: allNewContractDetails?.lesseeZone,
       lesseeState: allNewContractDetails?.lesseeState,
-
-      lesseeApproverrenewals: allNewContractDetails?.lesseeApproverrenewals,
-      lesseeApproverRelocation: allNewContractDetails?.lesseeApproverRelocation,
       lesseeEntityDetails: allNewContractDetails?.lesseeEntityDetails?.label,
 
       premesisLocation: allNewContractDetails?.premesisLocation?.label,
@@ -2092,10 +2089,10 @@ const MasterDetails = (props) => {
             name="contractStatus"
             value={
               props.type === "edit"
-                ? allNewContractDetails?.contractStatus?.label &&
-                
-                  allNewContractDetails?.contractStatus?.label
-                : allNewContractDetails?.contractStatus?.label || null
+                ? (allNewContractDetails?.contractStatus &&
+                    allNewContractDetails?.contractStatus) ||
+                  null
+                : allNewContractDetails?.contractStatus || null
             }
             onChange={handleContractChange}
           />
