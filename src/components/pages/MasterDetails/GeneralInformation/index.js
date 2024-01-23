@@ -71,10 +71,6 @@ const GeneralInformation = ({
     });
   };
 
-  // const handleNext = () => {
-  //   onSave(allNewContractDetails, type);
-  // };
-
   const ElectricityBillInput = useRef();
   const [electricityBillFile, setElectricityBillFile] = useState({
     file: {},
@@ -192,8 +188,6 @@ const GeneralInformation = ({
 
   const handleSubmit = () => {
     const ValidateError = handleAddRentContractInformationError();
-    // console.log("ValidateError", ValidateError);
-    // Check for empty fields
     const isEmptyField = Object.values(allNewContractDetails).some(
       (value) => value === ""
     );
@@ -203,10 +197,6 @@ const GeneralInformation = ({
       AddAllNewRentContactInformation();
       close();
     }
-    // if (!ValidateError && !isEmptyField && contractStatus === "Renewal") {
-    //   setAllNewContractDetails(allNewContractDetails, type);
-    //   AddAllNewRentContactInformation(EditLessorData);
-    // }
   };
 
   const handleBack = () => {
@@ -232,6 +222,7 @@ const GeneralInformation = ({
                 value={allNewContractDetails?.lessorName}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorName}
+                required
               />
 
               <InputBoxComponent
@@ -242,6 +233,7 @@ const GeneralInformation = ({
                 value={allNewContractDetails?.lessorContactNumber}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorContactNumber}
+                required
               />
               <InputBoxComponent
                 label="Email Address."
@@ -251,6 +243,7 @@ const GeneralInformation = ({
                 value={allNewContractDetails?.lessorEmailAddress}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorEmailAddress}
+                required
               />
             </Grid>
             <Grid item className="d-flex m-2" lg={12}>
@@ -262,6 +255,7 @@ const GeneralInformation = ({
                 value={allNewContractDetails?.lessorPanNumber}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorPanNumber}
+                required
               />
               <InputBoxComponent
                 label="GST No."
@@ -271,6 +265,7 @@ const GeneralInformation = ({
                 value={allNewContractDetails?.lessorGstNumber}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorGstNumber}
+                required
               />
 
               <InputBoxComponent
@@ -281,6 +276,7 @@ const GeneralInformation = ({
                 value={allNewContractDetails?.nationality}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.nationality}
+                required
               />
             </Grid>
             <Grid item className="d-flex m-2" lg={12}>
@@ -289,25 +285,20 @@ const GeneralInformation = ({
                 placeholder="Enter Mode"
                 sx={{ width: 300 }}
                 options={PaymentMode}
+                getOptionLabel={(option) =>
+                  option?.label || allNewContractDetails?.paymentMode
+                }
                 name="paymentMode"
                 value={
                   type === "edit"
                     ? allNewContractDetails?.paymentMode
-                    : allNewContractDetails?.paymentMode || ""
+                    : allNewContractDetails?.paymentMode || null
                 }
-                // onChange={handlePaymentChange}
+               
                 onChange={(val) => {
                   handlePaymentChange("paymentMode", val);
                 }}
-                // onChange={(value) => {
-                //   setAllNewContractDetails({
-                //     ...allNewContractDetails,
-                //     paymentMode: {
-                //       id: value?.id ? value?.id : "",
-                //       label: value?.label ? value?.label : "",
-                //     },
-                //   });
-                // }}
+                required
                 errorText={allNewContractDetailsErr?.paymentMode}
               />
             </Grid>
@@ -638,6 +629,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorDoorNumber}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorDoorNumber}
+                    required
                   />
                   <InputBoxComponent
                     label="Floor No."
@@ -647,6 +639,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorFloorNumber}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorFloorNumber}
+                    required
                   />
                   <InputBoxComponent
                     label="Land Mark"
@@ -656,6 +649,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorLandMark}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorLandMark}
+                    required
                   />
                 </Grid>
                 <Grid item className="d-flex m-2" md={12}>
@@ -667,6 +661,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorStreet}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorStreet}
+                    required
                   />
                   <InputBoxComponent
                     label="Ward Name/No Area Name/Layout Name/Extension"
@@ -676,6 +671,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorWardNo}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorWardNo}
+                    required
                   />
                   <InputBoxComponent
                     label="City"
@@ -685,6 +681,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorCity}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorCity}
+                    required
                   />
                 </Grid>
                 <Grid item className="d-flex m-2" md={12}>
@@ -696,6 +693,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorPinCode}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorPinCode}
+                    required
                   />
                   <InputBoxComponent
                     label="Taluk"
@@ -705,6 +703,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorTaluka}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorTaluka}
+                    required
                   />
                   <InputBoxComponent
                     label="District "
@@ -714,6 +713,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorDistrict}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorDistrict}
+                    required
                   />
                 </Grid>
                 <Grid item className="d-flex m-2" md={12}>
@@ -725,6 +725,7 @@ const GeneralInformation = ({
                     value={allNewContractDetails?.lessorState}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorState}
+                    required
                   />
                 </Grid>
 

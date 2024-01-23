@@ -1016,7 +1016,10 @@ const MasterDetails = (props) => {
       lessorDistrict: allNewContractDetails?.lessorDistrict,
       lessorState: allNewContractDetails?.lessorState,
 
-      lesseeBranchType: allNewContractDetails?.lesseeBranchType?.label,
+      lesseeBranchType:
+        allNewContractDetails?.lesseeBranchType &&
+        allNewContractDetails?.lesseeBranchType?.label,
+
       lesseeBranchName: allNewContractDetails?.branchName,
       lesseeAreaName: allNewContractDetails?.areaName,
       lesseeDivision: allNewContractDetails?.region,
@@ -1107,6 +1110,7 @@ const MasterDetails = (props) => {
     // console.log(data,"addData");
     if (data?.data) {
       setBranchDetails({
+        ...allNewContractDetails,
         branchID: allNewContractDetails?.branchID,
         branchName: allNewContractDetails?.lesseeBranchName,
         areaName: allNewContractDetails?.lesseeAreaName,
@@ -1116,6 +1120,7 @@ const MasterDetails = (props) => {
         // ... other fields
       });
       setAllNewContractDetails({
+        ...allNewContractDetails,
         lessorName: "",
         lessorContactNumber: "",
         lessorEmailAddress: "",
@@ -1248,7 +1253,9 @@ const MasterDetails = (props) => {
       lessorEmailAddress: allNewContractDetails?.lessorEmailAddress,
       lessorPanNumber: allNewContractDetails?.lessorPanNumber,
       lessorGstNumber: allNewContractDetails?.lessorGstNumber,
-      paymentMode: allNewContractDetails?.paymentMode?.label,
+      paymentMode:
+        allNewContractDetails?.paymentMode &&
+        allNewContractDetails?.paymentMode?.label,
       // recipiants: allNewContractDetails?.recipiants?.map(
       //   (recipient, index) => ({
       //     lessorRecipiantsName: recipient?.lessorRecipiantsName,
@@ -1265,7 +1272,9 @@ const MasterDetails = (props) => {
       //   })
       // ),
       nationality: allNewContractDetails?.nationality,
-      contractStatus: allNewContractDetails?.contractStatus,
+      contractStatus:
+        allNewContractDetails?.contractStatus &&
+        allNewContractDetails?.contractStatus?.label,
       recipiantsID: allNewContractDetails?.recipiantsID,
       lessorRecipiantsName: allNewContractDetails?.lessorRecipiantsName,
       lessorBankName: allNewContractDetails?.lessorBankName,
@@ -1288,15 +1297,21 @@ const MasterDetails = (props) => {
       lessorDistrict: allNewContractDetails?.lessorDistrict,
       lessorState: allNewContractDetails?.lessorState,
 
-      lesseeBranchType: allNewContractDetails?.lesseeBranchType?.label,
+      lesseeBranchType:
+        allNewContractDetails?.lesseeBranchType &&
+        allNewContractDetails?.lesseeBranchType?.label,
       lesseeBranchName: allNewContractDetails?.lesseeBranchName,
       lesseeAreaName: allNewContractDetails?.lesseeAreaName,
       lesseeDivision: allNewContractDetails?.lesseeDivision,
       lesseeZone: allNewContractDetails?.lesseeZone,
       lesseeState: allNewContractDetails?.lesseeState,
-      lesseeEntityDetails: allNewContractDetails?.lesseeEntityDetails?.label,
+      lesseeEntityDetails:
+        allNewContractDetails?.lesseeEntityDetails &&
+        allNewContractDetails?.lesseeEntityDetails?.label,
 
-      premesisLocation: allNewContractDetails?.premesisLocation?.label,
+      premesisLocation:
+        allNewContractDetails?.premesisLocation &&
+        allNewContractDetails?.premesisLocation?.label,
       premesisDoorNumber: allNewContractDetails?.premesisDoorNumber,
       premesisFloorNumber: allNewContractDetails?.premesisFloorNumber,
       premesisWardNo: allNewContractDetails?.premesisWardNo,
@@ -1307,7 +1322,9 @@ const MasterDetails = (props) => {
       premesisDistrict: allNewContractDetails?.premesisDistrict,
       lessorState: allNewContractDetails?.lessorState,
       premesisPinCode: allNewContractDetails?.premesisPinCode,
-      premesisBuildingType: allNewContractDetails?.premesisBuildingType?.label,
+      premesisBuildingType:
+        allNewContractDetails?.premesisBuildingType &&
+        allNewContractDetails?.premesisBuildingType?.label,
       northPremesis: allNewContractDetails?.northPremesis,
       southPremesis: allNewContractDetails?.southPremesis,
       eastPremesis: allNewContractDetails?.eastPremesis,
@@ -1378,7 +1395,7 @@ const MasterDetails = (props) => {
       payload
     );
     if (data) {
-      setBranchDetails(data)
+      setBranchDetails(data);
       setIFSCCodes(Array(recipientCount).fill(""));
       setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
       props.getContractDetails();
@@ -1386,7 +1403,7 @@ const MasterDetails = (props) => {
         appearance: "success",
       });
       props.close();
-      window.location.reload();
+      // window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
@@ -1971,7 +1988,7 @@ const MasterDetails = (props) => {
       }
     }
   };
-
+  console.log(allNewContractDetails, "allNewContractDetails");
   const steps = [
     {
       label: (
@@ -2087,12 +2104,13 @@ const MasterDetails = (props) => {
             label="Contract Status"
             options={RentContractStatus}
             sx={{ width: 300, ml: 30 }}
+            getOptionLabel={(option) =>
+              option?.label || option?.allNewContractDetails?.contractStatus
+            }
             name="contractStatus"
             value={
               props.type === "edit"
-                ? (allNewContractDetails?.contractStatus &&
-                    allNewContractDetails?.contractStatus) ||
-                  null
+                ? allNewContractDetails?.contractStatus || null
                 : allNewContractDetails?.contractStatus || null
             }
             onChange={handleContractChange}

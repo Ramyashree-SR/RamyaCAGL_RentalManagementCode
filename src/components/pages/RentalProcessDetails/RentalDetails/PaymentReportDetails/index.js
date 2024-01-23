@@ -224,6 +224,7 @@ const PaymentReportDetails = (props) => {
                 placeholder="Select "
                 sx={{ width: 200 }}
                 size="small"
+                getOptionLabel={(option) => option?.label || option}
                 options={yearOptions}
                 value={selectedYear}
                 onChange={handleChange}
@@ -233,6 +234,7 @@ const PaymentReportDetails = (props) => {
                 placeholder="Select "
                 sx={{ width: 200 }}
                 size="small"
+                getOptionLabel={(option) => option?.label || option}
                 options={months}
                 value={selectedMonth}
                 onChange={handleMonthChange}

@@ -25,6 +25,8 @@ import { useToasts } from "react-toast-notifications";
 import RentActualDetails from "../RentActualDetails";
 import CloseIcon from "@mui/icons-material/Close";
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
+import { paymentColumn } from "../../../../../constants/PaymentReport";
+import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 
 const RentActual = (props) => {
   const { addToast } = useToasts();
@@ -177,9 +179,14 @@ const RentActual = (props) => {
     if (data) {
       setSettlementAmt(data);
       addToast("SD Amount Settled", { appearance: "success" });
-      // props.close();
+      props.close();
     } else if (!data?.error) {
-      addToast(errRes?.msg, { appearance: "error" });
+      // addToast(errRes?.msg, { appearance: "error" });
+      addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
+        appearance: "error",
+        autoClose: 9000,
+      });
+      props.close();
     }
   };
 
@@ -407,6 +414,7 @@ const RentActual = (props) => {
                         placeholder="Select "
                         sx={{ width: 200 }}
                         size="small"
+                        getOptionLabel={(option) => option?.label || option}
                         options={yearOptions}
                         value={selectedYear}
                         onChange={handleChange}
@@ -416,6 +424,7 @@ const RentActual = (props) => {
                         placeholder="Select "
                         sx={{ width: 200 }}
                         size="small"
+                        getOptionLabel={(option) => option?.label || option}
                         options={months}
                         value={selectedMonth}
                         onChange={handleMonthChange}
@@ -460,9 +469,9 @@ const RentActual = (props) => {
                 )}
 
                 {selectedMonth && (
-                  <PaymentTableComponent
+                  <PaymentReportTable
                     data={[getPaymentReport]}
-                    columns={AllPaymentColumns}
+                    columns={paymentColumn}
                     sx={{
                       overFlowX: "scroll",
                       overFlowY: "scroll",
@@ -545,7 +554,7 @@ const RentActual = (props) => {
                             variant="filled"
                             sx={{ width: "30%" }}
                           >
-                            Note :CHange the Rent End Date to close the
+                            Note :Change the Rent End Date to close the
                             Agreement!
                           </Alert>
                         </Snackbar>

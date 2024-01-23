@@ -112,7 +112,6 @@ const Provisions = (props) => {
     setInputValue(e.target.value);
   };
 
-
   const getProvisionReport = Object.values(provisionsList)?.map((item) => ({
     ContractID: item.contractID,
     Month: item.month,
@@ -175,6 +174,7 @@ const Provisions = (props) => {
                 sx={{ width: 200, mt: 0.5 }}
                 size="small"
                 options={yearOptions}
+                getOptionLabel={(option) => option?.label || option}
                 value={selectedYear}
                 onChange={handleChange}
               />

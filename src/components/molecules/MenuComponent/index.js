@@ -92,7 +92,6 @@ export default function MenuComponent({
     setAnchorEl(null);
   };
 
-
   useEffect(() => {
     getAllRentDueDetailsByUniqueID();
   }, [uniqueID]);
@@ -112,17 +111,17 @@ export default function MenuComponent({
       provisiontype: typeProvisionsData,
       contractID: uniqueID,
       branchID: branchIDforDue,
-      year: addProvisions.year.label,
-      month: addProvisions.month.label,
-      provisionAmount: addProvisions.provisionAmount,
-      remark: addProvisions.remark,
+      year: addProvisions?.year?.label,
+      month: addProvisions?.month?.label,
+      provisionAmount: addProvisions?.provisionAmount,
+      remark: addProvisions?.remark,
       dateTime: addProvisions.dateTime,
     };
     const { data, errRes } = await AddRentProvisionDetails(
       typeProvisionsData,
       payload
     );
-    if (data) {
+    if (data?.error === "false") {
       setAddProvisions({
         provisionID: "",
         provisiontype: "",
@@ -134,8 +133,11 @@ export default function MenuComponent({
         remark: "",
         dateTime: "",
       });
+
       if (typeProvisionsData === "Make") {
-        addToast("Provision Successfully Made......", { appearance: "success" });
+        addToast("Provision Successfully Made......", {
+          appearance: "success",
+        });
       } else if (typeProvisionsData === "Reverse") {
         addToast("Provision Successfully Reversed.......", {
           appearance: "success",
@@ -144,15 +146,20 @@ export default function MenuComponent({
     } else if (!data?.error) {
       if (typeProvisionsData === "Make") {
         // addToast(errRes?.msg, { appearance: "error" });
-        addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, { appearance: "error",autoClose: 6000 });
-        // const formattedError = JSON.stringify(errRes, null, 2);
-        // addToast(formattedError, { appearance: "error" });
-        // alert( JSON.stringify(errRes, null, 2))
-      } else if (typeProvisionsData === "Reverse") {
-        addToast(errRes?.msg, {
+        addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
           appearance: "error",
+          autoClose: 9000,
         });
-        addToast(JSON.stringify(errRes, null, 2), { appearance: "error" });
+        setOpenProvisionsModal(false);
+      } else if (typeProvisionsData === "Reverse") {
+        // addToast(errRes?.msg, {
+        //   appearance: "error",
+        // });
+        addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
+          appearance: "error",
+          autoClose: 9000,
+        });
+        setOpenProvisionsModal(false);
       }
     }
   };

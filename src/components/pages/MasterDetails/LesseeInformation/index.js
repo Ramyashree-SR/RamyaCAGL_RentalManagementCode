@@ -17,18 +17,6 @@ import ReusableTable from "../../../molecules/ReusableTable";
 import { columns } from "../../../../constants/ScheduleTable";
 import AddIcon from "@mui/icons-material/Add";
 
-// const lesseeInformation = {
-//   branchid:"",
-//   branchName: "",
-//   areaName: "",
-//   regionName: "",
-//   zone: "",
-//   state: "",
-//   branchType: "",
-//   approverRenewal: "",
-//   approverRelocation: "",
-//   enitityDetails: "",
-// };
 const LesseeInformation = ({
   activeStep,
   setActiveStep,
@@ -49,12 +37,14 @@ const LesseeInformation = ({
   const [selectedBranchType, setSelectedBranchType] = useState("");
   // console.log(selectedBranchType,"selectedBranchType");
   const [showInputComponent, setShowInputComponent] = useState(false);
+
   const updateChange = (e) => {
     // console.log(e,"e");
-    setAllNewContractDetails({
-      ...allNewContractDetails,
+    e.preventDefault();
+    setAllNewContractDetails((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   let ApproverRenew = [
@@ -162,9 +152,6 @@ const LesseeInformation = ({
     setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
     setSelectedBranchType(value);
     getAllBranchID(value);
-    if (value !== undefined) {
-      getBranchIdDetails(value);
-    }
   };
 
   const handleBranchID = (_, value) => {
@@ -178,7 +165,7 @@ const LesseeInformation = ({
 
   useEffect(() => {
     getAllBranchID();
-  }, [selectedBranchType?.label]);
+  }, []);
 
   const getAllBranchID = async (branchType) => {
     const { data } = await getBranchIDForBranchDetails(branchType?.label);
@@ -191,12 +178,7 @@ const LesseeInformation = ({
   };
 
   const getBranchIdDetails = async (branchID) => {
-    // console.log(branchID, branchType?.label, "branchID, branchType");
-    const branchType = allNewContractDetails?.lesseeBranchType?.label;
-    const { data } = await getRentContractDetailsOnBranchID(
-      branchID,
-      branchType
-    );
+    const { data } = await getRentContractDetailsOnBranchID(branchID);
     if (data) {
       if (data) {
         setAllNewContractDetails(data?.data || {});
@@ -226,8 +208,6 @@ const LesseeInformation = ({
     setShowInputComponent(true);
   };
 
-  console.log(contractStatus, "contractStatus");
-
   return (
     <>
       <Box sx={{ height: "calc(100% - 55px)", overflowY: "scroll" }}>
@@ -241,6 +221,10 @@ const LesseeInformation = ({
                 label="Premesis Type"
                 sx={{ width: 300 }}
                 options={BranchType}
+                getOptionLabel={(option) =>
+                  option?.label ||
+                  allNewContractDetails?.lesseeBranchType?.label
+                }
                 name="lesseeBranchType"
                 value={
                   type === "edit"
@@ -248,6 +232,7 @@ const LesseeInformation = ({
                     : allNewContractDetails?.lesseeBranchType || null
                 }
                 onChange={(val) => handleBranchType("lesseeBranchType", val)}
+                required={true}
               />
             </Grid>
           </Grid>
@@ -275,6 +260,7 @@ const LesseeInformation = ({
                       name="branchID"
                       value={allNewContractDetails?.branchID}
                       onChange={(e) => updateChange(e)}
+                      required={true}
                     />
                   </Box>
                 ) : (
@@ -323,6 +309,7 @@ const LesseeInformation = ({
                     }
                     disableCloseOnSelect={false}
                     disableClearable={false}
+                    required={<span className="text-danger ms-1">*</span>}
                   />
                 )}
               </Grid>
@@ -334,12 +321,6 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="branchName"
                   value={
-                    // type === "edit" ||
-                    // (type === "edit" && contractStatus === "Renewal")
-                    //   ? allNewContractDetails?.lesseeBranchName ||
-                    //     allNewContractDetails?.branchName
-                    //   : allNewContractDetails?.branchName
-
                     type === "edit"
                       ? allNewContractDetails?.lesseeBranchName ||
                         allNewContractDetails?.branchName
@@ -357,12 +338,6 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="areaName"
                   value={
-                    // type === "edit" ||
-                    // (type === "edit" && contractStatus === "Renewal")
-                    //   ? allNewContractDetails?.lesseeAreaName ||
-                    //     allNewContractDetails?.areaName
-                    //   : allNewContractDetails?.areaName || ""
-
                     type === "edit"
                       ? allNewContractDetails?.lesseeAreaName ||
                         allNewContractDetails?.areaName
@@ -372,7 +347,6 @@ const LesseeInformation = ({
                   }
                   onChange={(e) => updateChange(e)}
                   errorText={allNewContractDetailsErr?.areaName || ""}
-                  // readOnly
                 />
                 <InputBoxComponent
                   label="Division/Region"
@@ -380,11 +354,6 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="region"
                   value={
-                    // type === "edit" ||
-                    // (type === "edit" && contractStatus === "Renewal")
-                    //   ? allNewContractDetails?.lesseeDivision ||
-                    //     allNewContractDetails?.region
-                    //   : allNewContractDetails?.region || ""
                     type === "edit"
                       ? allNewContractDetails?.lesseeDivision ||
                         allNewContractDetails?.region
@@ -394,7 +363,6 @@ const LesseeInformation = ({
                   }
                   onChange={(e) => updateChange(e)}
                   errorText={allNewContractDetailsErr?.region || ""}
-                  // readOnly
                 />
               </Grid>
               <Grid item className="d-flex m-2" lg={12}>
@@ -404,12 +372,6 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="zone"
                   value={
-                    // type === "edit" ||
-                    // (type === "edit" && contractStatus === "Renewal")
-                    //   ? allNewContractDetails?.lesseeZone ||
-                    //     allNewContractDetails?.zone
-                    //   : allNewContractDetails?.zone || ""
-
                     type === "edit"
                       ? allNewContractDetails?.lesseeZone ||
                         allNewContractDetails?.zone
@@ -419,7 +381,6 @@ const LesseeInformation = ({
                   }
                   onChange={(e) => updateChange(e)}
                   errorText={allNewContractDetailsErr?.zone || ""}
-                  // readOnly
                 />
                 <InputBoxComponent
                   label="State"
@@ -427,11 +388,6 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="state"
                   value={
-                    // type === "edit" ||
-                    // (type === "edit" && contractStatus === "Renewal")
-                    //   ? allNewContractDetails?.lesseeState ||
-                    //     allNewContractDetails?.state
-                    //   : allNewContractDetails?.state || ""
                     type === "edit"
                       ? allNewContractDetails?.lesseeState ||
                         allNewContractDetails?.state
@@ -484,6 +440,9 @@ const LesseeInformation = ({
                   label="Entity Details "
                   sx={{ width: 300 }}
                   options={EntityDetails}
+                  getOptionLabel={(option) =>
+                    option?.label || allNewContractDetails?.lesseeEntityDetails
+                  }
                   name="lesseeEntityDetails"
                   value={
                     type === "edit"
@@ -494,13 +453,16 @@ const LesseeInformation = ({
                   onChange={(val) =>
                     handleEntityDetails("lesseeEntityDetails", val)
                   }
+                  required={true}
                 />
                 <DropDownComponent
                   label="Location"
                   sx={{ width: 300 }}
                   options={location}
+                  getOptionLabel={(option) =>
+                    option?.label || allNewContractDetails?.premesisLocation
+                  }
                   name="premesisLocation"
-                  // onSelect={handleLocationChange}
                   value={
                     type === "edit"
                       ? allNewContractDetails?.premesisLocation || null
@@ -509,12 +471,16 @@ const LesseeInformation = ({
                   onChange={(val) =>
                     handleLocationChange("premesisLocation", val)
                   }
+                  required={true}
                 />
                 <DropDownComponent
                   label="Building Type"
                   sx={{ width: 300 }}
                   options={typeOfBuliding}
                   name="premesisBuildingType"
+                  getOptionLabel={(option) =>
+                    option?.label || allNewContractDetails?.premesisBuildingType
+                  }
                   value={
                     type === "edit"
                       ? allNewContractDetails?.premesisBuildingType || null
@@ -524,6 +490,7 @@ const LesseeInformation = ({
                   onChange={(val) =>
                     handleBulidingType("premesisBuildingType", val)
                   }
+                  required={true}
                 />
               </Grid>
             </Grid>
@@ -542,6 +509,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisDoorNumber}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisDoorNumber}
+                    required={true}
                   />
                   <InputBoxComponent
                     label="Floor No."
@@ -551,6 +519,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisFloorNumber}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisFloorNumber}
+                    required={true}
                   />
                   <InputBoxComponent
                     label="Land Mark"
@@ -560,6 +529,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisLandMark}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisLandMark}
+                    required={true}
                   />
                 </Grid>
                 <Grid item className="d-flex m-2" md={12}>
@@ -571,6 +541,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisStreet}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisStreet}
+                    required={true}
                   />
                   <InputBoxComponent
                     label="Ward Name/No Area Name/Layout Name/Extension"
@@ -580,6 +551,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisWardNo}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisWardNo}
+                    required={true}
                   />
                   <InputBoxComponent
                     label="City"
@@ -589,6 +561,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisCity}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisCity}
+                    required={true}
                   />
                 </Grid>
                 <Grid item className="d-flex m-2" md={12}>
@@ -600,6 +573,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisPinCode}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisPinCode}
+                    required={true}
                   />
                   <InputBoxComponent
                     label="Taluk"
@@ -609,6 +583,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisTaluka}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisTaluka}
+                    required={true}
                   />
 
                   <InputBoxComponent
@@ -619,6 +594,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.premesisDistrict}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.premesisDistrict}
+                    required={true}
                   />
                 </Grid>
                 <Grid item className="d-flex m-2" md={12}>
@@ -630,6 +606,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.lessorState}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.lessorState}
+                    required={true}
                   />
                 </Grid>
 
@@ -642,6 +619,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.plotNumber}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.plotNumber}
+                    required={true}
                   />
                   <InputBoxComponent
                     label="Buit-Up Area"
@@ -651,6 +629,7 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.builtupArea}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.builtupArea}
+                    required={true}
                   />
                 </Grid>
 
@@ -669,6 +648,7 @@ const LesseeInformation = ({
                       size="large"
                       value={address}
                       readOnly
+                      required={true}
                     />
                   )}
                 </Grid>
@@ -691,6 +671,7 @@ const LesseeInformation = ({
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.northPremesis}
                           multiline
+                          required={true}
                         />
                       </Grid>
                       <Grid item className="d-flex  m-2" md={12}>
@@ -705,6 +686,7 @@ const LesseeInformation = ({
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.southPremesis}
                           multiline
+                          required={true}
                         />
                       </Grid>
                     </Grid>
@@ -721,6 +703,7 @@ const LesseeInformation = ({
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.eastPremesis}
                           multiline
+                          required={true}
                         />
                       </Grid>
                       <Grid item className="d-flex m-2" md={12}>
@@ -735,9 +718,10 @@ const LesseeInformation = ({
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.westPremesis}
                           multiline
+                          required={true}
                         />
                       </Grid>
-                      {/* <ReusableTable columns={columns}/> */}
+                      {/* <ReusableTable columns={columns}required={true}/> */}
                     </Grid>
                   </Grid>
                 </Box>
@@ -760,6 +744,7 @@ const LesseeInformation = ({
                           value={allNewContractDetails?.lattitude}
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.lattitude}
+                          required={true}
                         />
                         <InputBoxComponent
                           label="Longitude"
@@ -769,6 +754,7 @@ const LesseeInformation = ({
                           value={allNewContractDetails?.longitude}
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.longitude}
+                          required={true}
                         />
 
                         <InputBoxComponent
@@ -779,6 +765,7 @@ const LesseeInformation = ({
                           value={allNewContractDetails?.gpsCoordinates}
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.gpsCoordinates}
+                          required={true}
                         />
                       </Grid>
                     </Grid>

@@ -234,6 +234,7 @@ const ProvisionsDetails = (props) => {
                     name="provisiontype"
                     value={typeProvisionsData}
                     onChange={handleTypeChange}
+                    required={true}
                   />
                 </Grid>
 
@@ -246,10 +247,14 @@ const ProvisionsDetails = (props) => {
                       sx={{ width: 200, ml: 0 }}
                       size="small"
                       options={yearOptions}
-                      value={addProvisions?.year}
+                      value={addProvisions?.year || null}
                       onChange={(val) => {
                         handleChange("year", val);
                       }}
+                      getOptionLabel={(option) =>
+                        option?.label || option?.allNewContractDetails?.year
+                      }
+                      required={true}
                     />
                     <DropDownComponent
                       label="Month"
@@ -258,10 +263,14 @@ const ProvisionsDetails = (props) => {
                       size="small"
                       options={months}
                       name="month"
-                      value={addProvisions?.month}
+                      value={addProvisions?.month || null}
                       onChange={(val) => {
                         handleMonthChange("month", val);
                       }}
+                      getOptionLabel={(option) =>
+                        option?.label || option?.allNewContractDetails?.month
+                      }
+                      required={true}
                     />
 
                     <InputBoxComponent
@@ -271,6 +280,7 @@ const ProvisionsDetails = (props) => {
                       name="provisionAmount"
                       value={addProvisions?.provisionAmount}
                       onChange={(e) => updateChange(e)}
+                      required={true}
                     />
                   </Grid>
                 ) : null}
@@ -326,7 +336,7 @@ const ProvisionsDetails = (props) => {
                   ) : null}
                 </Grid>
               </Col>
-
+              {/* 
               <Snackbar
                 open={open}
                 anchorOrigin={{ vertical, horizontal }}
@@ -346,7 +356,7 @@ const ProvisionsDetails = (props) => {
                     ? "Provision Made Successfully"
                     : "Provision Reversed Successfully"}
                 </Alert>
-              </Snackbar>
+              </Snackbar> */}
             </Row>
           </Container>
         </Modal.Body>

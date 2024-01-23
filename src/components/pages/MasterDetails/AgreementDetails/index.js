@@ -17,6 +17,10 @@ import { deepOrange, green } from "@mui/material/colors";
 import { IFSCCodeDetails } from "../../../services/IfscCodeApi";
 import { getTenureDetails } from "../../../services/AddContractApi";
 import { formatDateToBackEndReqirement } from "../../../CommonFunction/CommonFunction";
+import moment from "moment/moment";
+// import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -150,17 +154,6 @@ const AgreementDetails = ({
     }));
 
     // Assuming e.target.name is 'escalationRate' for setEscalationRate
-  };
-  const handleTenureChange = (e) => {
-    const { name, value } = e.target;
-    // console.log(value, "value");
-    if (name === "agreementTenure") {
-      // let Tenurevalue = getTenureBasedOnDate(value);
-      setAllNewContractDetails((prevDetails) => ({
-        ...prevDetails,
-        agreementTenure: value,
-      }));
-    }
   };
 
   const handleEscalationChange = (e) => {
@@ -302,7 +295,6 @@ const AgreementDetails = ({
   };
 
   const handleActivationStatus = (name, value) => {
-    // console.log(name, value, "name, value");
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
@@ -337,21 +329,25 @@ const AgreementDetails = ({
   //   }
   // };
 
-  const handleRentStartDate = (val) => {
-    setAllNewContractDetails({
-      ...allNewContractDetails,
-      rentStartDate: val,
-    });
-    // getTenureBasedOnDate(val);
-  };
+  // const calculateTenureInMonths = (startDate, endDate) => {
+  //   // Calculate the difference in months
+  //   const monthsDifference =
+  //     (endDate?.getFullYear() - startDate?.getFullYear()) * 12 +
+  //     (endDate?.getMonth() - startDate?.getMonth());
+  //   // You can adjust this calculation based on your specific logic
+  //   return console.log(monthsDifference, "monthsDifference");
+  // };
 
-  const handleRentEndDate = (val) => {
-    setAllNewContractDetails({
-      ...allNewContractDetails,
-      rentEndDate: val,
-    });
-    // getTenureBasedOnDate(val);
-  };
+  // const handleTenureChange = (e) => {
+  //   const { name, value } = e.target;
+  //   // console.log(value, "value");
+  //   if (name === "agreementTenure") {
+  //     setAllNewContractDetails((prevDetails) => ({
+  //       ...prevDetails,
+  //       agreementTenure: value,
+  //     }));
+  //   }
+  // };
 
   const handlePaymentDate = (val) => {
     // let data = moment(val).format("MM-DD-YYYY");
@@ -473,29 +469,23 @@ const AgreementDetails = ({
       branch: value,
     };
   };
-  // const calculateTenureInMonths = (startDate, endDate) => {
-  //   // Calculate the difference in months
-  //   const monthsDifference =
-  //     (endDate?.getFullYear() - startDate?.getFullYear()) * 12 +
-  //     (endDate?.getDays() - startDate?.getDays());
-  //   // You can adjust this calculation based on your specific logic
-  //   return monthsDifference;
-  // };
-  // const calculateTenureInMonths = () => {
-  //   const start = new Date(allNewContractDetails?.agreementStartDate);
-  //   const end = allNewContractDetails?.agreementEndDate
-  //     ? new Date(allNewContractDetails?.agreementEndDate)
-  //     : new Date(); // If no end date is provided, use the current date
 
-  //   const diffInMilliseconds = end - start;
-  //   const diffInYears = diffInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+  //   const calculateTenureInMonths = () => {
+  //     const start = new Date(allNewContractDetails?.agreementStartDate);
+  //     const end = new Date (allNewContractDetails?.agreementEndDate)
+  //       ? new Date(allNewContractDetails?.agreementEndDate)
+  //       : new Date(); // If no end date is provided, use the current date
 
-  //   // You can further format the tenure as needed (e.g., months, days, etc.)
-  //   const years = Math.floor(diffInYears);
-  //   const remainingMonths = Math.floor((diffInYears - years) * 12);
+  //     const diffInMilliseconds = end - start;
+  //     const diffInYears = diffInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+  // console.log(diffInMilliseconds,"nh");
+  // console.log(end,start,"val");
+  //     // You can further format the tenure as needed (e.g., months, days, etc.)
+  //     const years = Math.floor(diffInYears);
+  //     const remainingMonths = Math.floor((diffInYears - years) * 12);
 
-  //   return remainingMonths;
-  // };
+  //     return remainingMonths;
+  //   };
 
   const handleAgreementEndDate = (val) => {
     setAllNewContractDetails({
@@ -503,14 +493,8 @@ const AgreementDetails = ({
       agreementEndDate: val,
     });
 
-    // Call the function to update tenure when either date changes
-    handleDateChange(allNewContractDetails?.agreementStartDate, val);
-    handleRenewalDateChange(allNewContractDetails.agreementStartDate, val);
+    // handleRenewalDateChange(allNewContractDetails.agreementStartDate, val);
   };
-
-  // useEffect(() => {
-  //   getTenureBasedOnDate();
-  // }, []);
 
   // const getTenureBasedOnDate = async (startDate, endDate) => {
   //   const { data } = await getTenureDetails(startDate, endDate);
@@ -522,42 +506,94 @@ const AgreementDetails = ({
   //   }
   // };
 
-  const getTenureBasedOnDate = async () => {
-    let payload = {
-      startDate: formatDateToBackEndReqirement(
-        allNewContractDetails?.rentStartDate
-      ),
-      endDate: formatDateToBackEndReqirement(
-        allNewContractDetails?.rentEndDate
-      ),
-    };
-    const { data } = await getTenureDetails(payload);
-    if (data) {
-      setAllNewContractDetails(data);
-    } else {
-      setAllNewContractDetails([]);
-    }
+  // const getTenureBasedOnDate = async () => {
+  //   const payload = {
+  //     startDate: formatDateToBackEndReqirement(
+  //       allNewContractDetails?.rentStartDate
+  //     ),
+  //     endDate: formatDateToBackEndReqirement(
+  //       allNewContractDetails?.rentEndDate
+  //     ),
+  //   };
+  //   const { data } = await getTenureDetails(payload);
+  //   // console.log(data, "data");
+  //   if (data) {
+  //     setAllNewContractDetails(data);
+  //   } else {
+  //     setAllNewContractDetails([]);
+  //   }
+  // };
+  // const handleRentStartDate = (val) => {
+  //   setAllNewContractDetails((prevDetails) => ({
+  //     ...prevDetails,
+  //     rentStartDate: val,
+  //   }));
+  //   // Call the function to update tenure when either date changes
+  //   // handleDateChange(val); //, allNewContractDetails.rentEndDate
+  // };
+
+  const handleRentStartDate = (val) => {
+    const date = moment(val).format("YYYY-MM-DD");
+    setAllNewContractDetails({
+      ...allNewContractDetails,
+      rentStartDate: date,
+    });
+    // Call the function to update tenure when either date changes
+    // handleDateChange(val); //, allNewContractDetails.rentEndDate
   };
 
-  const handleRenewalDateChange = (startDate, endDate) => {
-    // Calculate Tenure
-    // const tenureValue = calculateTenureInMonths(startDate, endDate);
+  const handleRentEndDate = (val) => {
+    const date = moment(val).format("YYYY-MM-DD");
+    setAllNewContractDetails({
+      ...allNewContractDetails,
+      rentEndDate: date,
+    });
+
+    //call a function to update tenure when either date changes
+    // handleDateChange(val); //allNewContractDetails?.rentStartDate,
+  };
+  // const handleRentEndDate = (val) => {
+  //   setAllNewContractDetails((prevDetails) => ({
+  //     ...prevDetails,
+  //     rentEndDate: val,
+  //   }));
+
+  //   //call a function to update tenure when either date changes
+  //   // handleDateChange(val); //allNewContractDetails?.rentStartDate,
+  // };
+
+  const calculateTenure = (startDateString, endDateString) => {
+    const startDate = moment.utc(startDateString);
+    const endDate = moment.utc(endDateString);
+    const differenceInDays = endDate?.diff(startDate, "months");
+    return console.log(differenceInDays, "differenceInDays");
+  };
+
+  // console.log(tenureValue);
+  const handleDateChange = () => {
+    const tenureValue = calculateTenure(
+      allNewContractDetails?.rentStartDate,
+      allNewContractDetails?.rentEndDate
+    );
     // Update the state with the calculated Tenure value
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
-      // renewalTenure: tenureValue,
+      agreementTenure: tenureValue,
     }));
   };
 
-  const handleDateChange = (startDate, endDate) => {
-    // Calculate Tenure
-    // const tenureValue = calculateTenureInMonths(startDate, endDate);
-    // Update the state with the calculated Tenure value
-    setAllNewContractDetails((prevDetails) => ({
-      ...prevDetails,
-      // agreementTenure: tenureValue,
-    }));
-  };
+  // const handleRenewalDateChange = () => {
+  //   // Calculate Tenure
+  //   const tenureValue = calculateTenure(
+  //     allNewContractDetails?.rentStartDate,
+  //     allNewContractDetails?.rentEndDate
+  //   );
+  //   // Update the state with the calculated Tenure value
+  //   setAllNewContractDetails((prevDetails) => ({
+  //     ...prevDetails,
+  //     renewalTenure: tenureValue,
+  //   }));
+  // };
 
   const handleRentChange = (e) => {
     setCurrentRent(parseFloat(e.target.value));
@@ -619,6 +655,7 @@ const AgreementDetails = ({
                 name="agreementSignDate"
                 value={allNewContractDetails?.agreementSignDate}
                 onChange={handleAgreementSignDate}
+                required
               />
 
               <DropDownComponent
@@ -627,22 +664,21 @@ const AgreementDetails = ({
                 sx={{ width: 300, ml: 0 }}
                 size="small"
                 options={activationStatus}
+                getOptionLabel={(option) =>
+                  option?.label ||
+                  allNewContractDetails?.agreementActivationStatus
+                }
                 name="agreementActivationStatus"
-                value={allNewContractDetails?.agreementActivationStatus || null}
+                value={
+                  type === "edit"
+                    ? allNewContractDetails?.agreementActivationStatus
+                    : allNewContractDetails?.agreementActivationStatus || null
+                }
                 onChange={(val) =>
                   handleActivationStatus("agreementActivationStatus", val)
                 }
+                required
               />
-              {/* <DropDownComponent
-                options={ScheduleType}
-                label="Schedule Premesis"
-                placeholder="Enter Schedule Premesis"
-                sx={{ width: 300, ml: 0 }}
-                name="agreementTenure"
-                value={allNewContractDetails?.agreementTenure}
-                onChange={(e) => updateChange(e)}
-                errorText={allNewContractDetailsErr?.agreementTenure}
-              /> */}
             </Grid>
           </Grid>
 
@@ -655,20 +691,22 @@ const AgreementDetails = ({
                 <InputBoxComponent
                   label="GL Name"
                   placeholder="Enter GL Name"
-                  sx={{ width: 300, mt: -1.5, ml: 1 }}
+                  sx={{ width: 300, mt: -1.5, ml: 0 }}
                   name="glName"
                   value={allNewContractDetails?.glName}
                   onChange={(e) => updateChange(e)}
                   errorText={allNewContractDetailsErr?.glName}
+                  required
                 />
                 <DatePickerComponent
                   placeholder="Select Signed Date"
                   label="Signed Date"
                   size="small"
-                  sx={{ width: 300 }}
+                  sx={{ width: 300, mt: 3 }}
                   name="signedDate"
                   value={allNewContractDetails?.signedDate}
                   onChange={handleAgreementGLSignDate}
+                  required
                 />
                 <InputBoxComponent
                   label="GL Employee ID"
@@ -678,6 +716,7 @@ const AgreementDetails = ({
                   value={allNewContractDetails?.glEmpId}
                   onChange={(e) => updateChange(e)}
                   errorText={allNewContractDetailsErr?.glEmpId}
+                  required
                 />
               </Grid>
             </Grid>
@@ -696,22 +735,13 @@ const AgreementDetails = ({
                 name="agreementStartDate"
                 value={allNewContractDetails?.agreementStartDate}
                 onChange={(val) => {
+                  // console.log(val, "val");
                   setAllNewContractDetails({
                     ...allNewContractDetails,
                     agreementStartDate: val,
                   });
-                  // getTenureBasedOnDate(new Date(val));
-                  // Call the function to update tenure when either date changes
-                  handleDateChange(
-                    new Date(val),
-                    allNewContractDetails.agreementEndDate
-                  );
-                  handleRenewalDateChange(
-                    new Date(val),
-                    allNewContractDetails.agreementEndDate
-                  );
                 }}
-                // onChange={handleAgreementStartDate}
+                required
               />
               <DatePickerComponent
                 placeholder="Select End at"
@@ -721,6 +751,7 @@ const AgreementDetails = ({
                 name="agreementEndDate"
                 value={allNewContractDetails?.agreementEndDate}
                 onChange={handleAgreementEndDate}
+                required
               />
             </Grid>
 
@@ -732,30 +763,77 @@ const AgreementDetails = ({
                 placeholder="Select Start From"
                 label="Rent Start Date"
                 size="small"
+                defaultValue="00-00-0000"
                 sx={{ width: 300 }}
                 name="rentStartDate"
                 value={allNewContractDetails?.rentStartDate}
                 onChange={handleRentStartDate}
+                required
               />
               <DatePickerComponent
                 placeholder="Select End at"
                 label="Rent End Date"
                 size="small"
+                defaultValue="00-00-0000"
                 sx={{ width: 300 }}
                 name="rentEndDate"
                 value={allNewContractDetails?.rentEndDate}
                 onChange={handleRentEndDate}
                 // disabled
+                required
               />
+
+              {/* <input
+                type="date"
+                name="rentStartDate"
+                value={allNewContractDetails?.rentStartDate}
+                onChange={() => handleRentStartDate()}
+              />
+              <input
+                type="date"
+                name="rentEndDate"
+                value={allNewContractDetails?.rentEndDate}
+                onChange={() => handleRentEndDate()}
+              /> */}
+              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    label="Rent Start Date"
+                    inputFormat="YYYY-MM-DD"
+                    disablePast={true}
+                    value={new Date(allNewContractDetails?.rentStartDate)}
+                    onChange={(e, val) => {
+                      handleRentStartDate(e, val);
+                    }}
+                    sx={{ width: 225, ml: 1 }}
+                  />
+                </DemoContainer>
+              </LocalizationProvider> */}
+
+              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    label="Rent End Date"
+                    inputFormat="YYYY-MM-DD"
+                    disablePast={true}
+                    value={new Date(allNewContractDetails?.rentEndDate)}
+                    onChange={(e, val) => {
+                      handleRentEndDate(e, val);
+                    }}
+                    sx={{ width: 225, ml: 1 }}
+                  />
+                </DemoContainer>
+              </LocalizationProvider> */}
 
               <InputBoxComponent
                 label="Tenure (in months)"
                 placeholder="Enter Tenure "
-                sx={{ width: 300, mt: -1.5, ml: 1 }}
+                sx={{ width: 300, mt: -4.5, ml: 1 }}
                 name="agreementTenure"
                 value={allNewContractDetails?.agreementTenure}
-                onChange={(e) => handleTenureChange(e)}
+                onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.agreementTenure}
+                required
               />
             </Grid>
           </Grid>
@@ -799,7 +877,7 @@ const AgreementDetails = ({
 
               <DropDownComponent
                 label="Document Type"
-                sx={{ width: 300, mt: 1.5, mr: 3 }}
+                sx={{ width: 300, mt: 1, mr: 3 }}
                 options={DocumentType}
                 // onSelect={handleDocumentType}
                 name="documentType"
@@ -834,6 +912,7 @@ const AgreementDetails = ({
                       filename: e.target.files[0].name,
                     });
                   }}
+                  required
                 />
 
                 <ColorIcon
@@ -849,6 +928,7 @@ const AgreementDetails = ({
                     }}
                     fontSize="large"
                     // sx={{ background: "#FFFFF", color: "green" }}
+                    required
                   />
                   <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
                     Upload
@@ -860,7 +940,7 @@ const AgreementDetails = ({
             <Typography className="fs-20 fw-500 px-4 py-1 mt-1">
               Security Deposit Details
             </Typography>
-            <Grid item className="d-flex m-2" md={12}>
+            <Grid item className="d-flex" md={12}>
               <InputBoxComponent
                 label="Security Deposit Amount"
                 placeholder="Enter SD Amount"
@@ -869,15 +949,17 @@ const AgreementDetails = ({
                 value={allNewContractDetails?.securityDepositAmount}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.securityDepositAmount}
+                required
               />
 
               <DatePickerComponent
                 label="Payment Date"
                 placeholder="Enter Payment Date"
-                sx={{ width: 300, mt: 1.5 }}
+                sx={{ width: 300, mt: 4.5 }}
                 // name="securityDepositPaymentDate"
                 value={allNewContractDetails?.securityDepositPaymentDate}
                 onChange={handlePaymentDate}
+                required
               />
 
               <InputBoxComponent
@@ -888,71 +970,88 @@ const AgreementDetails = ({
                 value={allNewContractDetails?.securityDepositUtr}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.securityDepositUtr}
+                required
               />
             </Grid>
-            <Grid item className="d-flex m-2" md={12}>
+            <Grid item className="d-flex" md={12}>
               <InputBoxComponent
                 label="Monthly Rent"
                 placeholder="Enter Monthly Rent"
-                sx={{ width: 300, my: -1.3 }}
+                sx={{ width: 300 }}
                 name="lessorRentAmount"
-                value={allNewContractDetails?.lessorRentAmount}
+                value={
+                  type === "edit"
+                    ? allNewContractDetails?.lessorRentAmount
+                    : allNewContractDetails?.recipiants?.lessorRentAmount
+                }
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorRentAmount}
+                required
               />
               <DatePickerComponent
                 placeholder="Select Start From"
                 label="First Rent Date"
                 size="small"
-                sx={{ width: 300 }}
+                sx={{ width: 300, mt: 4.3 }}
                 value={allNewContractDetails?.rentStartDate} //firstRantDate
                 onChange={handleRentStartDate}
+                required
               />
               <InputBoxComponent
                 label="Standard Deduction"
                 placeholder="Enter Standard Deduction"
-                sx={{ width: 300, my: -1.3, ml: 1 }}
+                sx={{ width: 300, ml: 1 }}
                 name="standardDeducition"
                 value={allNewContractDetails?.standardDeducition}
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.standardDeducition}
+                required
               />
             </Grid>
 
-            <Grid item className="d-flex m-2" md={12}>
+            <Grid item className="d-flex " md={12}>
               <DropDownComponent
                 label="Lockin Period"
-                sx={{ width: 300, mr: 1 }}
+                sx={{ width: 300, mt: 2, ml: -2 }}
                 options={LockinPeriod}
+                getOptionLabel={(option) =>
+                  option?.label ||
+                  allNewContractDetails?.securityDepositLockinPeriod
+                }
                 name="securityDepositLockinPeriod"
                 value={allNewContractDetails?.securityDepositLockinPeriod}
                 onChange={(value) =>
                   handleLockinPeriod("securityDepositLockinPeriod", value)
                 }
+                required
               />
 
               <DropDownComponent
                 label="Notice Period"
-                sx={{ width: 300 }}
+                sx={{ width: 300, mt: 2, ml: 0 }}
                 options={noticePeriod}
-                // onSelect={handleNoticePeriod}
+                getOptionLabel={(option) =>
+                  option?.label ||
+                  allNewContractDetails?.securityDepositnoticePeriod
+                }
                 name="securityDepositnoticePeriod"
                 value={allNewContractDetails?.securityDepositnoticePeriod}
                 onChange={(value) =>
                   handleNoticePeriod("securityDepositnoticePeriod", value)
                 }
-                // onChange={(e) => updateChange(e)}
+                required
               />
 
               <InputBoxComponent
                 label="Exit Terms-Remarks"
-                sx={{ width: 300, mt: -1.5, ml: 1 }}
+                sx={{ width: 300, mt: -2.5, ml: 2.5 }}
                 // options={ExitTerms}
                 placeholder="Enter Remarks"
                 multiline
                 name="securityDepositExitTerm"
                 value={allNewContractDetails?.securityDepositExitTerm}
                 onChange={(e) => updateChange(e)}
+                required
               />
             </Grid>
           </Grid>
@@ -978,6 +1077,12 @@ const AgreementDetails = ({
                     options={recipents}
                     value={recipientCount}
                     onChange={handleDropDownChange}
+                    getOptionLabel={(option) =>
+                      option?.label ||
+                      option?.allNewContractDetails?.recipientCount ||
+                      null
+                    }
+                    required
                   />
                   <Grid item className="d-flex flex-column" lg={12}>
                     {Array.from({ length: recipientCount }, (_, index) => (
@@ -1014,6 +1119,7 @@ const AgreementDetails = ({
                                 )
                               }
                               errorText={allNewContractDetailsErr?.recipiantsID}
+                              required
                             />
                           ) : null}
 
@@ -1023,7 +1129,7 @@ const AgreementDetails = ({
                             sx={{ width: 300 }}
                             name={`lessorRentAmount-${index}`}
                             value={
-                              recipientCount && recipientCount > 1
+                              recipientCount && recipientCount?.length > 1
                                 ? calculateSplitAmount()
                                 : calculateSplitAmount() ||
                                   allNewContractDetails?.recipiants?.[index]
@@ -1039,6 +1145,7 @@ const AgreementDetails = ({
                             errorText={
                               allNewContractDetailsErr?.lessorRentAmount
                             }
+                            required
                           />
                         </Grid>
                         <Grid item className="d-flex m-2" md={12}>
@@ -1064,6 +1171,7 @@ const AgreementDetails = ({
                             errorText={
                               allNewContractDetailsErr?.lessorRecipiantsName
                             }
+                            required
                           />
 
                           <InputBoxComponent
@@ -1079,6 +1187,7 @@ const AgreementDetails = ({
                             errorText={
                               allNewContractDetailsErr?.lessorIfscNumber
                             }
+                            required
                           />
                         </Grid>
 
@@ -1102,6 +1211,7 @@ const AgreementDetails = ({
                                 )
                               }
                               errorText={allNewContractDetailsErr?.bank}
+                              required
                             />
 
                             <InputBoxComponent
@@ -1123,6 +1233,7 @@ const AgreementDetails = ({
                               errorText={
                                 allNewContractDetailsErr?.lessorBranchName
                               }
+                              required
                             />
                           </Grid>
                         ) : null}
@@ -1150,6 +1261,7 @@ const AgreementDetails = ({
                             errorText={
                               allNewContractDetailsErr?.lessorAccountNumber
                             }
+                            required
                           />
                           <Grid className="d-flex flex-column">
                             <InputBoxComponent
@@ -1201,6 +1313,7 @@ const AgreementDetails = ({
                               )
                             }
                             errorText={allNewContractDetailsErr?.panNo}
+                            required
                           />
                           <InputBoxComponent
                             label="GST No."
@@ -1222,6 +1335,7 @@ const AgreementDetails = ({
                               )
                             }
                             errorText={allNewContractDetailsErr?.gstNo}
+                            required
                           />
                         </Grid>
                       </Grid>
@@ -1255,7 +1369,7 @@ const AgreementDetails = ({
                           )
                         }
                         errorText={allNewContractDetailsErr?.recipiantsID}
-                      />
+                      required/>
                     ) : null} */}
                 <Grid item className="d-flex m-2" lg={12}>
                   {type === "edit" ? (
@@ -1265,6 +1379,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorRentAmount}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                 </Grid>
@@ -1277,6 +1392,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorRecipiantsName}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                   {type === "edit" ? (
@@ -1286,6 +1402,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorIfscNumber}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                   {type === "edit" ? (
@@ -1295,6 +1412,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorBankName}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                 </Grid>
@@ -1306,6 +1424,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorBranchName}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                   {type === "edit" ? (
@@ -1316,6 +1435,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorAccountNumber}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                   {type === "edit" ? (
@@ -1326,6 +1446,7 @@ const AgreementDetails = ({
                       value={allNewContractDetails?.lessorAccountNumber}
                       onChange={(e) => updateChange(e)}
                       sx={{ width: 300 }}
+                      required
                     />
                   ) : null}
                 </Grid>
@@ -1354,6 +1475,7 @@ const AgreementDetails = ({
                   onChange={(e) => updateChange(e)}
                   sx={{ width: 300 }}
                   readOnly
+                  required
                 />
 
                 <InputBoxComponent
@@ -1363,6 +1485,7 @@ const AgreementDetails = ({
                   value={allNewContractDetails?.lessorRentAmount}
                   onChange={(e) => updateChange(e)}
                   sx={{ width: 300 }}
+                  required
                 />
 
                 <InputBoxComponent
@@ -1372,6 +1495,7 @@ const AgreementDetails = ({
                   value={allNewContractDetails?.escalation}
                   onChange={(e) => handleEscalationChange(e)}
                   sx={{ width: 300 }}
+                  required
                 />
               </Grid>
               <Grid

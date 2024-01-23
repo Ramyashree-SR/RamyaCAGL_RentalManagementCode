@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { green } from "@mui/material/colors";
+import { deepOrange, green } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
@@ -21,6 +21,7 @@ import { getRentPaymentReportDetails } from "../../../../services/PaymentReportA
 
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 import RentActualPaymentTable from "../../../../molecules/RentActualPaymentTable";
+import ExcelExport from "../../../../../ExcelExport";
 
 const RentActualDetails = (props) => {
   const { addToast } = useToasts();
@@ -40,8 +41,11 @@ const RentActualDetails = (props) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
+  // console.log(tableData,"tableData");
   const [editedData, setEditedData] = useState({});
+  // console.log(editedData, "editedData");
   const [confirmSubmit, setconfirmSubmit] = useState(false);
+
   const months = [
     { id: 1, label: "January" },
     { id: 2, label: "February" },
@@ -63,12 +67,7 @@ const RentActualDetails = (props) => {
   const handleDialogClose = () => {
     setOpen(false);
   };
-  const handleConfirmSubmit = () => {
-    setconfirmSubmit(true);
-    if (selectedRows) {
-      AddRentActualFortheMonth();
-    }
-  };
+
   const endDateObject = new Date();
 
   // Check if the provided rent end date is valid
@@ -143,18 +142,46 @@ const RentActualDetails = (props) => {
         return editedDataRow;
       });
 
+      //   // Update the data with selected rows and edited data
+      //   const updatedData = getActualPaymentReport?.map((item) =>
+      //     selectedRows.includes(item.info?.uniqueID)
+      //       ? selectedRowsData.find((row) => row?.info?.uniqueID === item.info?.uniqueID)
+      //       : item
+      //   );
+
+      //   setTableData(updatedData);
+
+      //   // Clear the local storage for edited data
+      //   localStorage.removeItem('editedData');
+
+      //   return updatedData;
+      // }
+
+      // // If no selected rows, return the original data
+      // return getActualPaymentReport;
       // Remove rows after making a payment
       const updatedDataAfterPayment = getActualPaymentReport?.filter(
         (item) => !selectedRows.includes(item.info?.uniqueID)
       );
 
-      setTableData(updatedDataAfterPayment);
+      // Update the data with selected rows and edited data
+      const updatedData = updatedDataAfterPayment?.map((item) =>
+        selectedRows.includes(item.info?.uniqueID)
+          ? selectedRowsData.find(
+              (row) => row?.info?.uniqueID === item.info?.uniqueID
+            )
+          : item
+      );
+      setTableData(updatedData);
+      // Clear the local storage for edited data
+      localStorage.removeItem("editedData");
 
       return selectedRowsData;
     }
     // If no selected rows, return the original data
     return getActualPaymentReport;
   };
+
   // Function to get the details of the selected rows
   const getSelectedRowDetails = () => {
     return selectedRows?.map((rowId) =>
@@ -162,7 +189,11 @@ const RentActualDetails = (props) => {
     );
   };
 
-  // console.log(editedData, "editedData");
+  const handleConfirmSubmit = () => {
+    setconfirmSubmit(true);
+    AddRentActualFortheMonth();
+  };
+
   const AddRentActualFortheMonth = async () => {
     let selectedRowsDatas = handleSaveSelectedRows();
     // Assuming selectedRowsData is an array of objects
@@ -180,7 +211,8 @@ const RentActualDetails = (props) => {
     const { data, errRes } = await AddRentActualDetails(payload);
     // console.log(data, "dataRes");
     if (data) {
-      setAddRentActual(data?.data);
+      let getData = data?.data;
+      setAddRentActual(getData);
       props.close();
       addToast("Rent Actual Payment Done Successfully", {
         appearance: "success",
@@ -190,7 +222,7 @@ const RentActualDetails = (props) => {
       props.close();
     }
   };
-  // console.log(selectedRows, "selectedRows");
+
   return (
     <>
       <Modal
@@ -224,6 +256,7 @@ const RentActualDetails = (props) => {
                       placeholder="Select "
                       sx={{ width: 200 }}
                       size="small"
+                      getOptionLabel={(option) => option?.label || option}
                       options={yearOptions}
                       value={selectedYear}
                       onChange={handleChange}
@@ -233,10 +266,35 @@ const RentActualDetails = (props) => {
                       placeholder="Select "
                       sx={{ width: 200 }}
                       size="small"
+                      getOptionLabel={(option) => option?.label || option}
                       options={months}
                       value={selectedMonth}
                       onChange={handleMonthChange}
                     />
+                    <Grid
+                      item
+                      className="d-flex flex-row align-items-end justify-content-end"
+                      sx={{
+                        mt: 0.1,
+                        ml: 10,
+                        width: 120,
+                        height: 40,
+                      }}
+                    >
+                      <ExcelExport
+                        excelData={getActualPaymentReport}
+                        fileName={"ProvisionsList"}
+                        sx={{
+                          mr: 1,
+                          backgroundColor: deepOrange[600],
+                          width: 120,
+                          height: 40,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Col>

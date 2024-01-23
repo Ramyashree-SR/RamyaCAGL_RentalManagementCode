@@ -63,6 +63,7 @@ const DropDownComponent = ({
   endAdornmentLine = true,
   required = false,
   disableClearable = false,
+  getOptionLabel = () => {},
 }) => {
   const classes = useStyles();
 
@@ -79,7 +80,8 @@ const DropDownComponent = ({
       </li>
     );
   };
-  const handleOptionSelected = (option, value) => option.value === value.value;
+  const handleOptionSelected = (option, value) =>
+    option?.value === value?.value;
 
   return (
     <>
@@ -116,9 +118,10 @@ const DropDownComponent = ({
           multiple={multiple}
           options={options}
           fullWidth={fullWidth}
-          getOptionLabel={(option) =>
-            option?.label ? option?.label : option || ""
-          }
+          getOptionLabel={getOptionLabel}
+          // getOptionLabel={(option) =>
+          //   option?.label ? option?.label : option || ""
+          // }
           isOptionEqualToValue={(option, value) =>
             value === undefined ||
             value === "" ||

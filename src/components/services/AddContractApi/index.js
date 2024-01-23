@@ -20,7 +20,7 @@ const getTenureDetails = (payload) => {
   return serviceUtil
     .post(`getenure`,payload)
     .then((res) => {
-      // console.log(res, "BranchDatares");
+      console.log(res, "dataRes");
       const data = res.data;
       return { data };
     })

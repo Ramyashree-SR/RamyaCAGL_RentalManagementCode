@@ -10,6 +10,7 @@ let datePickerFormat = (val) => {
 
 // format date to backend format
 let formatDateToBackEndReqirement = (val) => {
+  // console.log(val,"val");
   let data = moment(val).format("YYYY-MM-DD");
   return data;
 };
