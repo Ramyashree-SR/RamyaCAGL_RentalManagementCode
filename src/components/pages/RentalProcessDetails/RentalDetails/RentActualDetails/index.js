@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   Grid,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
@@ -22,6 +23,8 @@ import { getRentPaymentReportDetails } from "../../../../services/PaymentReportA
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 import RentActualPaymentTable from "../../../../molecules/RentActualPaymentTable";
 import ExcelExport from "../../../../../ExcelExport";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const RentActualDetails = (props) => {
   const { addToast } = useToasts();
@@ -45,6 +48,8 @@ const RentActualDetails = (props) => {
   const [editedData, setEditedData] = useState({});
   // console.log(editedData, "editedData");
   const [confirmSubmit, setconfirmSubmit] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [showClearIcon, setShowClearIcon] = useState("none");
 
   const months = [
     { id: 1, label: "January" },
@@ -112,7 +117,6 @@ const RentActualDetails = (props) => {
       if (data) {
         let getData = data?.data;
         setGetAcualPaymentReport(getData);
-        setRentActualData(getData);
       } else {
         setGetAcualPaymentReport([]);
         setRentActualData([]);
@@ -142,30 +146,8 @@ const RentActualDetails = (props) => {
         return editedDataRow;
       });
 
-      //   // Update the data with selected rows and edited data
-      //   const updatedData = getActualPaymentReport?.map((item) =>
-      //     selectedRows.includes(item.info?.uniqueID)
-      //       ? selectedRowsData.find((row) => row?.info?.uniqueID === item.info?.uniqueID)
-      //       : item
-      //   );
-
-      //   setTableData(updatedData);
-
-      //   // Clear the local storage for edited data
-      //   localStorage.removeItem('editedData');
-
-      //   return updatedData;
-      // }
-
-      // // If no selected rows, return the original data
-      // return getActualPaymentReport;
-      // Remove rows after making a payment
-      const updatedDataAfterPayment = getActualPaymentReport?.filter(
-        (item) => !selectedRows.includes(item.info?.uniqueID)
-      );
-
       // Update the data with selected rows and edited data
-      const updatedData = updatedDataAfterPayment?.map((item) =>
+      const updatedData = selectedRowsData?.map((item) =>
         selectedRows.includes(item.info?.uniqueID)
           ? selectedRowsData.find(
               (row) => row?.info?.uniqueID === item.info?.uniqueID
@@ -173,13 +155,17 @@ const RentActualDetails = (props) => {
           : item
       );
       setTableData(updatedData);
-      // Clear the local storage for edited data
-      localStorage.removeItem("editedData");
-
-      return selectedRowsData;
+      return updatedData;
     }
+    // Clear the local storage for edited data
+    localStorage.removeItem("editedData");
+
     // If no selected rows, return the original data
     return getActualPaymentReport;
+    // // Remove rows after making a payment
+    // const updatedDataAfterPayment = getActualPaymentReport?.filter(
+    //   (item) => !selectedRows.includes(item.info?.uniqueID)
+    // );
   };
 
   // Function to get the details of the selected rows
@@ -217,6 +203,7 @@ const RentActualDetails = (props) => {
       addToast("Rent Actual Payment Done Successfully", {
         appearance: "success",
       });
+      // window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
@@ -271,6 +258,59 @@ const RentActualDetails = (props) => {
                       value={selectedMonth}
                       onChange={handleMonthChange}
                     />
+                    <Grid className="d-flex flex-row align-items-center justify-content-around">
+                      <TextField
+                        id="outlined-size-small"
+                        placeholder="Search"
+                        InputProps={{
+                          "aria-label": "Without label",
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <SearchIcon />
+                            </InputAdornment>
+                          ),
+                          endAdornment: (
+                            <InputAdornment
+                              position="end"
+                              style={{ display: showClearIcon }}
+                              onClick={(event) => {
+                                setShowClearIcon(event.target.value);
+                              }}
+                            >
+                              <ClearIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                        size="small"
+                        value={searchText}
+                        onChange={(e, value) => {
+                          setSearchText(e.target.value);
+                        }}
+                        sx={{
+                          // backgroundColor: "#FAFAFA",
+                          borderRadius: "100px",
+                          "& .MuiOutlinedInput-root:hover": {
+                            "& > fieldset": {
+                              borderColor: "#A6A6A6",
+                            },
+                          },
+                          "& .MuiOutlinedInput-root:focus": {
+                            "& > fieldset": {
+                              outline: "none",
+                              borderColor: "#ECECEC",
+                            },
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& > fieldset": {
+                              borderColor: "#c4c4c4",
+                              borderRadius: "100px",
+                            },
+                            width: 350,
+                            ml: 3,
+                          },
+                        }}
+                      />
+                    </Grid>
                     <Grid
                       item
                       className="d-flex flex-row align-items-end justify-content-end"
@@ -310,6 +350,7 @@ const RentActualDetails = (props) => {
                     setTableData={setTableData}
                     editedData={editedData}
                     setEditedData={setEditedData}
+                    searchText={searchText}
                   />
                 )}
               </Box>
@@ -328,7 +369,7 @@ const RentActualDetails = (props) => {
               mr: 2,
             }}
           >
-            {selectedMonth ? (
+            {selectedRows?.length > 0 ? (
               <Button
                 variant="contained"
                 onClick={() => {

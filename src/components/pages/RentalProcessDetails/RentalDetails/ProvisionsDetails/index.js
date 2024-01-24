@@ -6,12 +6,14 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
 import { red } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
+import ShowProvisionDetails from "../ShowProvisionDetails";
+import { getProvisionDetailsOfTheBranch } from "../../../../services/ProvisionsApi";
 
 const ProvisionsDetails = (props) => {
   const {
@@ -32,6 +34,8 @@ const ProvisionsDetails = (props) => {
     vertical: "bottom",
     horizontal: "center",
   });
+  const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
+
   const { vertical, horizontal, open } = state;
 
   const handleClick = (newState) => {
@@ -54,6 +58,7 @@ const ProvisionsDetails = (props) => {
     </React.Fragment>
   );
   const [selectedYear, setSelectedYear] = useState(null);
+
   const handleChange = (name, newValue) => {
     setAddProvisions({
       ...addProvisions,
@@ -220,17 +225,35 @@ const ProvisionsDetails = (props) => {
               </Col>
               <hr />
               <Col xs={12}>
-                <Grid className="d-flex align-items-center justify-content-start">
+                <Grid className="d-flex align-items-between justify-content-between">
                   <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                     Provision for the month :
                   </Typography>
 
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenShowProvisionModal(true)}
+                  >
+                    View Provisions
+                  </Button>
+
+                  <ShowProvisionDetails
+                    show={openShowProvisionModal}
+                    close={() => setOpenShowProvisionModal(false)}
+                   
+                  />
+                </Grid>
+
+                <Grid className="d-flex align-items-start justify-content-start mt-2">
                   <DropDownComponent
                     label="Provision Type"
                     placeholder="Select "
-                    sx={{ width: 200, ml: 3 }}
+                    sx={{ width: 200 }}
                     size="small"
                     options={Array.isArray(typeProvision) ? typeProvision : []}
+                    getOptionLabel={(option) =>
+                      option?.label || typeProvisionsData
+                    }
                     name="provisiontype"
                     value={typeProvisionsData}
                     onChange={handleTypeChange}
@@ -252,14 +275,14 @@ const ProvisionsDetails = (props) => {
                         handleChange("year", val);
                       }}
                       getOptionLabel={(option) =>
-                        option?.label || option?.allNewContractDetails?.year
+                        option?.label || addProvisions?.year
                       }
                       required={true}
                     />
                     <DropDownComponent
                       label="Month"
                       placeholder="Select "
-                      sx={{ width: 200, ml: 0 }}
+                      sx={{ width: 200 }}
                       size="small"
                       options={months}
                       name="month"
@@ -276,7 +299,7 @@ const ProvisionsDetails = (props) => {
                     <InputBoxComponent
                       label="Provision Amount"
                       placeholder="Provision Amount"
-                      sx={{ width: 200, ml: 0, mt: -1.3 }}
+                      sx={{ width: 200, mt: -4.2, ml: 3 }}
                       name="provisionAmount"
                       value={addProvisions?.provisionAmount}
                       onChange={(e) => updateChange(e)}
@@ -288,10 +311,10 @@ const ProvisionsDetails = (props) => {
                 typeProvisionsData === "Reverse" ? (
                   <Grid className="d-flex flex-row ">
                     <InputBoxComponent
-                      textLabel="Remarks :"
+                      textLabel="&nbsp;&nbsp;&nbsp;Remarks :"
                       placeholder="Type here..."
-                      sx={{ width: 400 }}
-                      rows={4}
+                      sx={{ width: 400, ml: 2 }}
+                      rows={3}
                       name="remark"
                       value={addProvisions?.remark}
                       multiline
@@ -301,7 +324,7 @@ const ProvisionsDetails = (props) => {
                 ) : null}
                 <Grid className="d-flex flex-row mt-1 ">
                   {typeProvisionsData === "Make" ? (
-                    <Grid>
+                    <Grid className="d-flex " sx={{ ml: 2 }}>
                       <Button
                         onClick={() => {
                           AddProvisionFortheMonth();

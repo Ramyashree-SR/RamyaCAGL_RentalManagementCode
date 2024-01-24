@@ -15,6 +15,8 @@ import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import ExcelExport from "../../../../../ExcelExport";
 import axios from "axios";
 import { ExportToCSV } from "../../../../ExportToCSV";
+import PaymentReportTable from "../../../../molecules/PaymentReportTable";
+import BranchReportTable from "../../../../molecules/BranchReportTable";
 
 const RentDue = (props) => {
   const {
@@ -198,6 +200,9 @@ const RentDue = (props) => {
                   options={
                     Array.isArray(activationStatus) ? activationStatus : []
                   }
+                  getOptionLabel={(option) =>
+                    option?.label || activationStatusFilterDue
+                  }
                   name="status"
                   value={activationStatusFilterDue || "All"}
                   onChange={(val) =>
@@ -225,12 +230,7 @@ const RentDue = (props) => {
                   height: 40,
                 }}
               >
-                <ExportToCSV
-                  // excelData={dataToExcel}
-                  // excelData={rentDueDataByBranchId}
-                  excelData={getRentExcelData}
-                  fileName={fileName}
-                />
+                <ExportToCSV excelData={getRentExcelData} fileName={fileName} />
               </Grid>
             </Grid>
             <Box
@@ -243,11 +243,11 @@ const RentDue = (props) => {
               }}
             >
               {branchIDforDue && (
-                <ReusableTable
+                <BranchReportTable
                   data={rentDueDataByBranchId}
                   columns={rentDueData}
                   sx={{
-                    height: 360,
+                    height: 350,
                     width: "100%",
                     overFlowX: "scroll",
                     overFlowY: "scroll",

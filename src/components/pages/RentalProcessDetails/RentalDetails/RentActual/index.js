@@ -96,7 +96,7 @@ const RentActual = (props) => {
     //   ...RentActualIDs,
     //   [e.target.name]: e.target.value,
     // });
-    setRentActualIDs(e.target.value);
+      setRentActualIDs(e.target.value);
   };
 
   const updatedChange = (e) => {

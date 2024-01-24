@@ -18,21 +18,19 @@ import Checkbox from "@mui/material/Checkbox";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.root}`]: {
-    padding: "5px",
+    padding: "7px",
   },
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme?.palette?.info.dark,
+    backgroundColor: theme?.palette?.success.dark,
     color: theme.palette?.common?.white,
     fontSize: 12,
     fontWeight: 650,
-    // fontFamily:"san-serif",
-    // padding: "3px",
-    fontFamily: "sans-serif",
+    padding: "5px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 12,
     fontWeight: 700,
-    backgroundColor: " #C5EBF6", //#CFE8F7, #C5EBF6 ,#D5F7DC
+    backgroundColor: "#D5F7DC", //#CFE8F7, #C5EBF6 ,#D5F7DC
     fontFamily: "sans-serif",
   },
 }));
@@ -72,6 +70,9 @@ const useStyles = makeStyles({
     fontSize: "12px !important",
     borderBottom: "1px solid #70B3D1 !important",
     borderRight: "1px solid #70B3D1  !!!important",
+    // display: "flex",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   tableRow: {
     border: "none !important",
@@ -80,10 +81,12 @@ const useStyles = makeStyles({
     fontSize: "12px",
   },
 });
-const PaymentReportTable = ({ data, columns, sx }) => {
+
+const BranchReportTable = ({ data, columns, sx, showTotal }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [monthlyTotal, setMonthlyTotal] = useState({});
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -94,57 +97,96 @@ const PaymentReportTable = ({ data, columns, sx }) => {
     setPage(0);
   };
 
+  // Calculate monthly totals
+  useEffect(() => {
+    const total = {};
+    data &&
+      data?.map((entry) => {
+        return Object.keys(entry).forEach((month) => {
+          if (
+            month !== "rentDueID" &&
+            month !== "contractID" &&
+            month !== "year" &&
+            month !== "escalation" &&
+            month !== "status"
+          ) {
+            total[month] = (total[month] || 0) + entry[month];
+          }
+        });
+      });
+    setMonthlyTotal(total);
+  }, [data]);
+
+  const calculateTotal = (row) => {
+    return Object.values(row).reduce((acc, value) => acc + value, 0);
+  };
+
   return (
     <>
-      <TableContainer
-        component={Paper}
-        sx={{
-          ...sx,
-        }}
-      >
+      <TableContainer component={Paper} sx={{ ...sx }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
               {columns &&
-                columns?.map((column) => (
+                columns.map((column) => (
                   <StyledTableCell
                     key={column.id}
                     classes={{ root: classes.tableHeader }}
                   >
-                    {column?.label}
+                    {column.label}
                   </StyledTableCell>
                 ))}
             </StyledTableRow>
           </TableHead>
           <TableBody>
             {data &&
-              data?.length &&
               data
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                ?.map((row, index) => (
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => (
                   <StyledTableRow key={index}>
                     {columns &&
-                      columns?.map((column) => (
+                      columns.map((column) => (
                         <StyledTableCell
                           key={column.id}
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
                         >
-                          {(row[column.id] !== undefined &&
-                            row[column.id] !== null) ||
-                          (row.info?.[column.id] && row.info?.[column.id])
-                            ? row[column.id] ||
-                              (row.info?.[column.id] && row.info?.[column.id])
+                          {row[column.id] !== undefined &&
+                          row[column.id] !== null
+                            ? row[column.id]
                             : 0}
                         </StyledTableCell>
                       ))}
                   </StyledTableRow>
                 ))}
+            {showTotal && (
+              <StyledTableRow>
+                {columns &&
+                  columns.map((column) => {
+                    if (
+                      ["contractID", "escalation", "year", "status"].includes(
+                        column.id
+                      )
+                    ) {
+                      return (
+                        <StyledTableCell key={column.id}>-</StyledTableCell>
+                      );
+                    } else if (column.id in monthlyTotal) {
+                      return (
+                        <StyledTableCell key={column.id}>
+                          ₹{monthlyTotal[column.id]}
+                        </StyledTableCell>
+                      );
+                    }
+                    return null;
+                  })}
+              </StyledTableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 15, 100]}
+        rowsPerPageOptions={[5, 10, 100]}
         component="div"
         count={data?.length}
         rowsPerPage={rowsPerPage}
@@ -156,4 +198,4 @@ const PaymentReportTable = ({ data, columns, sx }) => {
   );
 };
 
-export default PaymentReportTable;
+export default BranchReportTable;

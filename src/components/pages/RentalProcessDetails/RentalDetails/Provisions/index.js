@@ -1,4 +1,11 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
@@ -10,26 +17,17 @@ import { ProvisionsColumns } from "../../../../../constants/ProvisionList";
 import PaymentTableComponent from "../../../../molecules/PaymentTableComponent";
 import { ExportToCSV } from "../../../../ExportToCSV";
 import ExcelExport from "./../../../../../ExcelExport/index";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const Provisions = (props) => {
-  const {
-    rentEndDate,
-    rentStartDate,
-    branchIDforDue,
-    lessorName,
-    AddProvisionFortheMonth,
-    addProvisions,
-    setAddProvisions,
-    monthlyRent,
-    uniqueID,
-    lesseeBranchName,
-  } = props;
-
   const [dataSelect, setDataSelect] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [provisionsList, setProvisionsList] = useState([]);
   const [selectedYear, setSelectedYear] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [showClearIcon, setShowClearIcon] = useState("none");
+  const [searchText, setSearchText] = useState("");
 
   const months = [
     { id: 1, label: "January" },
@@ -188,6 +186,59 @@ const Provisions = (props) => {
                 value={selectedMonth}
                 onChange={handleMonthChange}
               /> */}
+              <Grid className="d-flex flex-row align-items-center justify-content-around">
+                <TextField
+                  id="outlined-size-small"
+                  placeholder="Search"
+                  InputProps={{
+                    "aria-label": "Without label",
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment
+                        position="end"
+                        style={{ display: showClearIcon }}
+                        onClick={(event) => {
+                          setShowClearIcon(event.target.value);
+                        }}
+                      >
+                        <ClearIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  size="small"
+                  value={searchText}
+                  onChange={(e, value) => {
+                    setSearchText(e.target.value);
+                  }}
+                  sx={{
+                    // backgroundColor: "#FAFAFA",
+                    borderRadius: "100px",
+                    "& .MuiOutlinedInput-root:hover": {
+                      "& > fieldset": {
+                        borderColor: "#A6A6A6",
+                      },
+                    },
+                    "& .MuiOutlinedInput-root:focus": {
+                      "& > fieldset": {
+                        outline: "none",
+                        borderColor: "#ECECEC",
+                      },
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: "#c4c4c4",
+                        borderRadius: "100px",
+                      },
+                      width: 350,
+                      ml: 3,
+                    },
+                  }}
+                />
+              </Grid>
               <Grid
                 item
                 className="d-flex flex-row align-items-end justify-content-end"
@@ -231,6 +282,7 @@ const Provisions = (props) => {
                 data={provisionsList}
                 columns={ProvisionsColumns}
                 sx={{ height: 310, mt: 10 }} // height: 320
+                searchText={searchText}
               />
             )}
           </Box>

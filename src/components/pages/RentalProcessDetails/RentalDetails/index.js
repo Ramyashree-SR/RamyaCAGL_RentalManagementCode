@@ -150,7 +150,7 @@ const RentalDetails = (props) => {
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
   const [rentRenewContract, setRentRenewContract] = useState([]);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
-  console.log(uniqueIDs, "uniqueIDs");
+  // console.log(uniqueIDs, "uniqueIDs");
   const handleStateChange = (value) => {
     // console.log(value.target.outerText, "newValue");
     setFilterState({
@@ -369,7 +369,7 @@ const RentalDetails = (props) => {
     if (data) {
       if (data) {
         let getData = data?.data;
-        setRentDueDataByBranchId(getData);
+        setRentDueDataByBranchId(getData || {});
       } else {
         setRentDueDataByBranchId([]);
       }

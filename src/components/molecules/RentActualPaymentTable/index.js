@@ -58,6 +58,7 @@ const RentActualPaymentTable = ({
   setTableData,
   editedData,
   setEditedData,
+  searchText,
 }) => {
   // Track the edited data for saving
   const [page, setPage] = useState(0);
@@ -80,9 +81,9 @@ const RentActualPaymentTable = ({
   }, []);
 
   // Save edited data to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("editedData", JSON.stringify(editedData));
-  }, [editedData]);
+  // useEffect(() => {
+  //   localStorage.setItem("editedData", JSON.stringify(editedData));
+  // }, [editedData]);
 
   const handleEdit = (id, field, value) => {
     const updatedData = data?.map((item) =>
@@ -98,8 +99,50 @@ const RentActualPaymentTable = ({
         [field]: value,
       },
     }));
+
+    // Save the edited data locally
+    saveEditedDataLocally(id, field, value);
+
+    console.log("Edited data saved locally successfully");
   };
 
+  const saveEditedDataLocally = (id, field, value) => {
+    const storedEditedData =
+      JSON.parse(localStorage.getItem("editedData")) || {};
+    localStorage.setItem(
+      "editedData",
+      JSON.stringify({
+        ...storedEditedData,
+        [id]: {
+          ...storedEditedData[id],
+          [field]: value,
+        },
+      })
+    );
+  };
+
+  useEffect(() => {
+    // Save edited data to the backend when the component unmounts
+    return () => {
+      saveEditedDataToBackend();
+    };
+  }, []); // Empty dependency array ensures this effect runs only once, on component mount
+
+  const saveEditedDataToBackend = async () => {
+    try {
+      const storedEditedData = JSON.parse(localStorage.getItem("editedData"));
+
+      // Check if there is any edited data to save
+      if (storedEditedData) {
+        console.log("Edited data saved to the backend successfully");
+
+        // Clear the local storage for edited data after saving
+        localStorage.removeItem("editedData");
+      }
+    } catch (error) {
+      console.error("Error saving edited data to the backend:", error.message);
+    }
+  };
   const handleCheckboxChange = (id) => {
     const newSelectedRows = selectedRows?.includes(id)
       ? selectedRows?.filter((rowId) => rowId !== id)
@@ -131,56 +174,77 @@ const RentActualPaymentTable = ({
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {data
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                ?.map((row) => (
-                  <StyledTableRow key={row?.info?.uniqueID}>
-                    <StyledTableCell>
-                      <Checkbox
-                        checked={selectedRows?.includes(row?.info?.uniqueID)}
-                        onChange={() =>
-                          handleCheckboxChange(row?.info?.uniqueID)
+              {data &&
+                data
+                  ?.filter((value) => {
+                    if (searchText === "") {
+                      return value;
+                    } else if (
+                      value?.info?.lesseeBranchName
+                        ?.toString()
+                        ?.toLowerCase()
+                        ?.includes?.(searchText) ||
+                      value?.info?.uniqueID
+                        ?.toString()
+                        ?.toLowerCase()
+                        ?.includes?.(searchText) ||
+                      value?.info?.branchID
+                        ?.toString()
+                        ?.toLowerCase()
+                        ?.includes?.(searchText)
+                    ) {
+                      return value;
+                    }
+                  })
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((row) => (
+                    <StyledTableRow key={row?.info?.uniqueID}>
+                      <StyledTableCell>
+                        <Checkbox
+                          checked={selectedRows?.includes(row?.info?.uniqueID)}
+                          onChange={() =>
+                            handleCheckboxChange(row?.info?.uniqueID)
+                          }
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell>{row?.info?.uniqueID}</StyledTableCell>
+                      <StyledTableCell>{row?.monthYear}</StyledTableCell>
+                      <StyledTableCell>{row?.info?.branchID}</StyledTableCell>
+                      <StyledTableCell>
+                        {row?.info?.lesseeBranchName}
+                      </StyledTableCell>
+                      <StyledTableCell>{row?.monthlyRent}</StyledTableCell>
+                      <StyledTableCell>{row?.due}</StyledTableCell>
+                      <StyledTableCell>{row?.provision}</StyledTableCell>
+                      <StyledTableCell
+                        contentEditable
+                        onBlur={(e) =>
+                          handleEdit(
+                            row?.info?.uniqueID,
+                            "tds",
+                            e.target.innerText
+                          )
                         }
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>{row?.info?.uniqueID}</StyledTableCell>
-                    <StyledTableCell>{row?.monthYear}</StyledTableCell>
-                    <StyledTableCell>{row?.info?.branchID}</StyledTableCell>
-                    <StyledTableCell>
-                      {row?.info?.lesseeBranchName}
-                    </StyledTableCell>
-                    <StyledTableCell>{row?.monthlyRent}</StyledTableCell>
-                    <StyledTableCell>{row?.due}</StyledTableCell>
-                    <StyledTableCell>{row?.provision}</StyledTableCell>
-                    <StyledTableCell
-                      contentEditable
-                      onBlur={(e) =>
-                        handleEdit(
-                          row?.info?.uniqueID,
-                          "tds",
-                          e.target.innerText
-                        )
-                      }
-                    >
-                      {editedData?.[row?.info?.uniqueID]?.tds || row?.tds}
-                    </StyledTableCell>
-                    <StyledTableCell>{row?.net}</StyledTableCell>
-                    <StyledTableCell>{row?.gstamt}</StyledTableCell>
-                    <StyledTableCell
-                      contentEditable
-                      onBlur={(e) =>
-                        handleEdit(
-                          row?.info?.uniqueID,
-                          "actualAmount",
-                          e.target.innerText
-                        )
-                      }
-                    >
-                      {editedData?.[row?.info?.uniqueID]?.actualAmount ||
-                        row?.actualAmount}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+                      >
+                        {editedData?.[row?.info?.uniqueID]?.tds || row?.tds}
+                      </StyledTableCell>
+                      <StyledTableCell>{row?.net}</StyledTableCell>
+                      <StyledTableCell>{row?.gstamt}</StyledTableCell>
+                      <StyledTableCell
+                        contentEditable
+                        onBlur={(e) =>
+                          handleEdit(
+                            row?.info?.uniqueID,
+                            "actualAmount",
+                            e.target.innerText
+                          )
+                        }
+                      >
+                        {editedData?.[row?.info?.uniqueID]?.actualAmount ||
+                          row?.actualAmount}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
             </TableBody>
           </Table>
           <TablePagination

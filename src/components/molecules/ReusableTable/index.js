@@ -84,7 +84,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ReusableTable = ({ data, columns, sx, showTotal }) => {
+const ReusableTable = ({ data, columns, sx, showTotal, searchText }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -146,6 +146,26 @@ const ReusableTable = ({ data, columns, sx, showTotal }) => {
             {data &&
               data?.length &&
               data
+                ?.filter((value) => {
+                  if (searchText === "") {
+                    return value;
+                  } else if (
+                    value?.month
+                      ?.toString()
+                      ?.toLowerCase()
+                      ?.includes?.(searchText) ||
+                    value?.contractID
+                      ?.toString()
+                      ?.toLowerCase()
+                      ?.includes?.(searchText) ||
+                    value?.branchID
+                      ?.toString()
+                      ?.toLowerCase()
+                      ?.includes?.(searchText)
+                  ) {
+                    return value;
+                  }
+                })
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row, index) => (
                   <StyledTableRow key={index}>

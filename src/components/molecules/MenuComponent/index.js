@@ -301,6 +301,7 @@ export default function MenuComponent({
           lesseeBranchName={lesseeBranchName}
           setTypeProvisionsData={setTypeProvisionsData}
           typeProvisionsData={typeProvisionsData}
+         
         />
       )}
 
