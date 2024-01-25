@@ -15,12 +15,10 @@ import SwitchComponent from "../../../atoms/SwitchComponent";
 import { uploadFileApi } from "../../../services/UploadDoucmentApi";
 import { deepOrange, green } from "@mui/material/colors";
 import { IFSCCodeDetails } from "../../../services/IfscCodeApi";
-import { getTenureDetails } from "../../../services/AddContractApi";
-import { formatDateToBackEndReqirement } from "../../../CommonFunction/CommonFunction";
 import moment from "moment/moment";
-// import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DemoContainer } from "@mui/x-date-pickers";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -538,6 +536,7 @@ const AgreementDetails = ({
       ...allNewContractDetails,
       rentStartDate: date,
     });
+
     // Call the function to update tenure when either date changes
     // handleDateChange(val); //, allNewContractDetails.rentEndDate
   };
@@ -548,7 +547,7 @@ const AgreementDetails = ({
       ...allNewContractDetails,
       rentEndDate: date,
     });
-
+    handleCalculateTenure();
     //call a function to update tenure when either date changes
     // handleDateChange(val); //allNewContractDetails?.rentStartDate,
   };
@@ -565,8 +564,8 @@ const AgreementDetails = ({
   const calculateTenure = (startDateString, endDateString) => {
     const startDate = moment.utc(startDateString);
     const endDate = moment.utc(endDateString);
-    const differenceInDays = endDate?.diff(startDate, "months");
-    return console.log(differenceInDays, "differenceInDays");
+    const differenceInDays = endDate?.diff(startDate, "months") + 1;
+    return differenceInDays;
   };
 
   // console.log(tenureValue);
@@ -594,6 +593,17 @@ const AgreementDetails = ({
   //     renewalTenure: tenureValue,
   //   }));
   // };
+  const handleCalculateTenure = () => {
+    const start = allNewContractDetails?.rentStartDate || new Date(); // If start date is not selected, use the current date
+    const end = allNewContractDetails?.rentEndDate || new Date(); // If end date is not selected, use the current date
+
+    const tenureInMonths = calculateTenure(start, end);
+    // alert(`Tenure in months: ${tenureInMonths}`);
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      agreementTenure: tenureInMonths,
+    }));
+  };
 
   const handleRentChange = (e) => {
     setCurrentRent(parseFloat(e.target.value));
@@ -758,7 +768,7 @@ const AgreementDetails = ({
             <Typography className="fs-20 fw-500 pt-4 px-4">
               Rent Start & End Date
             </Typography>
-            <Grid item className="d-flex m-2" md={12}>
+            <Grid item className="d-flex m-1 px-0" md={12}>
               <DatePickerComponent
                 placeholder="Select Start From"
                 label="Rent Start Date"
@@ -783,47 +793,9 @@ const AgreementDetails = ({
                 required
               />
 
-              {/* <input
-                type="date"
-                name="rentStartDate"
-                value={allNewContractDetails?.rentStartDate}
-                onChange={() => handleRentStartDate()}
-              />
-              <input
-                type="date"
-                name="rentEndDate"
-                value={allNewContractDetails?.rentEndDate}
-                onChange={() => handleRentEndDate()}
-              /> */}
-              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    label="Rent Start Date"
-                    inputFormat="YYYY-MM-DD"
-                    disablePast={true}
-                    value={new Date(allNewContractDetails?.rentStartDate)}
-                    onChange={(e, val) => {
-                      handleRentStartDate(e, val);
-                    }}
-                    sx={{ width: 225, ml: 1 }}
-                  />
-                </DemoContainer>
-              </LocalizationProvider> */}
-
-              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    label="Rent End Date"
-                    inputFormat="YYYY-MM-DD"
-                    disablePast={true}
-                    value={new Date(allNewContractDetails?.rentEndDate)}
-                    onChange={(e, val) => {
-                      handleRentEndDate(e, val);
-                    }}
-                    sx={{ width: 225, ml: 1 }}
-                  />
-                </DemoContainer>
-              </LocalizationProvider> */}
+              <Button onClick={handleCalculateTenure}  >
+                =
+              </Button>
 
               <InputBoxComponent
                 label="Tenure (in months)"
@@ -831,7 +803,7 @@ const AgreementDetails = ({
                 sx={{ width: 300, mt: -4.5, ml: 1 }}
                 name="agreementTenure"
                 value={allNewContractDetails?.agreementTenure}
-                onChange={(e) => updateChange(e)}
+                // onChange={handleCalculateTenure}
                 errorText={allNewContractDetailsErr?.agreementTenure}
                 required
               />

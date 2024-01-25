@@ -32,9 +32,15 @@ const getProvisionDetailsOfTheBranch = (params1, params2) => {
     });
 };
 
-const deleteProvisionDetailsOfSelectedTheBranch = (params1) => {
+const deleteProvisionDetailsOfSelectedTheBranch = (
+  params1,
+  params2,
+  params3
+) => {
   return serviceUtil
-    .deleteById(`deleteProvision?provisionID=${params1}`)
+    .deleteById(
+      `deleteProvision?contractID=${params1}&year=${params2}&month=${params3}`
+    )
     .then((res) => {
       // console.log(res, "res");
       const data = res.data;

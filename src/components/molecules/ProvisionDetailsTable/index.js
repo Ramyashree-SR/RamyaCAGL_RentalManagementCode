@@ -15,8 +15,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { deepOrange, green, pink, red } from "@mui/material/colors";
-import Checkbox from "@mui/material/Checkbox";
-import DeleteIcon from "@mui/icons-material/Delete"; // Import Delete Icon
+import DeleteIcon from "@mui/icons-material/Delete";         // Import Delete Icon
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.root}`]: {
@@ -82,7 +81,7 @@ const useStyles = makeStyles({
     fontSize: "12px",
   },
 });
-const ProvisionDetailsTable = ({ data, columns, sx,handleDeleteClick=()=>{} }) => {
+const ProvisionDetailsTable = ({ data, columns, sx,handleDeleteClick=(row)=>{} }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);

@@ -16,6 +16,7 @@ const paymentColumn = [
 
   { id: "net", label: "Net", align: "center" },
   { id: "gst", label: "Gst", align: "center" },
+  { id: "actualAmount", label: "Actual Amount", align: "center" },
 ];
 
 export { paymentColumn };

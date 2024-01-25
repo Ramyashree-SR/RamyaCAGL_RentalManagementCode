@@ -20,6 +20,7 @@ import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 import ProvisionDetailsTable from "../../../../molecules/ProvisionDetailsTable";
 
 const ShowProvisionDetails = (props) => {
+  let { uniqueID, selectedMonth } = props;
   const [inputValue, setInputValue] = useState("");
   const [selectedYear, setSelectedYear] = useState([]);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
@@ -27,7 +28,6 @@ const ShowProvisionDetails = (props) => {
   const [open, setOpen] = useState(false);
   const [confirmDelete, setconfirmDelete] = useState(false);
   const [confirmDeleteVal, setconfirmDeleteVal] = useState(null);
-
 
 
   useEffect(() => {
@@ -65,7 +65,6 @@ const ShowProvisionDetails = (props) => {
       inputValue,
       selectedYear
     );
-
     if (data) {
       if (data) {
         let getData = data?.data;
@@ -76,19 +75,27 @@ const ShowProvisionDetails = (props) => {
     }
   };
 
+  console.log(getProvisionDetails?.year,"getProvisionDetails");
   const handleClose = (event) => {
     // event.preventDefault();
     setOpen(false);
     // window.location.reload();
   };
-  const handleConfirmDelete = () => {
+
+  const handleConfirmDelete = (row) => {
     setconfirmDelete(true);
-    deleteTheBranchProvisionData();
+    // Extract contractID, year, and month from the row data
+    const { contractID, year, month } = row;
+    // Perform delete operation
+    deleteTheBranchProvisionData(contractID, year, month);
   };
 
-  const deleteTheBranchProvisionData = async (ProvisionId) => {
+  const deleteTheBranchProvisionData = async (contractID, year, month) => {
     if (confirmDelete) {
       const { data } = await deleteProvisionDetailsOfSelectedTheBranch(
+        contractID,
+        year,
+        month
       );
       if (data?.error === "false") {
         setRemoveRowData([]);
@@ -153,9 +160,9 @@ const ShowProvisionDetails = (props) => {
                   <ProvisionDetailsTable
                     data={getProvisionDetails}
                     columns={ProvisionsColumns}
-                    handleDeleteClick={(value) => {
+                    handleDeleteClick={(val) => {
                       setOpen(true);
-                      setconfirmDeleteVal(value);
+                      setconfirmDeleteVal(val);
                     }}
                   />
                 )}

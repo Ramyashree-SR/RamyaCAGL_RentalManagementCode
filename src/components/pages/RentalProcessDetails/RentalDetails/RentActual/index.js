@@ -38,7 +38,7 @@ const RentActual = (props) => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [openActualDetailsModal, setOpenActualDetailsModal] = useState(false);
   const [settlementAmt, setSettlementAmt] = useState([]);
-  const [getSdAmt, setGetSdAmt] = useState([]);
+
   const months = [
     { id: 1, label: "January" },
     { id: 2, label: "February" },
@@ -92,11 +92,7 @@ const RentActual = (props) => {
   }, [selectedMonth]);
 
   const updateChange = (e) => {
-    // setRentActualIDs({
-    //   ...RentActualIDs,
-    //   [e.target.name]: e.target.value,
-    // });
-      setRentActualIDs(e.target.value);
+    setRentActualIDs(e.target.value);
   };
 
   const updatedChange = (e) => {
@@ -131,6 +127,7 @@ const RentActual = (props) => {
     }
     getAllPaymentReportDetailsOfMonth(value);
   };
+
   const handleChange = (newValue) => {
     let value = newValue?.label;
     setSelectedYear(value);
@@ -166,19 +163,24 @@ const RentActual = (props) => {
     }
   };
 
-  const addSDSettlement = async () => {
-    let payload = {
-      contractID: getPaymentReport.info.uniqueID,
-      year: selectedYear,
-      month: selectedMonth,
-      sdAmount: settlementAmt.sdAmount,
-      remark: "Amount Settled",
-    };
-    const { data, errRes } = await addSDSettlementDetails(payload);
+  const addRentActualSettelement = async () => {
+    let payload = [
+      {
+        contractID: getPaymentReport?.info?.uniqueID,
+        branchID: getPaymentReport?.info?.branchID,
+        year: selectedYear,
+        month: selectedMonth,
+        amount: settlementAmt?.amount,
+        startDate: getPaymentReport?.info?.rentStartDate,
+        endDate: getPaymentReport?.info?.rentEndDate,
+      },
+    ];
+    const { data, errRes } = await AddRentActualDetails(payload);
     // console.log(data, "data");
     if (data) {
       setSettlementAmt(data);
-      addToast("SD Amount Settled", { appearance: "success" });
+      getAllPaymentReportDetailsOfMonth();
+      addToast("Amount Settled", { appearance: "success" });
       props.close();
     } else if (!data?.error) {
       // addToast(errRes?.msg, { appearance: "error" });
@@ -449,7 +451,7 @@ const RentActual = (props) => {
                           {getPaymentReport?.actualAmount}
                         </Typography>
 
-                        <Grid className="d-flex">
+                        {/* <Grid className="d-flex">
                           <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
                             SD Amount :
                           </Typography>
@@ -462,7 +464,7 @@ const RentActual = (props) => {
                           >
                             {getPaymentReport?.sdAmount}
                           </Typography>
-                        </Grid>
+                        </Grid> */}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -494,7 +496,7 @@ const RentActual = (props) => {
                       sx={{ flexBasis: "100%" }}
                     >
                       <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                        SD Settlements :&nbsp;&nbsp;
+                        Actual Amount :&nbsp;&nbsp;
                       </Typography>
                       <Grid
                         item
@@ -506,8 +508,8 @@ const RentActual = (props) => {
                           type="number"
                           placeholder="Enter Amount"
                           sx={{ width: 200 }}
-                          name="sdAmount"
-                          value={settlementAmt.sdAmount}
+                          name="amount"
+                          value={settlementAmt?.amount}
                           onChange={(e) => {
                             updatedChange(e);
                           }}
@@ -515,13 +517,13 @@ const RentActual = (props) => {
                           // required={true}
                         />
 
-                        {settlementAmt.sdAmount ? (
+                        {settlementAmt?.amount ? (
                           <Button
                             className="d-flex"
                             variant="contained"
                             size="small"
                             onClick={() => {
-                              addSDSettlement();
+                              addRentActualSettelement();
                               handleClick({
                                 vertical: "bottom",
                                 horizontal: "center",

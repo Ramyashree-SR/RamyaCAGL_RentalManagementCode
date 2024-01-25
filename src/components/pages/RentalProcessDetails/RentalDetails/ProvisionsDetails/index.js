@@ -240,7 +240,8 @@ const ProvisionsDetails = (props) => {
                   <ShowProvisionDetails
                     show={openShowProvisionModal}
                     close={() => setOpenShowProvisionModal(false)}
-                   
+                    uniqueID={uniqueID}
+                    selectedMonth={addProvisions?.month}
                   />
                 </Grid>
 
@@ -291,7 +292,7 @@ const ProvisionsDetails = (props) => {
                         handleMonthChange("month", val);
                       }}
                       getOptionLabel={(option) =>
-                        option?.label || option?.allNewContractDetails?.month
+                        option?.label || addProvisions?.month
                       }
                       required={true}
                     />
