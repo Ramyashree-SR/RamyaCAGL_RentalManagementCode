@@ -793,9 +793,7 @@ const AgreementDetails = ({
                 required
               />
 
-              <Button onClick={handleCalculateTenure}  >
-                =
-              </Button>
+              <Button onClick={handleCalculateTenure}>=</Button>
 
               <InputBoxComponent
                 label="Tenure (in months)"
@@ -851,9 +849,15 @@ const AgreementDetails = ({
                 label="Document Type"
                 sx={{ width: 300, mt: 1, mr: 3 }}
                 options={DocumentType}
-                // onSelect={handleDocumentType}
+                getOptionLabel={(option) =>
+                  option?.label || allNewContractDetails?.documentType
+                }
                 name="documentType"
-                value={allNewContractDetails?.documentType}
+                value={
+                  type === "edit"
+                    ? allNewContractDetails?.documentType
+                    : allNewContractDetails?.documentType || null
+                }
                 onChange={(value) => handleDocumentType("documentType", value)}
               />
               <form
@@ -954,7 +958,7 @@ const AgreementDetails = ({
                 value={
                   type === "edit"
                     ? allNewContractDetails?.lessorRentAmount
-                    : allNewContractDetails?.recipiants?.lessorRentAmount
+                    : allNewContractDetails?.lessorRentAmount
                 }
                 onChange={(e) => updateChange(e)}
                 errorText={allNewContractDetailsErr?.lessorRentAmount}
@@ -991,7 +995,11 @@ const AgreementDetails = ({
                   allNewContractDetails?.securityDepositLockinPeriod
                 }
                 name="securityDepositLockinPeriod"
-                value={allNewContractDetails?.securityDepositLockinPeriod}
+                value={
+                  type === "edit"
+                    ? allNewContractDetails?.securityDepositLockinPeriod
+                    : allNewContractDetails?.securityDepositLockinPeriod || null
+                }
                 onChange={(value) =>
                   handleLockinPeriod("securityDepositLockinPeriod", value)
                 }
@@ -1007,7 +1015,11 @@ const AgreementDetails = ({
                   allNewContractDetails?.securityDepositnoticePeriod
                 }
                 name="securityDepositnoticePeriod"
-                value={allNewContractDetails?.securityDepositnoticePeriod}
+                value={
+                  type === "edit"
+                    ? allNewContractDetails?.securityDepositnoticePeriod
+                    : allNewContractDetails?.securityDepositnoticePeriod || null
+                }
                 onChange={(value) =>
                   handleNoticePeriod("securityDepositnoticePeriod", value)
                 }
@@ -1047,13 +1059,9 @@ const AgreementDetails = ({
                     placeholder="Enter Recipiant"
                     sx={{ width: 300, ml: 1 }}
                     options={recipents}
+                    getOptionLabel={(option) => option?.label || recipientCount}
                     value={recipientCount}
                     onChange={handleDropDownChange}
-                    getOptionLabel={(option) =>
-                      option?.label ||
-                      option?.allNewContractDetails?.recipientCount ||
-                      null
-                    }
                     required
                   />
                   <Grid item className="d-flex flex-column" lg={12}>

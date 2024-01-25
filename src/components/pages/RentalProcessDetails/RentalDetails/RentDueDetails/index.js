@@ -8,6 +8,7 @@ import { getRentDueDetails } from "../../../../services/RentDueApi";
 import { blue, blueGrey, pink, red } from "@mui/material/colors";
 import { ExportToCSV } from "../../../../ExportToCSV";
 import ExcelExport from "../../../../../ExcelExport";
+import BranchReportTable from "./../../../../molecules/BranchReportTable/index";
 
 const RentDueDetails = (props) => {
   const {
@@ -197,7 +198,7 @@ const RentDueDetails = (props) => {
                 }}
               >
                 {uniqueID && (
-                  <ReusableTable
+                  <BranchReportTable
                     data={rentDueDetails}
                     columns={rentDueData}
                     sx={{ width: "100%" }}

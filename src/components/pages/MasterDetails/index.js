@@ -1104,7 +1104,7 @@ const MasterDetails = (props) => {
       glEmpId: allNewContractDetails?.glEmpId,
       signedDate: allNewContractDetails?.signedDate,
 
-      lessorRentAmount: allNewContractDetails?.lessorRentAmount,
+      monthlyRent: allNewContractDetails?.lessorRentAmount,
     };
     const { data, errRes } = await AddRentContractDetails(payload);
     // console.log(data,"addData");
@@ -1226,7 +1226,7 @@ const MasterDetails = (props) => {
         glName: "",
         glEmpId: "",
         signedDate: "",
-        lessorRentAmount: "",
+        monthlyRent: "",
       });
       setIFSCCodes(Array(recipientCount).fill(""));
       setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
@@ -1388,7 +1388,7 @@ const MasterDetails = (props) => {
       glEmpId: allNewContractDetails?.glEmpId,
       signedDate: allNewContractDetails?.signedDate,
 
-      lessorRentAmount: allNewContractDetails?.lessorRentAmount,
+      monthlyRent: allNewContractDetails?.lessorRentAmount,
     };
     const { data, errRes } = await EditRentContractDetails(
       props.uniqueID,
