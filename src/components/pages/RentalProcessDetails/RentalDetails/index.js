@@ -132,7 +132,7 @@ const RentalDetails = (props) => {
   const [branchTypeFilter, setBranchTypeFilter] = useState("All"); // Specify the filter for 'Name'
   const [activationStatusFilter, setActivationStatusFilter] = useState("All");
   const [activationStatusFilterDue, setActivationStatusFilterDue] =
-    useState("");
+    useState("All");
   const [branchFilter, setBranchFilter] = useState("");
   const [branchNameFilter, setBranchNameFilter] = useState("");
   const [branchIDforDue, setbranchIDforDue] = useState("");
@@ -350,7 +350,8 @@ const RentalDetails = (props) => {
     // Check if 'All' is selected
     if (value === "All") {
       // Show all data without filtering
-      setRentDueDataByBranchId(rentDueDataByBranchId);
+      // return value;
+      return setRentDueDataByBranchId(rentDueDataByBranchId);
     } else {
       // Filter the data based on the selected activation status
       const filteredData = rentDueDataByBranchId?.filter((item) => {
@@ -891,6 +892,7 @@ const RentalDetails = (props) => {
           setEditLessorRenewData={setEditLessorRenewData}
           openPaymentReportData={openPaymentReportData}
           setOpenPaymentReportData={setOpenPaymentReportData}
+          activationStatusFilterDue={activationStatusFilterDue}
         />
       </Box>
     </Box>

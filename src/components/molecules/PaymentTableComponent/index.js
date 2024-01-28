@@ -203,8 +203,12 @@ const PaymentTableComponent = ({
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
                         >
-                          {row[column.id] ||
-                            (row.info?.[column.id] && row.info?.[column.id])}
+                          {(row[column.id] !== undefined &&
+                            row[column.id] !== null) ||
+                          (row.info?.[column.id] && row.info?.[column.id])
+                            ? row[column.id] ||
+                              (row.info?.[column.id] && row.info?.[column.id])
+                            : 0}
                         </StyledTableCell>
                       ))}
                   </StyledTableRow>

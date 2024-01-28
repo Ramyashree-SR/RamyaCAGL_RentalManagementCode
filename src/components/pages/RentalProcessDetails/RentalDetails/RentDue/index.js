@@ -124,7 +124,7 @@ const RentDue = (props) => {
     December: item.december,
   }));
 
-  // console.log(rentDueDataByBranchId,"rentDueDataByBranchId");
+  console.log(rentDueDataByBranchId, "rentDueDataByBranchId");
   return (
     <>
       <Modal
@@ -253,6 +253,7 @@ const RentDue = (props) => {
                     overFlowY: "scroll",
                   }}
                   showTotal={true}
+                  activationStatusFilterDue={activationStatusFilterDue}
                 />
               )}
             </Box>

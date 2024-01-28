@@ -1,14 +1,24 @@
-import { Button, Grid, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Grid,
+  IconButton,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
 
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
-import { deepOrange, orange, red } from "@mui/material/colors";
-
+import { deepOrange, green, orange, red } from "@mui/material/colors";
+import CloseIcon from "@mui/icons-material/Close";
 import ExcelExport from "../../../../../ExcelExport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
+import InputBoxComponent from "../../../../atoms/InputBoxComponent";
+import { AddRentActualDetails } from "../../../../services/RentActualApi";
+import { useToasts } from "react-toast-notifications";
 
 const PaymentReportDetails = (props) => {
   const {
@@ -19,10 +29,21 @@ const PaymentReportDetails = (props) => {
     lesseeBranchName,
     lessorName,
   } = props;
-
+  const { addToast } = useToasts();
   const [getPaymentReport, setGetPaymentReport] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [settlementAmt, setSettlementAmt] = useState([]);
+  const [state, setState] = useState({
+    open: false,
+    vertical: "bottom",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+
+  const handleClick = (newState) => () => {
+    setState({ ...newState, open: true });
+  };
 
   const months = [
     { id: 1, label: "January" },
@@ -96,6 +117,62 @@ const PaymentReportDetails = (props) => {
       } else {
         setGetPaymentReport([]);
       }
+    }
+  };
+  const updatedChange = (e) => {
+    setSettlementAmt({
+      ...settlementAmt,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+  const action = (
+    <React.Fragment>
+      {/* <Button color="warning" size="small" onClick={handleClose}>
+        UNDO
+      </Button> */}
+
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  const addRentActualSettelement = async () => {
+    let payload = [
+      {
+        contractID: getPaymentReport?.info?.uniqueID,
+        branchID: getPaymentReport?.info?.branchID,
+        year: selectedYear,
+        month: selectedMonth,
+        amount: settlementAmt?.amount,
+        startDate: getPaymentReport?.info?.rentStartDate,
+        endDate: getPaymentReport?.info?.rentEndDate,
+        monthlyRent: getPaymentReport?.monthlyRent,
+      },
+    ];
+    const { data, errRes } = await AddRentActualDetails(payload);
+    // console.log(data, "data");
+    if (data) {
+      setSettlementAmt(data);
+      getAllPaymentReportDetailsOfMonth();
+      addToast("Amount Settled", { appearance: "success" });
+      props.close();
+    } else if (!data?.error) {
+      // addToast(errRes?.msg, { appearance: "error" });
+      addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
+        appearance: "error",
+        autoClose: 9000,
+      });
+      props.close();
     }
   };
 
@@ -269,6 +346,86 @@ const PaymentReportDetails = (props) => {
               }}
             />
           )}
+
+          <Grid
+            container
+            className="d-flex flex-column "
+            sx={{ flexBasis: "100%", mt: -4 }}
+          >
+            {selectedMonth && (
+              <Grid
+                item
+                className="d-flex flex-column "
+                sx={{ flexBasis: "100%" }}
+              >
+                <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                  Actual Amount :&nbsp;&nbsp;
+                </Typography>
+                <Grid
+                  item
+                  className="d-flex flex-row"
+                  sx={{ flexBasis: "100%" }}
+                >
+                  <InputBoxComponent
+                    label="Amount"
+                    type="number"
+                    placeholder="Enter Amount"
+                    sx={{ width: 200 }}
+                    name="amount"
+                    value={settlementAmt?.amount}
+                    onChange={(e) => {
+                      updatedChange(e);
+                    }}
+                    // errorText={settlementAmt.sdAmount}
+                    // required={true}
+                  />
+
+                  {settlementAmt?.amount ? (
+                    <Button
+                      className="d-flex"
+                      variant="contained"
+                      size="small"
+                      onClick={() => {
+                        addRentActualSettelement();
+                        handleClick({
+                          vertical: "bottom",
+                          horizontal: "center",
+                        });
+                      }}
+                      sx={{
+                        width: 150,
+                        fontSize: 10,
+                        height: 30,
+                        mt: 2,
+                        backgroundColor: green[900],
+                      }}
+                    >
+                      Make Settlement
+                    </Button>
+                  ) : null}
+
+                  <Snackbar
+                    open={open}
+                    anchorOrigin={{ vertical, horizontal }}
+                    autoHideDuration={1000}
+                    onClose={handleClose}
+                    action={action}
+                    key={vertical + horizontal}
+                    variant="success"
+                  >
+                    <Alert
+                      onClose={handleClose}
+                      severity="success"
+                      variant="filled"
+                      sx={{ width: "30%" }}
+                    >
+                      Note :Change the Rent End Date to close the Agreement!
+                    </Alert>
+                  </Snackbar>
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.close} variant="contained">

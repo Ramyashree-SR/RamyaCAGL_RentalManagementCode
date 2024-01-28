@@ -138,7 +138,7 @@ const PaymentReport = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Grid item className="d-flex mt-4" sx={{ position: "fixed" }}>
+          <Grid item className="d-flex mt-0" sx={{ position: "fixed" }}>
             <DropDownComponent
               label="Year"
               placeholder="Select "
@@ -234,7 +234,7 @@ const PaymentReport = (props) => {
             /> */}
           </Grid>
 
-          <Grid sx={{ mt: 10 }}>
+          <Grid sx={{ mt: 8 }}>
             {selectedMonth && (
               <PaymentTableComponent
                 data={getPaymentReport}

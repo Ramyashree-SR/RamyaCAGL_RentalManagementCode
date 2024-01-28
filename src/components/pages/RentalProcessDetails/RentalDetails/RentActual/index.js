@@ -173,6 +173,7 @@ const RentActual = (props) => {
         amount: settlementAmt?.amount,
         startDate: getPaymentReport?.info?.rentStartDate,
         endDate: getPaymentReport?.info?.rentEndDate,
+        monthlyRent: getPaymentReport?.monthlyRent,
       },
     ];
     const { data, errRes } = await AddRentActualDetails(payload);

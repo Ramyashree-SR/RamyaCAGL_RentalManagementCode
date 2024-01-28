@@ -65,6 +65,7 @@ export default function MenuComponent({
   lesseeBranchName,
   openPaymentReportData,
   setOpenPaymentReportData,
+  activationStatusFilterDue,
   setStateValue,
 }) {
   const { addToast } = useToasts();
@@ -282,6 +283,7 @@ export default function MenuComponent({
         uniqueID={uniqueID}
         lessorName={lessorName}
         lesseeBranchName={lesseeBranchName}
+        activationStatusFilterDue={activationStatusFilterDue}
       />
       {activationStatusFilter === "Open" && (
         <ProvisionsDetails

@@ -142,6 +142,7 @@ const TableComponent = ({
   setEditLessorRenewData,
   setOpenPaymentReportData,
   openPaymentReportData,
+  activationStatusFilterDue
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -405,7 +406,7 @@ const TableComponent = ({
                                     setOpenPaymentReportData={
                                       setOpenPaymentReportData
                                     }
-                                    
+                                    activationStatusFilterDue={activationStatusFilterDue}
                                   />
                                 )}
 

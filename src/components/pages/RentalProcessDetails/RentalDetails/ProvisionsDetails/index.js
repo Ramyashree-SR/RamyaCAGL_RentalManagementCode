@@ -240,8 +240,8 @@ const ProvisionsDetails = (props) => {
                   <ShowProvisionDetails
                     show={openShowProvisionModal}
                     close={() => setOpenShowProvisionModal(false)}
-                    uniqueID={uniqueID}
-                    selectedMonth={addProvisions?.month}
+                    // uniqueID={uniqueID}
+                    // selectedMonth={addProvisions?.month}
                   />
                 </Grid>
 

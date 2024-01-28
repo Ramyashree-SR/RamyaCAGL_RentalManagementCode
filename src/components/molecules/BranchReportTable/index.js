@@ -82,7 +82,13 @@ const useStyles = makeStyles({
   },
 });
 
-const BranchReportTable = ({ data, columns, sx, showTotal }) => {
+const BranchReportTable = ({
+  data,
+  columns,
+  sx,
+  showTotal,
+  activationStatusFilterDue,
+}) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -121,6 +127,15 @@ const BranchReportTable = ({ data, columns, sx, showTotal }) => {
     return Object.values(row).reduce((acc, value) => acc + value, 0);
   };
 
+  const filteredData =
+    data &&
+    data?.filter((item) => {
+      if (activationStatusFilterDue === "All") {
+        return item; // Show all rows if 'all' is selected
+      }
+      return item["status"] === activationStatusFilterDue; // Customize the filtering condition based on your data structure
+    });
+
   return (
     <>
       <TableContainer component={Paper} sx={{ ...sx }}>
@@ -139,8 +154,8 @@ const BranchReportTable = ({ data, columns, sx, showTotal }) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {data &&
-              data
+            {filteredData &&
+              filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
                   <StyledTableRow key={index}>

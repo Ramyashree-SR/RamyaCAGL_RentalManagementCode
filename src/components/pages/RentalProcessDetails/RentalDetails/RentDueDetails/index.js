@@ -19,6 +19,7 @@ const RentDueDetails = (props) => {
     lesseeBranchName,
     lessorName,
     uniqueID,
+    activationStatusFilterDue
   } = props;
 
   const getRentExcelData = rentDueDetails?.map((item) => ({
@@ -202,6 +203,7 @@ const RentDueDetails = (props) => {
                     data={rentDueDetails}
                     columns={rentDueData}
                     sx={{ width: "100%" }}
+                    activationStatusFilterDue={activationStatusFilterDue}
                   />
                 )}
               </Box>

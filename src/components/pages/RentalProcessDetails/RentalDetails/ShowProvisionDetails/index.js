@@ -20,23 +20,23 @@ import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 import ProvisionDetailsTable from "../../../../molecules/ProvisionDetailsTable";
 
 const ShowProvisionDetails = (props) => {
-  let { uniqueID, selectedMonth } = props;
   const [inputValue, setInputValue] = useState("");
-  const [selectedYear, setSelectedYear] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
   const [removeRowData, setRemoveRowData] = useState([]);
   const [open, setOpen] = useState(false);
   const [confirmDelete, setconfirmDelete] = useState(false);
   const [confirmDeleteVal, setconfirmDeleteVal] = useState(null);
 
-
   useEffect(() => {
     getProvisionListOftheBranch();
-  }, [selectedYear]);
+  }, []);
 
   const handleChange = (newValue) => {
     // console.log(newValue, "newValue");
-    setSelectedYear(newValue.label);
+    let value = newValue?.label;
+    setSelectedYear(value);
+    // console.log(value, "newValue");
   };
   const endDateObject = new Date();
 
@@ -52,7 +52,7 @@ const ShowProvisionDetails = (props) => {
 
   // Generate an array of years, including the current MOnth
   const yearOptions = Array?.from({ length: 10 }, (_, index) => ({
-    value: currentYear - index, // currentYear
+    id: currentYear - index, // currentYear
     label: `${currentYear - index}`,
   }));
 
@@ -61,21 +61,25 @@ const ShowProvisionDetails = (props) => {
   };
 
   const getProvisionListOftheBranch = async () => {
-    const { data } = await getProvisionDetailsOfTheBranch(
-      inputValue,
-      selectedYear
-    );
-    if (data) {
+    try {
+      const { data } = await getProvisionDetailsOfTheBranch(
+        inputValue,
+        selectedYear
+      );
       if (data) {
-        let getData = data?.data;
-        setGetProvisionDetails(getData);
-      } else {
-        setGetProvisionDetails([]);
+        if (data) {
+          let getData = data?.data;
+          setGetProvisionDetails(getData);
+        } else {
+          setGetProvisionDetails([]);
+        }
       }
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error fetching provision details:", error);
     }
   };
 
-  console.log(getProvisionDetails?.year,"getProvisionDetails");
   const handleClose = (event) => {
     // event.preventDefault();
     setOpen(false);
@@ -90,18 +94,20 @@ const ShowProvisionDetails = (props) => {
     deleteTheBranchProvisionData(contractID, year, month);
   };
 
-  const deleteTheBranchProvisionData = async (contractID, year, month) => {
+  const deleteTheBranchProvisionData = async () => {
     if (confirmDelete) {
       const { data } = await deleteProvisionDetailsOfSelectedTheBranch(
-        contractID,
-        year,
-        month
+        getProvisionDetails?.contractID,
+        getProvisionDetails?.year,
+        getProvisionDetails?.month
       );
       if (data?.error === "false") {
         setRemoveRowData([]);
       }
     }
   };
+
+  console.log(getProvisionDetails, "getProvisionDetails");
   return (
     <>
       <Modal
@@ -141,7 +147,6 @@ const ShowProvisionDetails = (props) => {
                   />
 
                   <DropDownComponent
-                    // label="Year"
                     placeholder="Select "
                     sx={{
                       width: 200,
@@ -150,8 +155,8 @@ const ShowProvisionDetails = (props) => {
                       borderRadius: 2,
                     }}
                     size="small"
-                    options={yearOptions}
                     getOptionLabel={(option) => option?.label || option}
+                    options={yearOptions}
                     value={selectedYear}
                     onChange={handleChange}
                   />
