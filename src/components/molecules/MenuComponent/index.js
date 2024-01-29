@@ -95,7 +95,7 @@ export default function MenuComponent({
 
   useEffect(() => {
     getAllRentDueDetailsByUniqueID();
-  }, [uniqueID]);
+  }, []);
 
   const getAllRentDueDetailsByUniqueID = async () => {
     const { data } = await getRentDueDetails(uniqueID);
@@ -122,7 +122,7 @@ export default function MenuComponent({
       typeProvisionsData,
       payload
     );
-    if (data?.error === "false") {
+    if (data) {
       setAddProvisions({
         provisionID: "",
         provisiontype: "",
@@ -134,7 +134,7 @@ export default function MenuComponent({
         remark: "",
         dateTime: "",
       });
-
+      setOpenProvisionsModal(false);
       if (typeProvisionsData === "Make") {
         addToast("Provision Successfully Made......", {
           appearance: "success",
@@ -240,7 +240,7 @@ export default function MenuComponent({
         <MenuItem
           onClick={() => {
             handleRentDue();
-            // getAllRentDueDetailsByUniqueID();
+            getAllRentDueDetailsByUniqueID(uniqueID);
           }}
           sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
         >
@@ -303,7 +303,6 @@ export default function MenuComponent({
           lesseeBranchName={lesseeBranchName}
           setTypeProvisionsData={setTypeProvisionsData}
           typeProvisionsData={typeProvisionsData}
-         
         />
       )}
 
@@ -318,6 +317,7 @@ export default function MenuComponent({
           rentStartDate={rentStartDate}
           lessorName={lessorName}
           lesseeBranchName={lesseeBranchName}
+          monthlyRent={monthlyRent}
         />
       )}
     </React.Fragment>

@@ -152,7 +152,7 @@ let errObj = {
   glName: "",
   glEmpId: "",
   signedDate: "",
-  lessorRentAmount: "",
+  monthlyRent: "",
 };
 
 const MasterDetails = (props) => {
@@ -273,7 +273,7 @@ const MasterDetails = (props) => {
     glName: "",
     glEmpId: "",
     signedDate: "",
-    lessorRentAmount: "",
+    monthlyRent: "",
   });
 
   // console.log("allNewContractDetails", allNewContractDetails);
@@ -407,7 +407,7 @@ const MasterDetails = (props) => {
       glName: "",
       glEmpId: "",
       signedDate: "",
-      lessorRentAmount: "",
+      monthlyRent: "",
     };
     setAllNewContractDetailsErr(errObj);
   }, []);
@@ -1104,7 +1104,7 @@ const MasterDetails = (props) => {
       glEmpId: allNewContractDetails?.glEmpId,
       signedDate: allNewContractDetails?.signedDate,
 
-      monthlyRent: allNewContractDetails?.lessorRentAmount,
+      monthlyRent: allNewContractDetails?.monthlyRent,
     };
     const { data, errRes } = await AddRentContractDetails(payload);
     // console.log(data,"addData");
@@ -1388,7 +1388,7 @@ const MasterDetails = (props) => {
       glEmpId: allNewContractDetails?.glEmpId,
       signedDate: allNewContractDetails?.signedDate,
 
-      monthlyRent: allNewContractDetails?.lessorRentAmount,
+      monthlyRent: allNewContractDetails?.monthlyRent,
     };
     const { data, errRes } = await EditRentContractDetails(
       props.uniqueID,
@@ -1396,9 +1396,10 @@ const MasterDetails = (props) => {
     );
     if (data) {
       setBranchDetails(data);
+      setAllNewContractDetails(data)
       setIFSCCodes(Array(recipientCount).fill(""));
       setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
-      props.getContractDetails();
+      // props.getContractDetails();
       addToast("Rent Contract Data Edited Successfully", {
         appearance: "success",
       });
@@ -1547,7 +1548,7 @@ const MasterDetails = (props) => {
         glEmpId: props.EditLessorData?.glEmpId,
         signedDate: props.EditLessorData?.signedDate,
 
-        lessorRentAmount: props?.EditLessorData?.lessorRentAmount,
+        monthlyRent: props?.EditLessorData?.monthlyRent,
       });
       setIFSCCodes(Array(recipientCount).fill(""));
       setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
@@ -1688,7 +1689,7 @@ const MasterDetails = (props) => {
             options={RentContractStatus}
             sx={{ width: 300, ml: 30 }}
             getOptionLabel={(option) =>
-              option?.label || option?.allNewContractDetails?.contractStatus
+              option?.label || allNewContractDetails?.contractStatus
             }
             name="contractStatus"
             value={

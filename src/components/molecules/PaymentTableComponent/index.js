@@ -87,6 +87,7 @@ const PaymentTableComponent = ({
   searchText,
   showTotal,
   withCheckbox,
+  filteredData,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -198,6 +199,7 @@ const PaymentTableComponent = ({
                     )} */}
                     {columns &&
                       columns?.map((column) => (
+                        
                         <StyledTableCell
                           key={column.id}
                           sx={{ sx }}
@@ -219,7 +221,7 @@ const PaymentTableComponent = ({
       <TablePagination
         rowsPerPageOptions={[10, 15, 100]}
         component="div"
-        count={data?.length}
+        count={ filteredData?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

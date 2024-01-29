@@ -88,10 +88,11 @@ const BranchReportTable = ({
   sx,
   showTotal,
   activationStatusFilterDue,
+  handleActivationStatusFilterChangeDue,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(7);
   const [monthlyTotal, setMonthlyTotal] = useState({});
 
   const handleChangePage = (event, newPage) => {
@@ -136,6 +137,15 @@ const BranchReportTable = ({
       return item["status"] === activationStatusFilterDue; // Customize the filtering condition based on your data structure
     });
 
+  const filterOptions =
+    data &&
+    data?.reduce((options, item) => {
+      if (!options.includes(item["status"])) {
+        options?.push(item["status"]);
+      }
+      return options;
+    }, []);
+
   return (
     <>
       <TableContainer component={Paper} sx={{ ...sx }}>
@@ -149,12 +159,26 @@ const BranchReportTable = ({
                     classes={{ root: classes.tableHeader }}
                   >
                     {column.label}
+                    {column && column.label === "Status" && (
+                      <select
+                        value={activationStatusFilterDue || "All"}
+                        onChange={handleActivationStatusFilterChangeDue}
+                      >
+                        {/* <option value=""></option> */}
+                        <option value="All">All</option>
+                        {filterOptions?.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </StyledTableCell>
                 ))}
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {filteredData &&
+            {Array.isArray(filteredData) &&
               filteredData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => (
@@ -201,9 +225,9 @@ const BranchReportTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 100]}
+        rowsPerPageOptions={[5, 7, 50]}
         component="div"
-        count={data?.length}
+        count={filteredData?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

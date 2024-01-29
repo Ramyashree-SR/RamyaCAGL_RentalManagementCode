@@ -35,7 +35,7 @@ const ProvisionsDetails = (props) => {
     horizontal: "center",
   });
   const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
-
+  const [getProvisionDetails, setGetProvisionDetails] = useState([]);
   const { vertical, horizontal, open } = state;
 
   const handleClick = (newState) => {
@@ -132,6 +132,22 @@ const ProvisionsDetails = (props) => {
     label: `${currentYear}`,
   }));
 
+  const getProvisionListOftheBranch = async () => {
+    try {
+      const { data } = await getProvisionDetailsOfTheBranch(uniqueID);
+      if (data) {
+        if (data) {
+          let getData = data?.data;
+          setGetProvisionDetails(getData);
+        } else {
+          setGetProvisionDetails([]);
+        }
+      }
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error fetching provision details:", error);
+    }
+  };
   return (
     <>
       <Modal
@@ -232,7 +248,10 @@ const ProvisionsDetails = (props) => {
 
                   <Button
                     variant="contained"
-                    onClick={() => setOpenShowProvisionModal(true)}
+                    onClick={() => {
+                      setOpenShowProvisionModal(true);
+                      getProvisionListOftheBranch();
+                    }}
                   >
                     View Provisions
                   </Button>
@@ -240,8 +259,11 @@ const ProvisionsDetails = (props) => {
                   <ShowProvisionDetails
                     show={openShowProvisionModal}
                     close={() => setOpenShowProvisionModal(false)}
-                    // uniqueID={uniqueID}
-                    // selectedMonth={addProvisions?.month}
+                    uniqueID={uniqueID}
+                    selectedYear={selectedYear}
+                    selectedMonth={selectedMonth}
+                    getProvisionDetails={getProvisionDetails}
+                    getProvisionListOftheBranch={getProvisionListOftheBranch}
                   />
                 </Grid>
 

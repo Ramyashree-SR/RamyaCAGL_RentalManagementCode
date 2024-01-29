@@ -73,7 +73,11 @@ const LesseeInformation = ({
   };
 
   const handleEntityDetails = (name, value) => {
-    setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+    // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+    setAllNewContractDetails({
+      ...allNewContractDetails,
+      [name]: value,
+    });
   };
 
   let BranchType = [
@@ -222,8 +226,7 @@ const LesseeInformation = ({
                 sx={{ width: 300 }}
                 options={BranchType}
                 getOptionLabel={(option) =>
-                  option?.label ||
-                  allNewContractDetails?.lesseeBranchType?.label
+                  option?.label || allNewContractDetails?.lesseeBranchType
                 }
                 name="lesseeBranchType"
                 value={

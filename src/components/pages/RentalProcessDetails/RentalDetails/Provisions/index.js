@@ -110,6 +110,8 @@ const Provisions = (props) => {
     setInputValue(e.target.value);
   };
 
+  
+
   const getProvisionReport = Object.values(provisionsList)?.map((item) => ({
     ContractID: item.contractID,
     Month: item.month,

@@ -551,6 +551,7 @@ const AgreementDetails = ({
     //call a function to update tenure when either date changes
     // handleDateChange(val); //allNewContractDetails?.rentStartDate,
   };
+  
   // const handleRentEndDate = (val) => {
   //   setAllNewContractDetails((prevDetails) => ({
   //     ...prevDetails,
@@ -593,6 +594,7 @@ const AgreementDetails = ({
   //     renewalTenure: tenureValue,
   //   }));
   // };
+
   const handleCalculateTenure = () => {
     const start = allNewContractDetails?.rentStartDate || new Date(); // If start date is not selected, use the current date
     const end = allNewContractDetails?.rentEndDate || new Date(); // If end date is not selected, use the current date

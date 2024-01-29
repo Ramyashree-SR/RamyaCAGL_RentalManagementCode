@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import ReusableTable from "../../../../molecules/ReusableTable";
 import { rentDueData } from "../../../../../constants/RentDueData";
-import { getRentDueDetails } from "../../../../services/RentDueApi";
-
 import { blue, blueGrey, pink, red } from "@mui/material/colors";
 import { ExportToCSV } from "../../../../ExportToCSV";
 import ExcelExport from "../../../../../ExcelExport";

@@ -1,9 +1,12 @@
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   Grid,
+  IconButton,
+  Snackbar,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -16,69 +19,62 @@ import {
   deleteProvisionDetailsOfSelectedTheBranch,
   getProvisionDetailsOfTheBranch,
 } from "../../../../services/ProvisionsApi";
-import PaymentReportTable from "../../../../molecules/PaymentReportTable";
+import CloseIcon from "@mui/icons-material/Close";
 import ProvisionDetailsTable from "../../../../molecules/ProvisionDetailsTable";
+import { useToasts } from "react-toast-notifications";
 
 const ShowProvisionDetails = (props) => {
-  const [inputValue, setInputValue] = useState("");
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [getProvisionDetails, setGetProvisionDetails] = useState([]);
+  const { addToast } = useToasts();
   const [removeRowData, setRemoveRowData] = useState([]);
   const [open, setOpen] = useState(false);
   const [confirmDelete, setconfirmDelete] = useState(false);
   const [confirmDeleteVal, setconfirmDeleteVal] = useState(null);
+  const [yearData, setYearData] = useState(null);
+  const [contractID, setContractID] = useState(null);
+  const [monthData, setMonthData] = useState(null);
 
-  useEffect(() => {
-    getProvisionListOftheBranch();
-  }, []);
+  const [state, setState] = useState({
+    opened: false,
+    vertical: "bottom",
+    horizontal: "center",
+  });
 
-  const handleChange = (newValue) => {
-    // console.log(newValue, "newValue");
-    let value = newValue?.label;
-    setSelectedYear(value);
-    // console.log(value, "newValue");
+  const { vertical, horizontal, opened } = state;
+
+  const handleClick = (newState) => {
+    setState({ ...newState, opened: true });
   };
-  const endDateObject = new Date();
 
+  const handleClosed = () => {
+    setState({ ...state, opened: false });
+  };
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClosed}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  const endDateObject = new Date();
   // Check if the provided rent end date is valid
   if (isNaN(endDateObject.getTime())) {
     // Handle invalid date
     console.error("Invalid date format");
     return null;
   }
-
   // Extract the year from the rent end date
   const currentYear = endDateObject?.getFullYear();
-
   // Generate an array of years, including the current MOnth
-  const yearOptions = Array?.from({ length: 10 }, (_, index) => ({
-    id: currentYear - index, // currentYear
+  const yearOptions = Array?.from({ length: 3 }, (_, index) => ({
+    id: currentYear - index, // currentYear //currentYear - index
     label: `${currentYear - index}`,
   }));
-
-  const handleContractIDChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const getProvisionListOftheBranch = async () => {
-    try {
-      const { data } = await getProvisionDetailsOfTheBranch(
-        inputValue,
-        selectedYear
-      );
-      if (data) {
-        if (data) {
-          let getData = data?.data;
-          setGetProvisionDetails(getData);
-        } else {
-          setGetProvisionDetails([]);
-        }
-      }
-    } catch (error) {
-      // Handle any errors here
-      console.error("Error fetching provision details:", error);
-    }
-  };
 
   const handleClose = (event) => {
     // event.preventDefault();
@@ -88,26 +84,26 @@ const ShowProvisionDetails = (props) => {
 
   const handleConfirmDelete = (row) => {
     setconfirmDelete(true);
-    // Extract contractID, year, and month from the row data
-    const { contractID, year, month } = row;
-    // Perform delete operation
-    deleteTheBranchProvisionData(contractID, year, month);
+    deleteTheBranchProvisionData();
   };
 
   const deleteTheBranchProvisionData = async () => {
     if (confirmDelete) {
-      const { data } = await deleteProvisionDetailsOfSelectedTheBranch(
-        getProvisionDetails?.contractID,
-        getProvisionDetails?.year,
-        getProvisionDetails?.month
+      const { data, errRes } = await deleteProvisionDetailsOfSelectedTheBranch(
+        contractID,
+        yearData,
+        monthData
       );
-      if (data?.error === "false") {
+      if (data) {
+        handleClose();
+        props.close();
+        addToast("Provision Deletion Successful", {
+          appearance: "success",
+        });
         setRemoveRowData([]);
       }
     }
   };
-
-  console.log(getProvisionDetails, "getProvisionDetails");
   return (
     <>
       <Modal
@@ -129,52 +125,20 @@ const ShowProvisionDetails = (props) => {
           <Container>
             <Row>
               <Col>
-                <Grid className="d-flex" sx={{ mt: 0.5 }}>
-                  <InputBoxComponent
-                    // textLabel="ID"
-                    placeholder="Enter Contract ID"
-                    sx={{
-                      width: 200,
-                      mt: -1,
-                      backgroundColor: "#ffffff",
-                      borderRadius: 2,
-                    }}
-                    name="inputValue"
-                    value={inputValue}
-                    onChange={(e) => {
-                      handleContractIDChange(e);
-                    }}
-                  />
-
-                  <DropDownComponent
-                    placeholder="Select "
-                    sx={{
-                      width: 200,
-                      mt: 0.5,
-                      backgroundColor: "#ffffff",
-                      borderRadius: 2,
-                    }}
-                    size="small"
-                    getOptionLabel={(option) => option?.label || option}
-                    options={yearOptions}
-                    value={selectedYear}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                {selectedYear && (
-                  <ProvisionDetailsTable
-                    data={getProvisionDetails}
-                    columns={ProvisionsColumns}
-                    handleDeleteClick={(val) => {
-                      setOpen(true);
-                      setconfirmDeleteVal(val);
-                    }}
-                  />
-                )}
+                <ProvisionDetailsTable
+                  data={props?.getProvisionDetails}
+                  columns={ProvisionsColumns}
+                  setOpen={setOpen}
+                  setconfirmDeleteVal={setconfirmDeleteVal}
+                  setYearData={setYearData}
+                  setContractID={setContractID}
+                  setMonthData={setMonthData}
+                  yearData={yearData}
+                />
 
                 <Dialog
                   open={open}
-                  onClose={handleClose}
+                  onClose={handleClosed}
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
@@ -183,9 +147,38 @@ const ShowProvisionDetails = (props) => {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose}>Back</Button>
-                    <Button onClick={handleConfirmDelete}>Delete</Button>
+                    <Button
+                      onClick={() => {
+                        handleConfirmDelete();
+                        handleClick({
+                          vertical: "bottom",
+                          horizontal: "center",
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </DialogActions>
                 </Dialog>
+
+                <Snackbar
+                  open={opened}
+                  anchorOrigin={{ vertical, horizontal }}
+                  autoHideDuration={3000}
+                  onClose={handleClosed}
+                  action={action}
+                  key={vertical + horizontal}
+                  variant="error"
+                >
+                  <Alert
+                    onClose={handleClosed}
+                    severity="error"
+                    variant="filled"
+                  >
+                    Provision Deletion Failed[ ALLOWED ONLY FOR CURRENT
+                    MONTH&YEAR ]
+                  </Alert>
+                </Snackbar>
               </Col>
             </Row>
           </Container>

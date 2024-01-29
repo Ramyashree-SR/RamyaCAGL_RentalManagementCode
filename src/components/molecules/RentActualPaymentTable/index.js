@@ -59,6 +59,7 @@ const RentActualPaymentTable = ({
   editedData,
   setEditedData,
   searchText,
+  filteredData
 }) => {
   // Track the edited data for saving
   const [page, setPage] = useState(0);
@@ -250,7 +251,7 @@ const RentActualPaymentTable = ({
           <TablePagination
             rowsPerPageOptions={[5, 10, 100]}
             component="div"
-            count={data?.length}
+            count={filteredData?.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

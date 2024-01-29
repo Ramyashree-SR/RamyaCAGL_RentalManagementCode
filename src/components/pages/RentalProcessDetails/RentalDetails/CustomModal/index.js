@@ -90,7 +90,7 @@ const CustomModal = (props) => {
                   label="Monthly Rent"
                   placeholder=" Monthly Rent"
                   sx={{ width: 200 }}
-                  value={props.selectedItem?.rentAmount}
+                  value={props.selectedItem?.lessorRentAmount}
                   readOnly
                 />
                 {/* <InputBoxComponent
@@ -100,7 +100,7 @@ const CustomModal = (props) => {
                   value={props.selectedItem?.firstMonthvalue}
                   readOnly
                 /> */}
-                 <InputBoxComponent
+                <InputBoxComponent
                   label="Standard Deduction"
                   placeholder=" Standard Deduction"
                   sx={{ width: 200 }}

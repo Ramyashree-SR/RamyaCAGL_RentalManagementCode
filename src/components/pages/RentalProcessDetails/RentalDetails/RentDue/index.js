@@ -24,13 +24,13 @@ const RentDue = (props) => {
     rentDueDataByBranchId,
     branchFilter,
     handleBranchID,
-    lesseeBranchName,
     activationStatusFilterDue,
     handleActivationStatusFilterChangeDue,
   } = props;
   const [monthlyTotal, setMonthlyTotal] = useState({});
   const [dataToExcel, setDataToExcel] = useState([]);
-  // console.log(dataToExcel, dataToExcel);
+  const [filterDetails, setFilterDetails] = useState(rentDueDataByBranchId);
+
   // Calculate monthly totals
   const calculateMonthlyTotal = () => {
     const total = {};
@@ -95,8 +95,19 @@ const RentDue = (props) => {
     fetchData();
   }, [branchIDforDue]);
 
-  // const [rentExcelData, setrentExcelData] = useState([])
-  const getRentExcelData = rentDueDataByBranchId?.map((item) => ({
+  useEffect(() => {
+    // Filter the data based on Status
+    const filtered = rentDueDataByBranchId?.filter((value) => {
+      if (activationStatusFilterDue === "All") {
+        return value;
+      } else if (value?.status.includes?.(activationStatusFilterDue)) {
+        return value;
+      }
+    });
+    setFilterDetails(filtered);
+  }, [rentDueDataByBranchId, activationStatusFilterDue]);
+
+  const getRentExcelData = Object.values(filterDetails)?.map((item) => ({
     ContractID: item.contractID,
     BranchID: item.info?.branchID,
     BranchName: item.info?.lesseeBranchName,
@@ -124,7 +135,6 @@ const RentDue = (props) => {
     December: item.december,
   }));
 
-  console.log(rentDueDataByBranchId, "rentDueDataByBranchId");
   return (
     <>
       <Modal
@@ -191,35 +201,8 @@ const RentDue = (props) => {
                     />
                   )}
                 />
-
-                <DropDownComponent
-                  label="ActivationStatus"
-                  placeholder="select"
-                  sx={{ width: 200 }}
-                  size="small"
-                  options={
-                    Array.isArray(activationStatus) ? activationStatus : []
-                  }
-                  getOptionLabel={(option) =>
-                    option?.label || activationStatusFilterDue
-                  }
-                  name="status"
-                  value={activationStatusFilterDue || "All"}
-                  onChange={(val) =>
-                    handleActivationStatusFilterChangeDue("status", val)
-                  }
-                />
-
-                {/* <DropDownComponent
-                  label="Months"
-                  placeholder="Months"
-                  size="small"
-                  options={months}
-                  sx={{ width: 200, ml: 1, mt: 0 }}
-                  value={lesseeBranchName}
-                /> */}
               </Grid>
-              <Grid
+              {/* <Grid
                 item
                 className="d-flex align-items-end justify-content-end"
                 sx={{
@@ -231,6 +214,21 @@ const RentDue = (props) => {
                 }}
               >
                 <ExportToCSV excelData={getRentExcelData} fileName={fileName} />
+              </Grid> */}
+              <Grid
+                item
+                className="d-flex align-items-end justify-content-end"
+                sx={{
+                  width: 120,
+                  height: 40,
+                  flexBasis: "50%",
+                }}
+              >
+                <ExcelExport
+                  excelData={getRentExcelData}
+                  fileName={"Payment Report"}
+                  sx={{ color: "#ffffff", backgroundColor: deepOrange[900] }}
+                />
               </Grid>
             </Grid>
             <Box
@@ -246,14 +244,11 @@ const RentDue = (props) => {
                 <BranchReportTable
                   data={rentDueDataByBranchId}
                   columns={rentDueData}
-                  sx={{
-                    height: 350,
-                    width: "100%",
-                    overFlowX: "scroll",
-                    overFlowY: "scroll",
-                  }}
                   showTotal={true}
                   activationStatusFilterDue={activationStatusFilterDue}
+                  handleActivationStatusFilterChangeDue={
+                    handleActivationStatusFilterChangeDue
+                  }
                 />
               )}
             </Box>

@@ -15,12 +15,8 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
 import { useToasts } from "react-toast-notifications";
-import ReusableTable from "./../../../../molecules/ReusableTable/index";
-import { RentActualColumn } from "../../../../../constants/RentActual";
 import { AddRentActualDetails } from "../../../../services/RentActualApi";
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
-
-import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 import RentActualPaymentTable from "../../../../molecules/RentActualPaymentTable";
 import ExcelExport from "../../../../../ExcelExport";
 import SearchIcon from "@mui/icons-material/Search";
@@ -44,12 +40,11 @@ const RentActualDetails = (props) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
-  // console.log(tableData,"tableData");
   const [editedData, setEditedData] = useState({});
-  // console.log(editedData, "editedData");
   const [confirmSubmit, setconfirmSubmit] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [showClearIcon, setShowClearIcon] = useState("none");
+  const [filteredData, setFilteredData] = useState(getActualPaymentReport);
 
   const months = [
     { id: 1, label: "January" },
@@ -68,6 +63,28 @@ const RentActualDetails = (props) => {
   useEffect(() => {
     getAllActualPaymentReportDetailsOfMonth();
   }, [selectedMonth]);
+
+  useEffect(() => {
+    // Filter the data based on searchText
+    const filtered = getActualPaymentReport?.filter((value) => {
+      if (searchText === "") {
+        return value;
+      } else if (
+        value?.info?.lesseeBranchName
+          ?.toString()
+          .toLowerCase()
+          ?.includes?.(searchText) ||
+        value?.info?.uniqueID
+          ?.toString()
+          .toLowerCase()
+          ?.includes?.(searchText) ||
+        value?.info?.branchID?.toString().toLowerCase()?.includes?.(searchText)
+      ) {
+        return value;
+      }
+    });
+    setFilteredData(filtered);
+  }, [getActualPaymentReport, searchText]);
 
   const handleDialogClose = () => {
     setOpen(false);
@@ -203,7 +220,7 @@ const RentActualDetails = (props) => {
       addToast("Rent Actual Payment Done Successfully", {
         appearance: "success",
       });
-      // window.location.reload();
+      window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
@@ -322,7 +339,7 @@ const RentActualDetails = (props) => {
                       }}
                     >
                       <ExcelExport
-                        excelData={getActualPaymentReport}
+                        excelData={filteredData}
                         fileName={"ProvisionsList"}
                         sx={{
                           mr: 1,
@@ -351,6 +368,7 @@ const RentActualDetails = (props) => {
                     editedData={editedData}
                     setEditedData={setEditedData}
                     searchText={searchText}
+                    filteredData={filteredData}
                   />
                 )}
               </Box>

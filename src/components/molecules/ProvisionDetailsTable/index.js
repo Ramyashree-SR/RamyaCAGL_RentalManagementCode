@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { deepOrange, green, pink, red } from "@mui/material/colors";
-import DeleteIcon from "@mui/icons-material/Delete";         // Import Delete Icon
+import DeleteIcon from "@mui/icons-material/Delete"; // Import Delete Icon
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.root}`]: {
@@ -81,7 +81,16 @@ const useStyles = makeStyles({
     fontSize: "12px",
   },
 });
-const ProvisionDetailsTable = ({ data, columns, sx,handleDeleteClick=(row)=>{} }) => {
+const ProvisionDetailsTable = ({
+  data,
+  columns,
+  sx,
+  setconfirmDeleteVal,
+  setOpen,
+  setYearData,
+  setContractID,
+  setMonthData,
+}) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -95,10 +104,16 @@ const ProvisionDetailsTable = ({ data, columns, sx,handleDeleteClick=(row)=>{} }
     setPage(0);
   };
 
-//   const handleDeleteClick = (row) => {
-//     // Handle delete logic here
-//     console.log("Delete clicked for row:", row);
-//   };
+  const handleDeleteClick = (row) => {
+    console.log(row, "row");
+    // Handle delete logic here
+    setOpen(true);
+    setconfirmDeleteVal(row);
+    setContractID(row.contractID);
+    setYearData(row?.year);
+    setMonthData(row?.month);
+    console.log("Delete clicked for row:", row);
+  };
 
   return (
     <>
@@ -149,8 +164,11 @@ const ProvisionDetailsTable = ({ data, columns, sx,handleDeleteClick=(row)=>{} }
                       ))}
                     <StyledTableCell>
                       <IconButton
-                        onClick={() => handleDeleteClick(row)}
-                        color="error">
+                        onClick={() => {
+                          handleDeleteClick(row);
+                        }}
+                        color="error"
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </StyledTableCell>

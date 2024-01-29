@@ -132,7 +132,10 @@ const PaymentReportTable = ({ data, columns, sx }) => {
                         >
                           {(row[column.id] !== undefined &&
                             row[column.id] !== null) ||
-                          (row.info?.[column.id] && row.info?.[column.id])
+                          ((row.info?.[column.id] && row.info?.[column.id]) !==
+                            undefined &&
+                            (row.info?.[column.id] && row.info?.[column.id]) !==
+                              null)
                             ? row[column.id] ||
                               (row.info?.[column.id] && row.info?.[column.id])
                             : 0}

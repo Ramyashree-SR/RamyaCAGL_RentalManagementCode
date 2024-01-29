@@ -150,8 +150,7 @@ const RentActual = (props) => {
       }
     }
   };
-  // console.log(getPaymentReport, "getPaymentReport");
-
+  
   const getAllRentActualDetailsByUniqueID = async () => {
     const { data } = await getAllRentContractDetailsByContractID(RentActualIDs);
     // console.log(uniqueID, "ActualId");

@@ -23,6 +23,7 @@ const PaymentReport = (props) => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showClearIcon, setShowClearIcon] = useState("none");
   const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState(getPaymentReport);
   const months = [
     { id: 1, label: "January" },
     { id: 2, label: "February" },
@@ -41,6 +42,28 @@ const PaymentReport = (props) => {
     getAllPaymentReportDetailsOfMonth();
   }, [selectedMonth]);
 
+  useEffect(() => {
+    // Filter the data based on searchText
+    const filtered = getPaymentReport?.filter((value) => {
+      if (searchText === "") {
+        return value;
+      } else if (
+        value?.info?.lesseeBranchName
+          ?.toString()
+          .toLowerCase()
+          ?.includes?.(searchText) ||
+        value?.info?.uniqueID
+          ?.toString()
+          .toLowerCase()
+          ?.includes?.(searchText) ||
+        value?.info?.branchID?.toString().toLowerCase()?.includes?.(searchText)
+      ) {
+        return value;
+      }
+    });
+    setFilteredData(filtered);
+  }, [getPaymentReport, searchText]);
+
   const handleMonthChange = (newValue) => {
     const value = newValue?.label;
     if (value) {
@@ -49,7 +72,6 @@ const PaymentReport = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
-    // getAllPaymentReportDetailsOfMonth(value);
   };
 
   const endDateObject = new Date();
@@ -92,7 +114,7 @@ const PaymentReport = (props) => {
     }
   };
 
-  const getPaymentReportData = Object.values(getPaymentReport)?.map((item) => ({
+  const getPaymentReportData = Object.values(filteredData)?.map((item) => ({
     ID: item.info?.uniqueID,
     MonthYear: item.monthYear,
     LessorName: item.info?.lessorName,
@@ -116,7 +138,6 @@ const PaymentReport = (props) => {
     gst: item.gst,
   }));
 
-  //   console.log(getPaymentReport, "getPaymentReport");
   return (
     <>
       <Modal
@@ -240,6 +261,7 @@ const PaymentReport = (props) => {
                 data={getPaymentReport}
                 columns={AllPaymentColumns}
                 searchText={searchText}
+                filteredData={filteredData}
                 sx={{
                   width: "100%",
                   mt: 5,

@@ -110,20 +110,10 @@ const RentalDetails = (props) => {
   const [openProvisionsModal, setOpenProvisionsModal] = useState(false);
   const [openRentDueModal, setOpenRentDueModal] = useState(false);
   const [openRentDueDataModal, setOpenRentDueDataModal] = useState(false);
-
   const [fullscreen, setFullscreen] = useState(true);
   const [uniqueID, setUniqueID] = useState(null);
-  // console.log(uniqueID, "uniqueID");
   const [rentContractDetails, setRentContractDetails] = useState([]);
-  // console.log(rentContractDetails, "rentContractDetails");
-  // const [stateFilter, setStateFilter] = useState(
-  //   ...new Set(rentContractDetails?.map((item) => item.lesseeState))
-  // );
   const [stateFilter, setStateFilter] = useState([]);
-
-  // const [districtFilter, setDistrictFilter] = useState([
-  //   ...new Set(rentContractDetails?.map((item) => item.premesisDistrict)),
-  // ]);
   const [districtFilter, setDistrictFilter] = useState(null);
   const [filterState, setFilterState] = useState({});
   const [filterDistrict, setFilterDistrict] = useState({});
@@ -136,12 +126,7 @@ const RentalDetails = (props) => {
   const [branchFilter, setBranchFilter] = useState("");
   const [branchNameFilter, setBranchNameFilter] = useState("");
   const [branchIDforDue, setbranchIDforDue] = useState("");
-  // console.log(branchIDforDue, "branchIDforDue");
   const [rentDueDataByBranchId, setRentDueDataByBranchId] = useState([]);
-  // console.log(rentDueDataByBranchId, "rentDueDataByBranchId");
-  // const [rentDetailsForDue, setrentDetailsForDue] = useState([]);
-  // console.log(rentDetailsForDue, "rentDetailsForDue");
-
   const [rentStartDate, setRentStartDate] = useState(null);
   const [rentEndDate, setRentEndDate] = useState(null);
   const [agreementTenure, setAgreementTenure] = useState(null);
@@ -150,7 +135,7 @@ const RentalDetails = (props) => {
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
   const [rentRenewContract, setRentRenewContract] = useState([]);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
-  // console.log(uniqueIDs, "uniqueIDs");
+  
   const handleStateChange = (value) => {
     // console.log(value.target.outerText, "newValue");
     setFilterState({
@@ -324,7 +309,6 @@ const RentalDetails = (props) => {
 
   const getAllContractDetailsByBranchName = async (branchName) => {
     const { data } = await getRentContractDetailsByBranchName(branchName);
-    // console.log(data?.data?.data, "BRanchNAmedata");
     if (data) {
       if (data) {
         let getData = data?.data;
@@ -341,40 +325,41 @@ const RentalDetails = (props) => {
     setActivationStatusFilter(e.target.value);
   };
 
-  const handleActivationStatusFilterChangeDue = (name, selectedValue) => {
-    let value = selectedValue?.label;
-    setRentDueDataByBranchId({
-      ...rentDueDataByBranchId,
-      [name]: value,
-    });
-    // Check if 'All' is selected
-    if (value === "All") {
-      // Show all data without filtering
-      // return value;
-      return setRentDueDataByBranchId(rentDueDataByBranchId);
-    } else {
-      // Filter the data based on the selected activation status
-      const filteredData = rentDueDataByBranchId?.filter((item) => {
-        return item?.status === value;
-      });
+  // const handleActivationStatusFilterChangeDue = (name, selectedValue) => {
+  //   let value = selectedValue?.label;
+  //   setRentDueDataByBranchId({
+  //     ...rentDueDataByBranchId,
+  //     [name]: value,
+  //   });
 
-      // Update your state or whatever data structure you are using for the table
-      setRentDueDataByBranchId(filteredData);
-    }
-    // Also, update the state for the activation status filter
-    setActivationStatusFilterDue(value);
+  //   if (value === "All") {
+  //     return setRentDueDataByBranchId(rentDueDataByBranchId);
+  //   } else {
+  //     // Filter the data based on the selected activation status
+  //     const filteredData = rentDueDataByBranchId?.filter((item) => {
+  //       return item?.status === value;
+  //     });
+
+  //     // Update your state or whatever data structure you are using for the table
+  //     setRentDueDataByBranchId(filteredData);
+  //   }
+  //   // Also, update the state for the activation status filter
+  //   setActivationStatusFilterDue(value);
+  // };
+
+  const handleActivationStatusFilterChangeDue = (e) => {
+    setActivationStatusFilterDue(e.target.value);
   };
 
   const getAllRentDueDetailsByBranchID = async (branchID) => {
     const { data } = await getAllRentDueDetails(branchID);
-    if (data) {
+    if (data)
       if (data) {
         let getData = data?.data;
         setRentDueDataByBranchId(getData || {});
       } else {
         setRentDueDataByBranchId([]);
       }
-    }
   };
 
   return (

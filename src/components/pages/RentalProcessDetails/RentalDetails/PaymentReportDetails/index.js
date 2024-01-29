@@ -12,13 +12,14 @@ import DropDownComponent from "../../../../atoms/DropDownComponent";
 
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
-import { deepOrange, green, orange, red } from "@mui/material/colors";
+import { blue, deepOrange, green, orange, pink, red } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import ExcelExport from "../../../../../ExcelExport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import { AddRentActualDetails } from "../../../../services/RentActualApi";
 import { useToasts } from "react-toast-notifications";
+import ShowProvisionDetails from "../ShowProvisionDetails";
 
 const PaymentReportDetails = (props) => {
   const {
@@ -28,8 +29,10 @@ const PaymentReportDetails = (props) => {
     rentEndDate,
     lesseeBranchName,
     lessorName,
+    monthlyRent,
   } = props;
   const { addToast } = useToasts();
+  const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
   const [getPaymentReport, setGetPaymentReport] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -176,31 +179,32 @@ const PaymentReportDetails = (props) => {
     }
   };
 
-  const getPaymentReportData = Object.values(getPaymentReport)?.map((item) => ({
-    ID: item?.info?.uniqueID,
-    MonthYear: item?.monthYear,
-    LessorName: item?.info?.lessorName,
-    BranchID: item?.info?.branchID,
-    BranchName: item?.info?.lesseeBranchName,
-    AreaName: item?.info?.lesseeAreaName,
-    Division: item?.lesseeDivision,
-    Zone: item?.info?.lesseeZone,
-    State: item?.info?.lesseeState,
-    BankName: item?.info?.lessorBankName,
-    IFSCNumber: item?.info?.lessorIfscNumber,
-    AccountNumber: item?.info?.lessorAccountNumber,
-    RentStartDate: item?.info?.rentStartDate,
-    RentEndDate: item?.info?.rentEndDate,
-    MonthlyRent: item?.info?.lessorRentAmount,
-    Due: item?.due,
-    Provision: item?.provision,
-    Gross: item?.gross,
-    Tds: item?.tds,
-    Net: item?.net,
-    Gst: item?.gst,
-  }));
+  const getPaymentReportData = Object.values([getPaymentReport])?.map(
+    (item) => ({
+      ID: item?.info?.uniqueID,
+      MonthYear: item?.monthYear,
+      LessorName: item?.info?.lessorName,
+      BranchID: item?.info?.branchID,
+      BranchName: item?.info?.lesseeBranchName,
+      AreaName: item?.info?.lesseeAreaName,
+      Division: item?.lesseeDivision,
+      Zone: item?.info?.lesseeZone,
+      State: item?.info?.lesseeState,
+      BankName: item?.info?.lessorBankName,
+      IFSCNumber: item?.info?.lessorIfscNumber,
+      AccountNumber: item?.info?.lessorAccountNumber,
+      RentStartDate: item?.info?.rentStartDate,
+      RentEndDate: item?.info?.rentEndDate,
+      MonthlyRent: item?.info?.lessorRentAmount,
+      Due: item?.due,
+      Provision: item?.provision,
+      Gross: item?.gross,
+      Tds: item?.tds,
+      Net: item?.net,
+      Gst: item?.gst,
+    })
+  );
 
-  // console.log(Report, "Report");
   return (
     <>
       <Modal
@@ -257,6 +261,7 @@ const PaymentReportDetails = (props) => {
               </Typography>
             </Grid>
           </Grid>
+
           <Grid
             className="d-flex flex-row m-2"
             sx={{ fontSize: 15, fontWeight: 700 }}
@@ -293,6 +298,16 @@ const PaymentReportDetails = (props) => {
               </Typography>
             </Grid>
           </Grid>
+          <Grid className="d-flex flex-row m-2 align-items-start justify-content-start" >
+            <Typography sx={{ fontSize: 15, fontWeight: 700 ,}}>
+              Initial Rent :&nbsp;&nbsp;
+            </Typography>
+            <Typography
+              sx={{ fontSize: 15, fontWeight: 700, color: blue[500] }}
+            >
+              ₹ {monthlyRent}
+            </Typography>
+          </Grid>
           <hr />
           <Grid container className="d-flex flex-row px-0 py-1">
             <Grid item className="d-flex" sx={{ flexBasis: "50%" }}>
@@ -317,13 +332,14 @@ const PaymentReportDetails = (props) => {
                 onChange={handleMonthChange}
               />
             </Grid>
+
             <Grid
               item
               className="d-flex align-items-end justify-content-end"
               sx={{
                 width: 120,
                 height: 40,
-                flexBasis: "50%",
+                flexBasis: "30%",
               }}
             >
               <ExcelExport
