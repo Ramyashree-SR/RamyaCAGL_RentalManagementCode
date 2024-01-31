@@ -12,7 +12,14 @@ import DropDownComponent from "../../../../atoms/DropDownComponent";
 
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
-import { blue, deepOrange, green, orange, pink, red } from "@mui/material/colors";
+import {
+  blue,
+  deepOrange,
+  green,
+  orange,
+  pink,
+  red,
+} from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import ExcelExport from "../../../../../ExcelExport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
@@ -159,7 +166,7 @@ const PaymentReportDetails = (props) => {
         amount: settlementAmt?.amount,
         startDate: getPaymentReport?.info?.rentStartDate,
         endDate: getPaymentReport?.info?.rentEndDate,
-        monthlyRent: getPaymentReport?.monthlyRent,
+        monthRent: getPaymentReport?.monthRent,
       },
     ];
     const { data, errRes } = await AddRentActualDetails(payload);
@@ -298,8 +305,8 @@ const PaymentReportDetails = (props) => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid className="d-flex flex-row m-2 align-items-start justify-content-start" >
-            <Typography sx={{ fontSize: 15, fontWeight: 700 ,}}>
+          <Grid className="d-flex flex-row m-2 align-items-start justify-content-start">
+            <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
               Initial Rent :&nbsp;&nbsp;
             </Typography>
             <Typography

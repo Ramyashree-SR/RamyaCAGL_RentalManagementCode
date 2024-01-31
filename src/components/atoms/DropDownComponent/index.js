@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import { FormHelperText } from "@mui/material";
 import { IoMdArrowDropdown } from "react-icons/io";
 import AddIcon from "@mui/icons-material/Add";
+import { useState } from "react";
 const useStyles = makeStyles({
   customTextField: {
     "& input::placeholder": {
@@ -66,6 +67,12 @@ const DropDownComponent = ({
   getOptionLabel = () => {},
 }) => {
   const classes = useStyles();
+  const [selectedValue, setSelectedValue] = useState(value);
+
+  const handleOnChange = (newValue) => {
+    setSelectedValue(newValue);
+    onChange(newValue);
+  };
 
   const renderOption = (props, option) => {
     return (
@@ -111,7 +118,7 @@ const DropDownComponent = ({
             )
           }
           size={size}
-          value={value}
+          // value={value}
           inputValue={inputValue}
           clearOnBlur={false}
           id={id}
@@ -141,7 +148,9 @@ const DropDownComponent = ({
               classes={{ root: classes.customTextField }}
             />
           )}
-          onChange={(_, value) => onChange(value)}
+          // onChange={(_, value) => onChange(value)}
+          value={selectedValue}
+          onChange={(_, value) => handleOnChange(value)}
           onInputChange={(_, newvalue) => {
             onInputChange(newvalue);
           }}

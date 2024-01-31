@@ -142,7 +142,7 @@ const TableComponent = ({
   setEditLessorRenewData,
   setOpenPaymentReportData,
   openPaymentReportData,
-  activationStatusFilterDue
+  activationStatusFilterDue,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -163,12 +163,14 @@ const TableComponent = ({
     setPage(0);
   };
 
-  const handleEditRow = (event, rowData) => {
+  const handleEditRow = (event,rowData) => {
+    // console.log(rowData, "rowData");
     setModalType("edit");
     setOpenLessorModal(true);
-    setEditLessorData(rowData);
-    setEditLessorRenewData(rowData);
     setOpenEditLessorModal(true);
+    setEditLessorData(rowData);
+    // setEditLessorRenewData(rowData);
+    
   };
 
   const handleModalOpen = (rowData) => {
@@ -348,9 +350,9 @@ const TableComponent = ({
 
                                   <MenuComponent
                                     handleEdit={(e) => {
-                                      handleEditRow(e, row);
+                                      handleEditRow(e,row);
                                       setUniqueID(row.uniqueID);
-                                      setEditLessorRenewData(e, row);
+                                      setEditLessorRenewData(row);
                                     }}
                                     handleEditProvisions={() => {
                                       changeProvisions();
@@ -406,7 +408,9 @@ const TableComponent = ({
                                     setOpenPaymentReportData={
                                       setOpenPaymentReportData
                                     }
-                                    activationStatusFilterDue={activationStatusFilterDue}
+                                    activationStatusFilterDue={
+                                      activationStatusFilterDue
+                                    }
                                   />
                                 )}
 

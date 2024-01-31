@@ -150,7 +150,7 @@ const RentActual = (props) => {
       }
     }
   };
-  
+
   const getAllRentActualDetailsByUniqueID = async () => {
     const { data } = await getAllRentContractDetailsByContractID(RentActualIDs);
     // console.log(uniqueID, "ActualId");
@@ -172,7 +172,7 @@ const RentActual = (props) => {
         amount: settlementAmt?.amount,
         startDate: getPaymentReport?.info?.rentStartDate,
         endDate: getPaymentReport?.info?.rentEndDate,
-        monthlyRent: getPaymentReport?.monthlyRent,
+        monthRent: getPaymentReport?.monthRent,
       },
     ];
     const { data, errRes } = await AddRentActualDetails(payload);

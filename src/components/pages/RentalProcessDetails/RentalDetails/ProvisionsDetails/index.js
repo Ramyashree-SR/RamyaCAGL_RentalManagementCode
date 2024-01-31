@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import { red } from "@mui/material/colors";
+import { green, red } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import ShowProvisionDetails from "../ShowProvisionDetails";
 import { getProvisionDetailsOfTheBranch } from "../../../../services/ProvisionsApi";
@@ -252,8 +252,9 @@ const ProvisionsDetails = (props) => {
                       setOpenShowProvisionModal(true);
                       getProvisionListOftheBranch();
                     }}
+                    sx={{backgroundColor:green[800]}}
                   >
-                    View Provisions
+                    View Provisions Details
                   </Button>
 
                   <ShowProvisionDetails

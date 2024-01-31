@@ -985,7 +985,6 @@ const MasterDetails = (props) => {
       lessorEmailAddress: allNewContractDetails?.lessorEmailAddress,
       lessorPanNumber: allNewContractDetails?.lessorPanNumber,
       lessorGstNumber: allNewContractDetails?.lessorGstNumber,
-      // lessorTdsNumber: allNewContractDetails?.lessorTdsNumber,
       paymentMode: allNewContractDetails?.paymentMode?.label,
       recipiants: allNewContractDetails?.recipiants?.map(
         (recipient, index) => ({
@@ -1019,7 +1018,6 @@ const MasterDetails = (props) => {
       lesseeBranchType:
         allNewContractDetails?.lesseeBranchType &&
         allNewContractDetails?.lesseeBranchType?.label,
-
       lesseeBranchName: allNewContractDetails?.branchName,
       lesseeAreaName: allNewContractDetails?.areaName,
       lesseeDivision: allNewContractDetails?.region,
@@ -1107,10 +1105,9 @@ const MasterDetails = (props) => {
       monthlyRent: allNewContractDetails?.monthlyRent,
     };
     const { data, errRes } = await AddRentContractDetails(payload);
-    // console.log(data,"addData");
     if (data?.data) {
-      setBranchDetails({
-        ...allNewContractDetails,
+      setBranchDetails((prevBranchDetails) => ({
+        ...prevBranchDetails,
         branchID: allNewContractDetails?.branchID,
         branchName: allNewContractDetails?.lesseeBranchName,
         areaName: allNewContractDetails?.lesseeAreaName,
@@ -1118,7 +1115,7 @@ const MasterDetails = (props) => {
         zone: allNewContractDetails?.lesseeZone,
         state: allNewContractDetails?.lesseeState,
         // ... other fields
-      });
+      }));
       setAllNewContractDetails({
         ...allNewContractDetails,
         lessorName: "",
@@ -1238,14 +1235,18 @@ const MasterDetails = (props) => {
       setTimeout(() => {
         props.getContractDetails();
       }, 9000);
+      window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
     }
   };
 
-  const editAllNewRentContractDetails = async () => {
-    // if (props.type === "edit") {
+  const editAllNewRentContractDetails = async (EditLessorData) => {
+    console.log(
+      EditLessorData,
+      "EditLessorData in Other component while editing"
+    );
     let payload = {
       branchID: allNewContractDetails?.branchID,
       lessorName: allNewContractDetails?.lessorName,
@@ -1256,21 +1257,6 @@ const MasterDetails = (props) => {
       paymentMode:
         allNewContractDetails?.paymentMode &&
         allNewContractDetails?.paymentMode?.label,
-      // recipiants: allNewContractDetails?.recipiants?.map(
-      //   (recipient, index) => ({
-      //     lessorRecipiantsName: recipient?.lessorRecipiantsName,
-      //     lessorIfscNumber: recipient?.lessorIfscNumber || ifscCodes?.[index],
-      //     lessorBankName:
-      //       recipient?.lessorBankName || bankAndBranch?.[index].bank, // Use bank name from state
-      //     lessorBranchName:
-      //       recipient?.lessorBranchName || bankAndBranch?.[index].branch, // Use branch name from state
-      //     // Use IFSC code from state
-      //     lessorAccountNumber: recipient?.lessorAccountNumber,
-      //     lessorRentAmount: recipient?.lessorRentAmount,
-      //     panNo: recipient?.panNo,
-      //     gstNo: recipient?.gstNo,
-      //   })
-      // ),
       nationality: allNewContractDetails?.nationality,
       contractStatus:
         allNewContractDetails?.contractStatus &&
@@ -1305,10 +1291,10 @@ const MasterDetails = (props) => {
       lesseeDivision: allNewContractDetails?.lesseeDivision,
       lesseeZone: allNewContractDetails?.lesseeZone,
       lesseeState: allNewContractDetails?.lesseeState,
+
       lesseeEntityDetails:
         allNewContractDetails?.lesseeEntityDetails &&
         allNewContractDetails?.lesseeEntityDetails?.label,
-
       premesisLocation:
         allNewContractDetails?.premesisLocation &&
         allNewContractDetails?.premesisLocation?.label,
@@ -1395,16 +1381,12 @@ const MasterDetails = (props) => {
       payload
     );
     if (data) {
-      setBranchDetails(data);
-      setAllNewContractDetails(data)
-      setIFSCCodes(Array(recipientCount).fill(""));
-      setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
-      // props.getContractDetails();
+      props.getContractDetails();
       addToast("Rent Contract Data Edited Successfully", {
         appearance: "success",
       });
       props.close();
-      // window.location.reload();
+      window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
@@ -1413,6 +1395,7 @@ const MasterDetails = (props) => {
 
   useEffect(() => {
     if (props.type === "edit") {
+      console.log(props.EditLessorData, "inside useEffect");
       setAllNewContractDetails({
         uniqueID: props.EditLessorData?.uniqueID,
         branchID: props.EditLessorData?.branchID,
@@ -1422,21 +1405,6 @@ const MasterDetails = (props) => {
         lessorPanNumber: props.EditLessorData?.lessorPanNumber,
         lessorGstNumber: props.EditLessorData?.lessorGstNumber,
         paymentMode: props.EditLessorData?.paymentMode,
-        // recipiants: props.EditLessorData?.recipiants.map(
-        //   (recipient, index) => ({
-        //     recipiantsID: recipient?.recipiantsID,
-        //     lessorRecipiantsName: recipient?.lessorRecipiantsName,
-        //     lessorIfscNumber: recipient?.lessorIfscNumber || ifscCodes?.[index],
-        //     lessorBankName:
-        //       recipient?.lessorBankName || bankAndBranch?.[index].bank, // Use bank name from state
-        //     lessorBranchName:
-        //       recipient?.lessorBranchName || bankAndBranch?.[index].branch,
-        //     lessorAccountNumber: recipient?.lessorAccountNumber,
-        //     lessorRentAmount: recipient?.lessorRentAmount,
-        //     panNo: recipient?.panNo,
-        //     gstNo: recipient?.gstNo,
-        //   })
-        // ),
         nationality: props.EditLessorData?.nationality,
         contractStatus: props.EditLessorData?.contractStatus,
         recipiantsID: props.EditLessorData?.recipiantsID,
@@ -1467,10 +1435,6 @@ const MasterDetails = (props) => {
         lesseeDivision: props.EditLessorData?.lesseeDivision,
         lesseeZone: props.EditLessorData?.lesseeZone,
         lesseeState: props.EditLessorData?.lesseeState,
-
-        lesseeApproverrenewals: props.EditLessorData?.lesseeApproverrenewals,
-        lesseeApproverRelocation:
-          props.EditLessorData?.lesseeApproverRelocation,
         lesseeEntityDetails: props.EditLessorData?.lesseeEntityDetails,
 
         premesisLocation: props.EditLessorData?.premesisLocation,
@@ -1490,24 +1454,14 @@ const MasterDetails = (props) => {
         southPremesis: props.EditLessorData?.southPremesis,
         eastPremesis: props.EditLessorData?.eastPremesis,
         westPremesis: props.EditLessorData?.westPremesis,
-        // agreementSignDate: datePickerFormat(
-        //   props.EditLessorData?.agreementSignDate
-        // ),
+
         agreementSignDate: new Date(props.EditLessorData?.agreementSignDate),
         agreementTenure: props.EditLessorData?.agreementTenure,
         agreementActivationStatus:
           props.EditLessorData?.agreementActivationStatus,
-        // agreementStartDate: datePickerFormat(
-        //   props.EditLessorData?.agreementStartDate
-        // ),
         agreementStartDate: new Date(props.EditLessorData?.agreementStartDate),
-        // agreementEndDate: datePickerFormat(
-        //   props.EditLessorData?.agreementEndDate
-        // ),
         agreementEndDate: new Date(props.EditLessorData?.agreementEndDate),
         rentStartDate: new Date(props.EditLessorData?.rentStartDate),
-        // rentStartDate: props.EditLessorData?.rentStartDate,
-        // rentEndDate: datePickerFormat(props.EditLessorData?.rentEndDate),
         rentEndDate: new Date(props.EditLessorData?.rentEndDate),
 
         maintaineneCharge: props.EditLessorData?.maintaineneCharge,
@@ -1550,11 +1504,10 @@ const MasterDetails = (props) => {
 
         monthlyRent: props?.EditLessorData?.monthlyRent,
       });
-      setIFSCCodes(Array(recipientCount).fill(""));
-      setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
     }
   }, [props.EditLessorData]);
 
+  //  console.log(allNewContractDetails,"allNewContractDetails");
   useEffect(() => {
     editAllRenewRentContractDetails();
   }, [props.branchIDforDue]);
@@ -1649,9 +1602,10 @@ const MasterDetails = (props) => {
           }
           close={props.close}
           AddAllNewRentContactInformation={AddAllNewRentContactInformation}
+          EditLessorData={props.EditLessorData}
           editAllNewRentContractDetails={editAllNewRentContractDetails}
           // editAllRenewRentContractDetails={editAllRenewRentContractDetails}
-          EditLessorData={props.EditLessorData.uniqueID}
+
           contractStatus={allNewContractDetails?.contractStatus?.label}
           EditLessorRenewData={props.EditLessorRenewData?.uniqueID}
           // AddAllRenewRentContractDetails={AddAllRenewRentContractDetails}

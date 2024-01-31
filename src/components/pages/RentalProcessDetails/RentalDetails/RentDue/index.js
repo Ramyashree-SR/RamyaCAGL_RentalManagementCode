@@ -221,7 +221,10 @@ const RentDue = (props) => {
                 sx={{
                   width: 120,
                   height: 40,
-                  flexBasis: "50%",
+                  // flexBasis: "50%",
+                  flexBasis: "100%",
+                  mt: -2,
+                  mr: 2,
                 }}
               >
                 <ExcelExport
@@ -237,7 +240,7 @@ const RentDue = (props) => {
               sx={{
                 width: "97%",
                 position: "fixed",
-                mt: -1.4,
+                mt: -1,
               }}
             >
               {branchIDforDue && (

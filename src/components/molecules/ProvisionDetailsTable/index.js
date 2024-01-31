@@ -167,6 +167,7 @@ const ProvisionDetailsTable = ({
                         onClick={() => {
                           handleDeleteClick(row);
                         }}
+                        borderBottom="1px"
                         color="error"
                       >
                         <DeleteIcon />

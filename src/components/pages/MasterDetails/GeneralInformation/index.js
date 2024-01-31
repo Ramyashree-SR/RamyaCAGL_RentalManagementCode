@@ -294,7 +294,6 @@ const GeneralInformation = ({
                     ? allNewContractDetails?.paymentMode
                     : allNewContractDetails?.paymentMode || null
                 }
-               
                 onChange={(val) => {
                   handlePaymentChange("paymentMode", val);
                 }}
@@ -768,6 +767,7 @@ const GeneralInformation = ({
             // disabled={activeStep && activeStep === 0}
             onClick={() => {
               editAllNewRentContractDetails(EditLessorData);
+              console.log("Onclick", EditLessorData);
             }}
             variant="contained"
             sx={{ m: 1, background: "#238520" }}

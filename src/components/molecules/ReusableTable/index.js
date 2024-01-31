@@ -87,7 +87,7 @@ const useStyles = makeStyles({
 const ReusableTable = ({ data, columns, sx, showTotal, searchText }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [monthlyTotal, setMonthlyTotal] = useState({});
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -161,6 +161,10 @@ const ReusableTable = ({ data, columns, sx, showTotal, searchText }) => {
                     value?.branchID
                       ?.toString()
                       ?.toLowerCase()
+                      ?.includes?.(searchText) ||
+                    value?.provisiontype
+                      ?.toString()
+                      ?.toLowerCase()
                       ?.includes?.(searchText)
                   ) {
                     return value;
@@ -176,7 +180,16 @@ const ReusableTable = ({ data, columns, sx, showTotal, searchText }) => {
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
                         >
-                          {row[column.id]}
+                          {/* {row[column.id]} */}
+                          {(row[column.id] !== undefined &&
+                            row[column.id] !== null) ||
+                          ((row.info?.[column.id] && row.info?.[column.id]) !==
+                            undefined &&
+                            (row.info?.[column.id] && row.info?.[column.id]) !==
+                              null)
+                            ? row[column.id] ||
+                              (row.info?.[column.id] && row.info?.[column.id])
+                            : 0}
                         </StyledTableCell>
                       ))}
                   </StyledTableRow>
@@ -209,7 +222,7 @@ const ReusableTable = ({ data, columns, sx, showTotal, searchText }) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 15, 100]}
+        rowsPerPageOptions={[5, 10, 15]}
         component="div"
         count={data?.length}
         rowsPerPage={rowsPerPage}

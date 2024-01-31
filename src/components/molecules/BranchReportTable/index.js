@@ -92,7 +92,7 @@ const BranchReportTable = ({
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [rowsPerPage, setRowsPerPage] = useState(9);
   const [monthlyTotal, setMonthlyTotal] = useState({});
 
   const handleChangePage = (event, newPage) => {
@@ -225,7 +225,7 @@ const BranchReportTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 7, 50]}
+        rowsPerPageOptions={[5, 9, 50]}
         component="div"
         count={filteredData?.length}
         rowsPerPage={rowsPerPage}

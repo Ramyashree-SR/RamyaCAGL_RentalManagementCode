@@ -95,7 +95,7 @@ export default function MenuComponent({
 
   useEffect(() => {
     getAllRentDueDetailsByUniqueID();
-  }, []);
+  }, [uniqueID]);
 
   const getAllRentDueDetailsByUniqueID = async () => {
     const { data } = await getRentDueDetails(uniqueID);
@@ -240,7 +240,7 @@ export default function MenuComponent({
         <MenuItem
           onClick={() => {
             handleRentDue();
-            getAllRentDueDetailsByUniqueID(uniqueID);
+            // getAllRentDueDetailsByUniqueID(uniqueID);
           }}
           sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
         >

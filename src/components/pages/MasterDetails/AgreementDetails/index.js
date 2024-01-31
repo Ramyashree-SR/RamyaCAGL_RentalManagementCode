@@ -551,7 +551,7 @@ const AgreementDetails = ({
     //call a function to update tenure when either date changes
     // handleDateChange(val); //allNewContractDetails?.rentStartDate,
   };
-  
+
   // const handleRentEndDate = (val) => {
   //   setAllNewContractDetails((prevDetails) => ({
   //     ...prevDetails,
@@ -956,14 +956,14 @@ const AgreementDetails = ({
                 label="Monthly Rent"
                 placeholder="Enter Monthly Rent"
                 sx={{ width: 300 }}
-                name="lessorRentAmount"
+                name="monthlyRent"
                 value={
                   type === "edit"
-                    ? allNewContractDetails?.lessorRentAmount
-                    : allNewContractDetails?.lessorRentAmount
+                    ? allNewContractDetails?.monthlyRent
+                    : allNewContractDetails?.monthlyRent
                 }
                 onChange={(e) => updateChange(e)}
-                errorText={allNewContractDetailsErr?.lessorRentAmount}
+                errorText={allNewContractDetailsErr?.monthlyRent}
                 required
               />
               <DatePickerComponent

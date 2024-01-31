@@ -4,7 +4,7 @@ const paymentColumn = [
   { id: "branchID", label: "Branch ID", align: "center" },
   { id: "rentStartDate", label: "Rent Start Date", align: "center" },
   { id: "rentEndDate", label: "Rent  End Date", align: "center" },
-  { id: "monthlyRent", label: "Monthly Rent", align: "center" },
+  { id: "monthRent", label: "Esc.Monthly Rent", align: "center" },
   { id: "due", label: "RentDue", align: "center" },
   {
     id: "provision",
@@ -12,10 +12,10 @@ const paymentColumn = [
     align: "center",
   },
   { id: "gross", label: "Gross", align: "center" },
-  { id: "tds", label: "Tds", align: "center" },
+  { id: "reporttds", label: "Tds", align: "center" },
 
   { id: "net", label: "Net", align: "center" },
-  { id: "gst", label: "Gst", align: "center" },
+  { id: "gstamt", label: "Gst", align: "center" },
   { id: "actualAmount", label: "Actual Amount", align: "center" },
 ];
 

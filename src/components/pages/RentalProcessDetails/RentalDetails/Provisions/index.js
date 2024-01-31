@@ -14,8 +14,6 @@ import { deepOrange, red } from "@mui/material/colors";
 import { getBranchWiseProvisionsList } from "../../../../services/ProvisionsListApi";
 import ReusableTable from "../../../../molecules/ReusableTable";
 import { ProvisionsColumns } from "../../../../../constants/ProvisionList";
-import PaymentTableComponent from "../../../../molecules/PaymentTableComponent";
-import { ExportToCSV } from "../../../../ExportToCSV";
 import ExcelExport from "./../../../../../ExcelExport/index";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -110,8 +108,6 @@ const Provisions = (props) => {
     setInputValue(e.target.value);
   };
 
-  
-
   const getProvisionReport = Object.values(provisionsList)?.map((item) => ({
     ContractID: item.contractID,
     Month: item.month,
@@ -150,13 +146,13 @@ const Provisions = (props) => {
             <Row>
               <Col xs={12}> */}
           <Grid className="d-flex flex-column m-2" sx={{ position: "fixed" }}>
-            <Grid className="d-flex " sx={{ mt: -1.5 }}>
+            {/* <Grid className="d-flex " sx={{ mt: -1.5 }}>
               <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                 List of Branch with Provisions:
               </Typography>
-            </Grid>
+            </Grid> */}
             {/* <hr /> */}
-            <Grid className="d-flex" sx={{ mt: 0.5 }}>
+            <Grid className="d-flex" sx={{ mt: -2 }}>
               <InputBoxComponent
                 label="ID"
                 placeholder="Enter ID"
@@ -277,16 +273,20 @@ const Provisions = (props) => {
             xs={12}
             sx={{
               marginLeft: "1px auto auto 1px",
+              // position: "absolute",
+              // top: 2,
+              // left: 10,
+              width: "100%",
             }}
           >
-            {selectedYear && ( //selectedYear  ,selectedMonth
+            {selectedYear ? ( //selectedYear  ,selectedMonth
               <ReusableTable
                 data={provisionsList}
                 columns={ProvisionsColumns}
-                sx={{ height: 310, mt: 10 }} // height: 320
+                sx={{ mt: 8 }} // height: 320
                 searchText={searchText}
               />
-            )}
+            ) : null}
           </Box>
           {/* <PaymentTableComponent
                     data={provisionsList}

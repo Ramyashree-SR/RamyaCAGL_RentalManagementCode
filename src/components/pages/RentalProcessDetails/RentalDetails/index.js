@@ -135,7 +135,7 @@ const RentalDetails = (props) => {
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
   const [rentRenewContract, setRentRenewContract] = useState([]);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
-  
+
   const handleStateChange = (value) => {
     // console.log(value.target.outerText, "newValue");
     setFilterState({
@@ -460,10 +460,10 @@ const RentalDetails = (props) => {
               onBtnClick={() => {
                 setOpenLessorModal(true);
                 setModalType("add");
-                setOpenEditLessorModal(false);
-                setEditLessorRenewData(null);
-                setEditLessorData(null);
-                setRentRenewContract(null);
+                // setOpenEditLessorModal(false);
+                // setEditLessorRenewData(null);
+                // setEditLessorData(null);
+                // setRentRenewContract(null);
               }}
               sx={{ width: 200 }}
             />
@@ -482,7 +482,6 @@ const RentalDetails = (props) => {
               disabled={openEditLessorModal ? "edit" : "add"}
               uniqueID={uniqueID}
               EditLessorData={openEditLessorModal && EditLessorData}
-              EditLessorRenewData={openLessorModal && EditLessorRenewData}
             />
 
             <Box>
@@ -546,11 +545,12 @@ const RentalDetails = (props) => {
                 close={() => setOpenProvisionsModal(false)}
                 fullscreen={fullscreen}
               />
-              {/* <Variance
+              <Variance
                 show={openVarianceModal}
                 close={() => setOpenVarianceModal(false)}
                 fullscreen={fullscreen}
-              /> */}
+                uniqueIDs={uniqueIDs}
+              />
             </Box>
           </Box>
         </Box>
