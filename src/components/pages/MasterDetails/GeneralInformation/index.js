@@ -55,11 +55,10 @@ const GeneralInformation = ({
 
   let PaymentMode = [{ id: "3", label: "NEFT" }];
 
-  const handlePaymentChange = (name, value) => {
-    // console.log(name, value, "value");
-    setAllNewContractDetails(() => ({
-      ...allNewContractDetails,
-      [name]: value,
+  const handlePaymentChange = (value) => {
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      paymentMode: value ? value?.label : null,
     }));
     // setAllNewContractDetails(value);
   };
@@ -198,7 +197,7 @@ const GeneralInformation = ({
       close();
     }
   };
-
+console.log(contractStatus,"contractStatus");
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -288,15 +287,13 @@ const GeneralInformation = ({
                 getOptionLabel={(option) =>
                   option?.label || allNewContractDetails?.paymentMode
                 }
-                name="paymentMode"
+                // name="paymentMode"
                 value={
                   type === "edit"
                     ? allNewContractDetails?.paymentMode
                     : allNewContractDetails?.paymentMode || null
                 }
-                onChange={(val) => {
-                  handlePaymentChange("paymentMode", val);
-                }}
+                onChange={handlePaymentChange}
                 required
                 errorText={allNewContractDetailsErr?.paymentMode}
               />

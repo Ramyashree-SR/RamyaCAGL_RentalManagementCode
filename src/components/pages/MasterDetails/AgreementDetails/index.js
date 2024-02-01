@@ -265,16 +265,16 @@ const AgreementDetails = ({
   };
 
   const handleDocumentType = (name, value) => {
-    setAllNewContractDetails(() => ({
-      ...allNewContractDetails,
-      [name]: value,
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      documentType: value ? value?.label : null,
     }));
   };
 
   const handleLockinPeriod = (name, value) => {
-    setAllNewContractDetails(() => ({
-      ...allNewContractDetails,
-      [name]: value,
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      securityDepositLockinPeriod: value ? value?.label : null,
     }));
   };
 
@@ -286,16 +286,16 @@ const AgreementDetails = ({
   };
 
   const handleNoticePeriod = (name, value) => {
-    setAllNewContractDetails(() => ({
-      ...allNewContractDetails,
-      [name]: value,
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      securityDepositnoticePeriod: value ? value?.label : null,
     }));
   };
 
-  const handleActivationStatus = (name, value) => {
+  const handleActivationStatus = (value) => {
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: value,
+      agreementActivationStatus: value ? value?.label : null,
     }));
   };
 
@@ -680,15 +680,13 @@ const AgreementDetails = ({
                   option?.label ||
                   allNewContractDetails?.agreementActivationStatus
                 }
-                name="agreementActivationStatus"
+                // name="agreementActivationStatus"
                 value={
                   type === "edit"
                     ? allNewContractDetails?.agreementActivationStatus
                     : allNewContractDetails?.agreementActivationStatus || null
                 }
-                onChange={(val) =>
-                  handleActivationStatus("agreementActivationStatus", val)
-                }
+                onChange={handleActivationStatus}
                 required
               />
             </Grid>

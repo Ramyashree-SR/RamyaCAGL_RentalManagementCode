@@ -16,6 +16,7 @@ import {
 import ReusableTable from "../../../molecules/ReusableTable";
 import { columns } from "../../../../constants/ScheduleTable";
 import AddIcon from "@mui/icons-material/Add";
+import SimpleDropDown from "../../../atoms/SimpleDropDown";
 
 const LesseeInformation = ({
   activeStep,
@@ -46,38 +47,25 @@ const LesseeInformation = ({
       [e.target.name]: e.target.value,
     }));
   };
-
-  let ApproverRenew = [
-    { id: "DM", label: "DM" },
-    { id: "ZM", label: "ZM" },
+  let EntityDetails = [
+    { id: "Commercial", label: "Commercial" },
+    { id: "Residential", label: "Residential" },
+    {
+      id: "Both Commercial & Residential",
+      label: "Both Commercial & Residential",
+    },
   ];
 
-  let ApproverRelocate = [
-    { id: "SH", label: "SH" },
-    { id: "CBO", label: "CBO" },
-    { id: "MD/CEO", label: "MD/CEO" },
-  ];
-
-  const handleApproverRelocate = (name, value) => {
-    setAllNewContractDetails(() => ({
-      ...allNewContractDetails,
-      [name]: value,
-    }));
-  };
-
-  const handleApproverRenew = (name, value) => {
-    setAllNewContractDetails(() => ({
-      ...allNewContractDetails,
-      [name]: value,
-    }));
-  };
-
-  const handleEntityDetails = (name, value) => {
+  const handleEntityDetails = (value) => {
     // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
-    setAllNewContractDetails({
-      ...allNewContractDetails,
-      [name]: value,
-    });
+    // setAllNewContractDetails({
+    //   ...allNewContractDetails,
+    //   [name]: value,
+    // });
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      lesseeEntityDetails: value ? value?.label : null,
+    }));
   };
 
   let BranchType = [
@@ -101,21 +89,20 @@ const LesseeInformation = ({
     { id: "Others", label: "Others" },
   ];
 
-  let EntityDetails = [
-    { id: "Commercial", label: "Commercial" },
-    { id: "Residential", label: "Residential" },
-    {
-      id: "Both Commercial & Residential",
-      label: "Both Commercial & Residential",
-    },
-  ];
-
-  const handleBulidingType = (name, value) => {
-    setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+  const handleBulidingType = (value) => {
+    // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      premesisBuildingType: value ? value?.label : null,
+    }));
   };
 
-  const handleLocationChange = (name, value) => {
-    setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+  const handleLocationChange = (value) => {
+    // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      premesisLocation: value ? value?.label : null,
+    }));
   };
 
   const handleHeadOfficeChange = (name, value) => {
@@ -152,16 +139,21 @@ const LesseeInformation = ({
     setAddress(joinedAddress);
   };
 
-  const handleBranchType = (name, value) => {
-    setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+  const handleBranchType = (value) => {
+    // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
+    console.log(value?.label, "value");
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      lesseeBranchType: value ? value?.label : null,
+    }));
     setSelectedBranchType(value);
     getAllBranchID(value);
   };
 
   const handleBranchID = (_, value) => {
-    setBranchDetails(() => ({
-      ...branchDetails,
-      branchID: value,
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      branchID: value ? value?.label : null,
     }));
     setShowBranchID(true);
     getBranchIdDetails(value);
@@ -221,20 +213,35 @@ const LesseeInformation = ({
           </Typography>
           <Grid container spacing={2} className="px-2 py-2 mt-1">
             <Grid item className="d-flex m-2 px-3" lg={12}>
-              <DropDownComponent
+              {/* <DropDownComponent
                 label="Premesis Type"
                 sx={{ width: 300 }}
                 options={BranchType}
                 getOptionLabel={(option) =>
                   option?.label || allNewContractDetails?.lesseeBranchType
                 }
-                name="lesseeBranchType"
+                // name="lesseeBranchType"
                 value={
                   type === "edit"
-                    ? allNewContractDetails?.lesseeBranchType || null
+                    ? allNewContractDetails?.lesseeBranchType
                     : allNewContractDetails?.lesseeBranchType || null
                 }
-                onChange={(val) => handleBranchType("lesseeBranchType", val)}
+                onChange={handleBranchType}
+                // onChange={(val) => handleBranchType("lesseeBranchType", val)}
+                required={true}
+              /> */}
+
+              <SimpleDropDown
+                options={BranchType}
+                label="Select an option"
+                onChange={handleBranchType}
+                value={
+                  BranchType?.find(
+                    (option) =>
+                      option?.label === allNewContractDetails?.lesseeBranchType
+                  ) || null
+                }
+                sx={{ width: 300 }}
                 required={true}
               />
             </Grid>
@@ -324,7 +331,8 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="branchName"
                   value={
-                    type === "edit"
+                    type === "edit" ||
+                    (type === "edit" && contractStatus === "Renewal")
                       ? allNewContractDetails?.lesseeBranchName ||
                         allNewContractDetails?.branchName
                       : allNewContractDetails?.lesseeBranchName ||
@@ -439,7 +447,7 @@ const LesseeInformation = ({
             </Typography>
             <Grid container spacing={2} className="px-2 py-2 mt-1">
               <Grid item className="d-flex m-2" lg={12}>
-                <DropDownComponent
+                {/* <DropDownComponent
                   label="Entity Details "
                   sx={{ width: 300 }}
                   options={EntityDetails}
@@ -453,11 +461,24 @@ const LesseeInformation = ({
                       : allNewContractDetails?.lesseeEntityDetails || null
                   }
                   // onSelect={handleEntityDetails}
-                  onChange={(val) =>
-                    handleEntityDetails("lesseeEntityDetails", val)
+                  onChange={handleEntityDetails}
+                  required={true}
+                /> */}
+                <SimpleDropDown
+                  options={EntityDetails}
+                  label="Select an option"
+                  onChange={handleEntityDetails}
+                  value={
+                    EntityDetails?.find(
+                      (option) =>
+                        option?.label ===
+                        allNewContractDetails?.lesseeEntityDetails
+                    ) || null
                   }
+                  sx={{ width: 300 }}
                   required={true}
                 />
+
                 <DropDownComponent
                   label="Location"
                   sx={{ width: 300 }}
@@ -465,22 +486,20 @@ const LesseeInformation = ({
                   getOptionLabel={(option) =>
                     option?.label || allNewContractDetails?.premesisLocation
                   }
-                  name="premesisLocation"
+                  // name="premesisLocation"
                   value={
                     type === "edit"
                       ? allNewContractDetails?.premesisLocation || null
                       : allNewContractDetails?.premesisLocation || null
                   }
-                  onChange={(val) =>
-                    handleLocationChange("premesisLocation", val)
-                  }
+                  onChange={handleLocationChange}
                   required={true}
                 />
                 <DropDownComponent
                   label="Building Type"
                   sx={{ width: 300 }}
                   options={typeOfBuliding}
-                  name="premesisBuildingType"
+                  // name="premesisBuildingType"
                   getOptionLabel={(option) =>
                     option?.label || allNewContractDetails?.premesisBuildingType
                   }
@@ -490,9 +509,7 @@ const LesseeInformation = ({
                       : allNewContractDetails?.premesisBuildingType || null
                   }
                   // onSelect={handleBulidingType}
-                  onChange={(val) =>
-                    handleBulidingType("premesisBuildingType", val)
-                  }
+                  onChange={handleBulidingType}
                   required={true}
                 />
               </Grid>

@@ -148,7 +148,6 @@ const DropDownComponent = ({
               classes={{ root: classes.customTextField }}
             />
           )}
-          // onChange={(_, value) => onChange(value)}
           value={selectedValue}
           onChange={(_, value) => handleOnChange(value)}
           onInputChange={(_, newvalue) => {
