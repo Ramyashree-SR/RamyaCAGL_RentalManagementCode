@@ -151,12 +151,12 @@ const LesseeInformation = ({
   };
 
   const handleBranchID = (_, value) => {
+    setShowBranchID(true);
+    getBranchIdDetails(value);
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
       branchID: value ? value?.label : null,
     }));
-    setShowBranchID(true);
-    getBranchIdDetails(value);
   };
 
   useEffect(() => {

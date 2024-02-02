@@ -86,10 +86,22 @@ const PaymentReport = (props) => {
   // Extract the year from the rent end date
   const currentYear = endDateObject?.getFullYear();
 
+  // const yearOptions = Array.from({ length: 5 }, (_, index) => ({
+  //   id: currentYear - index || currentYear + index, // currentYear
+  //   label: `${currentYear - index || currentYear + index}`,
+  // }));
+
   const yearOptions = Array.from({ length: 10 }, (_, index) => ({
-    id: currentYear - index, // currentYear
-    label: `${currentYear - index}`,
+    id: currentYear - 3 + index,
+    label: `${currentYear - 3 + index}`,
   }));
+
+  // const numYears = 6; // You can adjust this number based on your requirement
+
+  // const yearOptions = Array.from({ length: 2 * numYears + 1 }, (_, index) => ({
+  //   id: currentYear - numYears + index,
+  //   label: `${currentYear - numYears + index}`,
+  // }));
 
   const handleChange = (newValue) => {
     let value = newValue?.label;

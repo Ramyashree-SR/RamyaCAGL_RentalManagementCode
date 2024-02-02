@@ -163,14 +163,13 @@ const TableComponent = ({
     setPage(0);
   };
 
-  const handleEditRow = (event,rowData) => {
+  const handleEditRow = (event, rowData) => {
     // console.log(rowData, "rowData");
     setModalType("edit");
     setOpenLessorModal(true);
     setOpenEditLessorModal(true);
     setEditLessorData(rowData);
     // setEditLessorRenewData(rowData);
-    
   };
 
   const handleModalOpen = (rowData) => {
@@ -203,6 +202,7 @@ const TableComponent = ({
     //   activationStatusFilter === "Open"
     // ) {
     setOpenProvisionsModal(true);
+
     // }
   };
 
@@ -350,7 +350,7 @@ const TableComponent = ({
 
                                   <MenuComponent
                                     handleEdit={(e) => {
-                                      handleEditRow(e,row);
+                                      handleEditRow(e, row);
                                       setUniqueID(row.uniqueID);
                                       setEditLessorRenewData(row);
                                     }}

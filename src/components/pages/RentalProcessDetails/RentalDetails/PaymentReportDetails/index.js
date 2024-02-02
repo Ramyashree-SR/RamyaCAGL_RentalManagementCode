@@ -37,6 +37,7 @@ const PaymentReportDetails = (props) => {
     lesseeBranchName,
     lessorName,
     monthlyRent,
+    // reload,
   } = props;
   const { addToast } = useToasts();
   const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
@@ -49,6 +50,8 @@ const PaymentReportDetails = (props) => {
     vertical: "bottom",
     horizontal: "center",
   });
+  // const [reload, setReload] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { vertical, horizontal, open } = state;
 
   const handleClick = (newState) => () => {
@@ -74,6 +77,25 @@ const PaymentReportDetails = (props) => {
     getAllPaymentReportDetailsOfMonth();
   }, [selectedMonth]);
 
+  useEffect(() => {
+    getAllPaymentReportDetailsOfMonth();
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear selected month and year
+      setSelectedMonth(null);
+      setSelectedYear(null);
+
+      // Clear existing payment report data
+      setGetPaymentReport([]);
+
+      // Open modal to select month and year again if needed
+      // ... (Open your modal logic here)
+
+      // Fetch new data based on the new month and year
+      getAllPaymentReportDetailsOfMonth();
+    }
+  }, [refreshKey]);
+
   const handleMonthChange = (newValue) => {
     const value = newValue?.label;
     if (value) {
@@ -82,7 +104,6 @@ const PaymentReportDetails = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
-    // getAllPaymentReportDetailsOfMonth(value);
   };
 
   const startDateObject = new Date(rentStartDate);
@@ -111,7 +132,6 @@ const PaymentReportDetails = (props) => {
   const handleChange = (newValue) => {
     let value = newValue?.label;
     setSelectedYear(value);
-    // getAllPaymentReportDetailsOfMonth(value);
   };
 
   const getAllPaymentReportDetailsOfMonth = async () => {
@@ -126,6 +146,7 @@ const PaymentReportDetails = (props) => {
         setGetPaymentReport(getData);
       } else {
         setGetPaymentReport([]);
+        props.close();
       }
     }
   };
@@ -176,6 +197,7 @@ const PaymentReportDetails = (props) => {
       getAllPaymentReportDetailsOfMonth();
       addToast("Amount Settled", { appearance: "success" });
       props.close();
+      // window.location.reload();
     } else if (!data?.error) {
       // addToast(errRes?.msg, { appearance: "error" });
       addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
@@ -183,6 +205,8 @@ const PaymentReportDetails = (props) => {
         autoClose: 9000,
       });
       props.close();
+
+      window.location.reload();
     }
   };
 
@@ -211,12 +235,15 @@ const PaymentReportDetails = (props) => {
       Gst: item?.gst,
     })
   );
-
+  console.log(refreshKey, "refreshKey");
   return (
     <>
       <Modal
         show={props.show}
-        close={props.close}
+        close={() => {
+          props.close();
+          // setReload(true);
+        }}
         fullscreen={props.fullscreen}
         animation={true}
         size="lg"
@@ -451,7 +478,14 @@ const PaymentReportDetails = (props) => {
           </Grid>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              // setReload(true);
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

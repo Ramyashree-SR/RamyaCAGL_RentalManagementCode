@@ -32,7 +32,7 @@ const ShowProvisionDetails = (props) => {
   const [yearData, setYearData] = useState(null);
   const [contractID, setContractID] = useState(null);
   const [monthData, setMonthData] = useState(null);
-
+  const [refreshKey, setRefreshKey] = useState(0);
   const [state, setState] = useState({
     opened: false,
     vertical: "bottom",
@@ -60,6 +60,16 @@ const ShowProvisionDetails = (props) => {
       </IconButton>
     </React.Fragment>
   );
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing payment report data
+      setRemoveRowData([]);
+      // Fetch new data based on the new month and year
+      deleteTheBranchProvisionData();
+    }
+  }, [refreshKey]);
 
   const endDateObject = new Date();
   // Check if the provided rent end date is valid
@@ -95,11 +105,12 @@ const ShowProvisionDetails = (props) => {
         monthData
       );
       if (data) {
+        // addToast("Provision Deletion Successful", {
+        //   appearance: "success",
+        // });
+        setRemoveRowData([]);
         handleClose();
-        props.close();
-        addToast("Provision Deletion Successful", {
-          appearance: "success",
-        });
+        // props.close();
         setRemoveRowData([]);
       }
     }
@@ -154,6 +165,7 @@ const ShowProvisionDetails = (props) => {
                           vertical: "bottom",
                           horizontal: "center",
                         });
+                        setRefreshKey((prevKey) => prevKey + 1);
                       }}
                     >
                       Delete
@@ -172,7 +184,24 @@ const ShowProvisionDetails = (props) => {
                 >
                   <Alert
                     onClose={handleClosed}
-                    severity="error"
+                    severity="success"
+                    variant="filled"
+                  >
+                    Provision Deleted Succesfully
+                  </Alert>
+                </Snackbar>
+                <Snackbar
+                  open={opened}
+                  anchorOrigin={{ vertical, horizontal }}
+                  autoHideDuration={3000}
+                  onClose={handleClosed}
+                  action={action}
+                  key={vertical + horizontal}
+                  variant="error"
+                >
+                  <Alert
+                    onClose={handleClosed}
+                    severity="warning"
                     variant="filled"
                   >
                     Provision Deletion Failed[ ALLOWED ONLY FOR CURRENT

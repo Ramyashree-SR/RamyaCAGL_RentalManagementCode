@@ -109,10 +109,10 @@ const ProvisionDetailsTable = ({
     // Handle delete logic here
     setOpen(true);
     setconfirmDeleteVal(row);
-    setContractID(row.contractID);
+    setContractID(row?.contractID);
     setYearData(row?.year);
     setMonthData(row?.month);
-    console.log("Delete clicked for row:", row);
+    console.log("row?.year", row?.year);
   };
 
   return (

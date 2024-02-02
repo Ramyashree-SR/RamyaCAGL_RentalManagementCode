@@ -83,6 +83,7 @@ export default function MenuComponent({
     dateTime: "",
   });
   const [typeProvisionsData, setTypeProvisionsData] = useState(null);
+  // const [reload, setReload] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -262,6 +263,7 @@ export default function MenuComponent({
           <MenuItem
             onClick={() => {
               handleEditReport();
+              // setReload(!reload);
               // getAllPaymentReportDetailsOfMonth();
             }}
             sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
@@ -318,6 +320,7 @@ export default function MenuComponent({
           lessorName={lessorName}
           lesseeBranchName={lesseeBranchName}
           monthlyRent={monthlyRent}
+          // reload={reload}
         />
       )}
     </React.Fragment>
