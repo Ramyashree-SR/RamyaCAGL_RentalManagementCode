@@ -290,7 +290,7 @@ const LesseeInformation = ({
                     value={
                       type === "edit"
                         ? allNewContractDetails?.branchID
-                        : allNewContractDetails?.branchID || ""
+                        : allNewContractDetails?.branchID || null
                     }
                     onChange={handleBranchID}
                     renderInput={(params) => (
@@ -331,8 +331,7 @@ const LesseeInformation = ({
                   sx={{ width: 300 }}
                   name="branchName"
                   value={
-                    type === "edit" ||
-                    (type === "edit" && contractStatus === "Renewal")
+                    type === "edit"
                       ? allNewContractDetails?.lesseeBranchName ||
                         allNewContractDetails?.branchName
                       : allNewContractDetails?.lesseeBranchName ||

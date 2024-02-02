@@ -1040,14 +1040,18 @@ const MasterDetails = (props) => {
       lesseeBranchType:
         allNewContractDetails?.lesseeBranchType &&
         allNewContractDetails?.lesseeBranchType,
-      lesseeBranchName: allNewContractDetails?.branchName,
-      lesseeAreaName: allNewContractDetails?.areaName,
-      lesseeDivision: allNewContractDetails?.region,
-      lesseeZone: allNewContractDetails?.zone,
-      lesseeState: allNewContractDetails?.state,
-
-      lesseeApproverrenewals: allNewContractDetails?.lesseeApproverrenewals,
-      lesseeApproverRelocation: allNewContractDetails?.lesseeApproverRelocation,
+      lesseeBranchName:
+        allNewContractDetails?.branchName ||
+        allNewContractDetails?.lesseeBranchName,
+      lesseeAreaName:
+        allNewContractDetails?.areaName ||
+        allNewContractDetails?.lesseeAreaName,
+      lesseeDivision:
+        allNewContractDetails?.region || allNewContractDetails?.lesseeDivision,
+      lesseeZone:
+        allNewContractDetails?.zone || allNewContractDetails?.lesseeZone,
+      lesseeState:
+        allNewContractDetails?.state || allNewContractDetails?.lesseeState,
       lesseeEntityDetails: allNewContractDetails?.lesseeEntityDetails,
 
       premesisLocation: allNewContractDetails?.premesisLocation,
@@ -1264,10 +1268,10 @@ const MasterDetails = (props) => {
   };
 
   const editAllNewRentContractDetails = async (EditLessorData) => {
-    console.log(
-      EditLessorData,
-      "EditLessorData in Other component while editing"
-    );
+    // console.log(
+    //   EditLessorData,
+    //   "EditLessorData in Other component while editing"
+    // );
     let payload = {
       branchID: allNewContractDetails?.branchID,
       lessorName: allNewContractDetails?.lessorName,
@@ -1410,6 +1414,16 @@ const MasterDetails = (props) => {
       payload
     );
     if (data) {
+      setBranchDetails((prev) => ({
+        ...prev,
+        branchID: allNewContractDetails?.branchID,
+        branchName: allNewContractDetails?.lesseeBranchName,
+        areaName: allNewContractDetails?.lesseeAreaName,
+        region: allNewContractDetails?.lesseeDivision,
+        zone: allNewContractDetails?.lesseeZone,
+        state: allNewContractDetails?.lesseeState,
+        // ... other fields
+      }));
       props.getContractDetails();
       setIFSCCodes(Array(recipientCount).fill(""));
       setBankAndBranch(Array(recipientCount).fill({ bank: "", branch: "" }));
@@ -1459,7 +1473,6 @@ const MasterDetails = (props) => {
         lessorTaluka: props.EditLessorData?.lessorTaluka,
         lessorDistrict: props.EditLessorData?.lessorDistrict,
         lessorState: props.EditLessorData?.lessorState,
-
         lesseeBranchType: props.EditLessorData?.lesseeBranchType,
         lesseeBranchName: props.EditLessorData?.lesseeBranchName,
         lesseeAreaName: props.EditLessorData?.lesseeAreaName,
@@ -1467,7 +1480,6 @@ const MasterDetails = (props) => {
         lesseeZone: props.EditLessorData?.lesseeZone,
         lesseeState: props.EditLessorData?.lesseeState,
         lesseeEntityDetails: props.EditLessorData?.lesseeEntityDetails,
-
         premesisLocation: props.EditLessorData?.premesisLocation,
         premesisDoorNumber: props.EditLessorData?.premesisDoorNumber,
         premesisFloorNumber: props.EditLessorData?.premesisFloorNumber,
@@ -1485,7 +1497,6 @@ const MasterDetails = (props) => {
         southPremesis: props.EditLessorData?.southPremesis,
         eastPremesis: props.EditLessorData?.eastPremesis,
         westPremesis: props.EditLessorData?.westPremesis,
-
         agreementSignDate: new Date(props.EditLessorData?.agreementSignDate),
         agreementTenure: props.EditLessorData?.agreementTenure,
         agreementActivationStatus:
@@ -1494,13 +1505,11 @@ const MasterDetails = (props) => {
         agreementEndDate: new Date(props.EditLessorData?.agreementEndDate),
         rentStartDate: new Date(props.EditLessorData?.rentStartDate),
         rentEndDate: new Date(props.EditLessorData?.rentEndDate),
-
         maintaineneCharge: props.EditLessorData?.maintaineneCharge,
         waterCharge: props.EditLessorData?.waterCharge,
         electricity: props.EditLessorData?.electricity,
         documentType: props.EditLessorData?.documentType,
         securityDepositAmount: props.EditLessorData?.securityDepositAmount,
-
         securityDepositPaymentMode:
           props.EditLessorData?.securityDepositPaymentMode,
         securityDepositUtr: props.EditLessorData?.securityDepositUtr,
@@ -1510,7 +1519,6 @@ const MasterDetails = (props) => {
           props.EditLessorData?.securityDepositnoticePeriod,
         securityDepositExitTerm: props.EditLessorData?.securityDepositExitTerm,
         standardDeducition: props.EditLessorData?.standardDeducition,
-
         escalation: props.EditLessorData?.escalation,
         renewalTenure: props.EditLessorData?.renewalTenure,
 
@@ -1533,7 +1541,6 @@ const MasterDetails = (props) => {
     }
   }, [props.EditLessorData]);
 
-  // console.log(allNewContractDetails, "allNewContractDetails");
   useEffect(() => {
     editAllRenewRentContractDetails();
   }, [props.branchIDforDue]);
@@ -1542,7 +1549,7 @@ const MasterDetails = (props) => {
     const { data, errRes } = await EditRentRenewContractDetails(
       props.branchIDforDue
     );
-    console.log(data, "resdata");
+    // console.log(data, "resdata");
     if (data) {
       if (data) {
         let renewData = data?.data;
@@ -1564,7 +1571,6 @@ const MasterDetails = (props) => {
           activeStep={activeStep}
           allNewContractDetailsErr={allNewContractDetailsErr}
           onSave={handleSaveData}
-          // onSave={handleSave}
           allNewContractDetails={allNewContractDetails}
           setAllNewContractDetails={setAllNewContractDetails}
           type={props.type}
