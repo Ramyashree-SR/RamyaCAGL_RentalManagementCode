@@ -87,9 +87,7 @@ const ShowProvisionDetails = (props) => {
   }));
 
   const handleClose = (event) => {
-    // event.preventDefault();
     setOpen(false);
-    // window.location.reload();
   };
 
   const handleConfirmDelete = (row) => {
@@ -105,13 +103,9 @@ const ShowProvisionDetails = (props) => {
         monthData
       );
       if (data) {
-        // addToast("Provision Deletion Successful", {
-        //   appearance: "success",
-        // });
         setRemoveRowData([]);
         handleClose();
-        // props.close();
-        setRemoveRowData([]);
+        props.close();
       }
     }
   };

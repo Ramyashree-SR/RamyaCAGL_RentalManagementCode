@@ -16,4 +16,20 @@ const getBranchWiseProvisionsList = (params1, params2) => {
     });
 };
 
-export { getBranchWiseProvisionsList };
+const DeleteAllSelectedProvisions = (payload) => {
+  return serviceUtil
+    .post(`BulkProvisionDelete`, payload)
+    .then((res) => {
+      // console.log(res, "res");
+      const data = res && res.data;
+      return { data };
+    })
+    .catch((err) => {
+      const errRes = (err && err.response && err.response.data) || {
+        message: "ERROR",
+      };
+      return { errRes };
+    });
+};
+
+export { getBranchWiseProvisionsList, DeleteAllSelectedProvisions };

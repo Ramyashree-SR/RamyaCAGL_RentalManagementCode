@@ -179,10 +179,6 @@ const RentActualDetails = (props) => {
 
     // If no selected rows, return the original data
     return getActualPaymentReport;
-    // // Remove rows after making a payment
-    // const updatedDataAfterPayment = getActualPaymentReport?.filter(
-    //   (item) => !selectedRows.includes(item.info?.uniqueID)
-    // );
   };
 
   // Function to get the details of the selected rows
@@ -212,7 +208,6 @@ const RentActualDetails = (props) => {
       endDate: selectRow?.info?.rentEndDate,
     }));
     const { data, errRes } = await AddRentActualDetails(payload);
-    // console.log(data, "dataRes");
     if (data) {
       let getData = data?.data;
       setAddRentActual(getData);
@@ -234,7 +229,6 @@ const RentActualDetails = (props) => {
         close={props.close}
         fullscreen={props.fullscreen}
         centered
-        // className="w-100"
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">

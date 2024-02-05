@@ -162,10 +162,6 @@ const PaymentReportDetails = (props) => {
   };
   const action = (
     <React.Fragment>
-      {/* <Button color="warning" size="small" onClick={handleClose}>
-        UNDO
-      </Button> */}
-
       <IconButton
         size="small"
         aria-label="close"
@@ -209,6 +205,7 @@ const PaymentReportDetails = (props) => {
       window.location.reload();
     }
   };
+  console.log(getPaymentReport, "getPaymentReport");
 
   const getPaymentReportData = Object.values([getPaymentReport])?.map(
     (item) => ({
@@ -235,7 +232,7 @@ const PaymentReportDetails = (props) => {
       Gst: item?.gst,
     })
   );
-  console.log(refreshKey, "refreshKey");
+  // console.log(refreshKey, "refreshKey");
   return (
     <>
       <Modal

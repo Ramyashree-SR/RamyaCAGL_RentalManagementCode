@@ -112,7 +112,7 @@ const ProvisionDetailsTable = ({
     setContractID(row?.contractID);
     setYearData(row?.year);
     setMonthData(row?.month);
-    console.log("row?.year", row?.year);
+    // console.log("row?.year", row?.year);
   };
 
   return (
