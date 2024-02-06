@@ -339,7 +339,7 @@ const Provisions = (props) => {
                 setContractID={setContractID}
                 setMonthData={setMonthData}
                 yearData={yearData}
-                withCheckbox={withCheckbox && currentMonth === "February"}
+                withCheckbox={withCheckbox && currentMonth}
                 currentYearAndMonth={currentYearAndMonth}
                 currentMonth={currentMonth}
                 setRefreshKey={setRefreshKey}
