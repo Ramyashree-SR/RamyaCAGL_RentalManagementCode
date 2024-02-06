@@ -81,10 +81,6 @@ const RentActualPaymentTable = ({
     }
   }, []);
 
-  // Save edited data to localStorage whenever it changes
-  // useEffect(() => {
-  //   localStorage.setItem("editedData", JSON.stringify(editedData));
-  // }, [editedData]);
 
   const handleEdit = (id, field, value) => {
     const updatedData = data?.map((item) =>
@@ -144,6 +140,7 @@ const RentActualPaymentTable = ({
       console.error("Error saving edited data to the backend:", error.message);
     }
   };
+
   const handleCheckboxChange = (id) => {
     const newSelectedRows = selectedRows?.includes(id)
       ? selectedRows?.filter((rowId) => rowId !== id)

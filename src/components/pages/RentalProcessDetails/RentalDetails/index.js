@@ -108,6 +108,7 @@ const RentalDetails = (props) => {
   const [openRentActualModal, setOpenRentActualModal] = useState(false);
   const [openVarianceModal, setOpenVarianceModal] = useState(false);
   const [openProvisionsModal, setOpenProvisionsModal] = useState(false);
+  const [openProvisionsListModal, setOpenProvisionsListModal] = useState(false);
   const [openRentDueModal, setOpenRentDueModal] = useState(false);
   const [openRentDueDataModal, setOpenRentDueDataModal] = useState(false);
   const [fullscreen, setFullscreen] = useState(true);
@@ -133,7 +134,6 @@ const RentalDetails = (props) => {
   const [monthlyRent, setMonthlyRent] = useState(null);
   const [lessorName, setLessorName] = useState(null);
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
-  const [rentRenewContract, setRentRenewContract] = useState([]);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
 
   const handleStateChange = (value) => {
@@ -857,11 +857,10 @@ const RentalDetails = (props) => {
             handleActivationStatusFilterChange
           }
           openRentDueModal={openRentDueModal}
-          openProvisionsModal={openProvisionsModal}
-          setOpenProvisionsModal={setOpenProvisionsModal}
+          openProvisionsListModal={openProvisionsListModal}
+          setOpenProvisionsListModal={setOpenProvisionsListModal}
           setOpenRentDueModal={setOpenRentDueModal}
           branchIDforDue={branchIDforDue}
-          // rentContractDetails={rentContractDetails.rentStartDate}
           rentStartDate={rentStartDate}
           setRentStartDate={setRentStartDate}
           rentEndDate={rentEndDate}

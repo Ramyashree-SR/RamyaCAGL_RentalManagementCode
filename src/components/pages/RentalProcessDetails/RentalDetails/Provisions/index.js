@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import { deepOrange, green, red } from "@mui/material/colors";
+import { blue, deepOrange, green, red } from "@mui/material/colors";
 import {
   DeleteAllSelectedProvisions,
   getBranchWiseProvisionsList,
@@ -37,7 +37,6 @@ const Provisions = (props) => {
   const [showClearIcon, setShowClearIcon] = useState("none");
   const [searchText, setSearchText] = useState("");
   const [filterDetails, setFilterDetails] = useState(provisionsList);
-  const [open, setOpen] = useState(false);
   const [confirmDelete, setconfirmDelete] = useState(false);
   const [confirmDeleteVal, setconfirmDeleteVal] = useState(null);
   const [yearData, setYearData] = useState(null);
@@ -46,6 +45,7 @@ const Provisions = (props) => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [removeRowData, setRemoveRowData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [open, setOpen] = useState(false);
   const [state, setState] = useState({
     opened: false,
     vertical: "bottom",
@@ -87,8 +87,13 @@ const Provisions = (props) => {
     setDataSelect(value.label);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedRows([]); // Reset selected rows when closing the dialog
+  };
+
   useEffect(() => {
-    // Filter the data based on Status
+    // Filter the data based on Status and selectedRows
     const filtered = provisionsList?.filter((value) => {
       if (provisionMonthFilter === "All") {
         return value;
@@ -99,23 +104,11 @@ const Provisions = (props) => {
     setFilterDetails(filtered);
   }, [provisionsList, provisionMonthFilter]);
 
-  // console.log(filterDetails, "filterDetails");
-
   useEffect(() => {
     getProvisionListDetails();
   }, [selectedYear]);
 
-  useEffect(() => {
-    // This useEffect will run whenever refreshKey changes
-    if (refreshKey !== 0) {
-      // Clear existing payment report data
-      setRemoveRowData([]);
-      // Fetch new data based on the new month and year
-      deleteSelectedProvisionDetailsFromTable();
-    }
-  }, [refreshKey]);
   // Parse the provided rent end date
-  // const endDateObject = new Date(rentEndDate);
   const endDateObject = new Date();
 
   // Check if the provided rent end date is valid
@@ -130,7 +123,6 @@ const Provisions = (props) => {
   const currentMonth = endDateObject?.toLocaleString("default", {
     month: "long",
   });
-  console.log(currentMonth, "currentMonth");
 
   // Generate an array of years, including the current MOnth
   const yearOptions = Array?.from({ length: 10 }, (_, index) => ({
@@ -147,7 +139,6 @@ const Provisions = (props) => {
       if (data) {
         let getData = data?.data;
         setProvisionsList(getData);
-        // props.close();
       } else {
         setProvisionsList([]);
       }
@@ -162,52 +153,25 @@ const Provisions = (props) => {
     setProvisionMonthFilter(e.target.value);
   };
 
-  const handleClose = (event) => {
-    setOpen(false);
-  };
-
-  const handleConfirmDelete = (row) => {
-    setconfirmDelete(true);
-    // Filter the data to keep only records for the current month
-    // const newData = provisionsList?.filter(
-    //   (item) => !(item.year === currentYear && item.month === currentMonth)
-    // );
-    // setProvisionsList(newData);
-
-    deleteSelectedProvisionDetailsFromTable();
-  };
-
-  // Function to get the details of the selected rows
-  const getSelectedRowDetails = () => {
-    return selectedRows?.map((rowId) =>
-      provisionsList?.find((row) => row?.contractID === rowId)
-    );
-  };
-
-  const { vertical, horizontal, opened } = state;
-
-  const handleClick = (newState) => {
-    setState({ ...newState, opened: true });
-  };
-  const selectedRowDatas = getSelectedRowDetails();
-  console.log(selectedRowDatas, "selectedRowDatas");
-
-  const deleteSelectedProvisionDetailsFromTable = async () => {
+  const deleteSelectedProvisionDetailsFromTable = async (selectedRowsData) => {
     if (confirmDelete) {
-      let payload = [
-        {
-          contractID: selectedRowDatas?.contractID,
-          year: selectedRowDatas?.year,
-          month: selectedRowDatas?.month,
-        },
-      ];
-      const { data, errRes } = await DeleteAllSelectedProvisions(payload);
-      console.log(data, "bulkdata");
-      if (data) {
-        setRemoveRowData(data);
-        handleClose();
-        props.close();
-        // addToast(data?.msg, { appearance: "success" });
+      const payload = selectedRowsData?.map((row) => ({
+        contractID: row?.contractID,
+        year: row?.year,
+        month: row?.month,
+      }));
+
+      try {
+        // Make API call to delete selected provisions
+        const { data } = await DeleteAllSelectedProvisions(payload);
+        if (data) {
+          // Set response data to removeRowData state
+          setRemoveRowData([]);
+          props.close();
+        }
+      } catch (error) {
+        console.error("Error deleting provisions:", error);
+        // Handle error if needed
       }
     }
   };
@@ -229,7 +193,7 @@ const Provisions = (props) => {
     Provisiontype: item.provisiontype,
     Remark: item.remark,
   }));
-  // showCheckbox={currentYear === 2024 && currentMonth === "February"}
+
   const withCheckbox = selectedYear === `${currentYear}`;
   const currentYearAndMonth = selectedYear === `${currentYear}`;
   return (
@@ -361,7 +325,7 @@ const Provisions = (props) => {
               width: "100%",
             }}
           >
-            {selectedYear ? ( //selectedYear  ,selectedMonth
+            {selectedYear && ( 
               <ReusableTable
                 data={provisionsList}
                 columns={ProvisionsColumns}
@@ -369,8 +333,8 @@ const Provisions = (props) => {
                 searchText={searchText}
                 provisionMonthFilter={provisionMonthFilter}
                 handleProvisionMonthChange={handleProvisionMonthChange}
-                setOpen={setOpen}
                 setconfirmDeleteVal={setconfirmDeleteVal}
+                setconfirmDelete={setconfirmDelete}
                 setYearData={setYearData}
                 setContractID={setContractID}
                 setMonthData={setMonthData}
@@ -378,52 +342,30 @@ const Provisions = (props) => {
                 withCheckbox={withCheckbox && currentMonth === "February"}
                 currentYearAndMonth={currentYearAndMonth}
                 currentMonth={currentMonth}
-                handleConfirmDelete={handleConfirmDelete}
+                setRefreshKey={setRefreshKey}
                 monthData={monthData}
-                setSelectedRows={setSelectedRows}
+                onSaveSelectedRows={deleteSelectedProvisionDetailsFromTable} // Pass onSaveSelectedRows prop
                 selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                open={open}
+                setOpen={setOpen}
+                handleClose={handleClose}
+                refreshKey={refreshKey}
+                setRemoveRowData={setRemoveRowData}
+                setInputValue={setInputValue}
+                setSelectedYear={setSelectedYear}
               />
-            ) : null}
+            )}
           </Box>
-          {selectedRows?.length > 0 ? (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setOpen(true);
-              }}
-              sx={{ backgroundColor: green[900] }}
-            >
-              Confirm Payment
-            </Button>
-          ) : null}
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogContent>
-              <Typography>Are you sure you want to delete?</Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Back</Button>
-              <Button
-                onClick={() => {
-                  handleConfirmDelete();
-                  handleClick({
-                    vertical: "bottom",
-                    horizontal: "center",
-                  });
-                  setRefreshKey((prevKey) => prevKey + 1);
-                }}
-              >
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

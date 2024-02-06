@@ -229,6 +229,7 @@ const RentActualDetails = (props) => {
         close={props.close}
         fullscreen={props.fullscreen}
         centered
+
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">

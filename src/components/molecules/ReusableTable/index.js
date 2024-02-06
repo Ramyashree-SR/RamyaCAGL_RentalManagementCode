@@ -13,10 +13,17 @@ import {
   TablePagination,
   IconButton,
   Checkbox,
+  Dialog,
+  DialogContent,
+  Typography,
+  DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { deepOrange, green, pink } from "@mui/material/colors";
+import { blue, deepOrange, green, pink } from "@mui/material/colors";
 import DeleteIcon from "@mui/icons-material/Delete"; // Import Delete Icon
+import CloseIcon from "@mui/icons-material/Close";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.root}`]: {
@@ -90,22 +97,36 @@ const ReusableTable = ({
   provisionMonthFilter,
   handleProvisionMonthChange,
   setconfirmDeleteVal,
-  setOpen,
   setYearData,
   setContractID,
   setMonthData,
   withCheckbox,
   currentYearAndMonth,
-  handleConfirmDelete,
+  setRefreshKey,
   currentMonth,
   selectedRows,
   setSelectedRows,
+  onSaveSelectedRows,
+  setconfirmDelete,
+  open,
+  handleClose,
+  setOpen,
+  monthData,
+  refreshKey,
+  setRemoveRowData,
+  setInputValue,
+  setSelectedYear,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [monthlyTotal, setMonthlyTotal] = useState({});
-  // const [selectedRows, setSelectedRows] = useState([]);
+  const [state, setState] = useState({
+    opened: false,
+    vertical: "bottom",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, opened } = state;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -114,6 +135,44 @@ const ReusableTable = ({
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleClosed = () => {
+    setState({ ...state, opened: false });
+  };
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClosed}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setInputValue("");
+      setSelectedYear([]);
+      setRemoveRowData([]);
+      handleClose();
+      // Fetch new data based on the new month and year
+      saveSelectedRows();
+    }
+  }, [refreshKey]);
+
+  const handleConfirmDelete = (row) => {
+    setconfirmDelete(true);
+    saveSelectedRows();
+  };
+
+  const handleClick = (newState) => {
+    setState({ ...newState, opened: true });
   };
 
   // Calculate monthly totals
@@ -159,130 +218,36 @@ const ReusableTable = ({
       return options;
     }, []);
 
-  // const handleDeleteClick = (row) => {
-  //   // console.log(row, "row");
-  //   // Handle delete logic here
-  //   setOpen(true);
-  //   setconfirmDeleteVal(row);
-  //   setContractID(row?.contractID);
-  //   setYearData(row?.year);
-  //   setMonthData(row?.month);
-  //   // console.log("row?.year", row?.year);
-  //   // Check if the row's month matches the current month
-  //   if (row.provisionList?.month === currentMonth) {
-  //     handleConfirmDelete(row); // Call the delete action only for the current month
-  //   }
-  // };
-
   const handleDeleteClick = (row) => {
     setOpen(true);
     setconfirmDeleteVal(row);
     setContractID(row?.contractID);
     setYearData(row?.year);
     setMonthData(row?.month);
-    console.log("row?.year", row?.year);
 
-    // // Debug point 1: Check the currentMonth and row's month
-    // console.log("currentMonth", currentMonth);
-    // console.log("row.month", row?.month);
-
-    // // Check if the row's month matches the current month before triggering delete action
-    // if (row?.month === currentMonth) {
-    //   // Debug point 2: Check if this block is executed
-    //   console.log("Deleting row");
-    //   handleConfirmDelete(row); // Call the delete action only for the current month
-    // } else {
-    //   // Debug point 3: Log if this block is executed
-    //   console.log("Row's month does not match current month");
-    // }
-    // Map the selectedRows indices to the corresponding rows and pass them to the delete function
-    // const rowsToDelete = selectedRows.map((index) => filteredData[index]);
-    // handleConfirmDelete(rowsToDelete);
-  };
-
-  // const handleRowSelection = (rowId) => {
-  //   const selectedIndex = selectedRows.indexOf(rowId);
-  //   let newSelectedRows = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelectedRows = newSelectedRows.concat(selectedRows, rowId);
-  //   } else if (selectedIndex === 0) {
-  //     newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
-  //   } else if (selectedIndex === selectedRows.length - 1) {
-  //     newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelectedRows = newSelectedRows.concat(
-  //       selectedRows.slice(0, selectedIndex),
-  //       selectedRows.slice(selectedIndex + 1)
-  //     );
-  //   }
-
-  //   setSelectedRows(newSelectedRows);
-  // };
-
-  // const handleRowSelection = (rowId) => {
-  //   const selectedIndex = selectedRows.indexOf(rowId);
-  //   let newSelectedRows = [];
-
-  //   if (rowId === "all") {
-  //     // "Select All" checkbox
-  //     if (selectedRows.length === data.length) {
-  //       // If all rows are already selected, unselect all
-  //       newSelectedRows = [];
-  //     } else {
-  //       // Otherwise, select all rows
-  //       newSelectedRows = data.map((_, index) => index);
-  //     }
-  //   } else {
-  //     // Individual row checkbox
-  //     if (selectedIndex === -1) {
-  //       newSelectedRows = newSelectedRows.concat(selectedRows, rowId);
-  //     } else if (selectedIndex === 0) {
-  //       newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
-  //     } else if (selectedIndex === selectedRows.length - 1) {
-  //       newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
-  //     } else if (selectedIndex > 0) {
-  //       newSelectedRows = newSelectedRows.concat(
-  //         selectedRows.slice(0, selectedIndex),
-  //         selectedRows.slice(selectedIndex + 1)
-  //       );
-  //     }
-  //   }
-
-  //   setSelectedRows(newSelectedRows);
-  // };
-
-  const handleRowSelection = (rowId) => {
-    const selectedIndex = selectedRows.indexOf(rowId);
-    let newSelectedRows = [];
- if (rowId === "all") {
-      // "Select All" checkbox
-      if (selectedRows.length === data.length) {
-        // If all rows are already selected, unselect all
-        newSelectedRows = [];
-      } else {
-        // Otherwise, select all rows
-        newSelectedRows = data.map((_, index) => index);
-      }
+    // Check if the row's month matches the current month before triggering delete action
+    if (row?.month === currentMonth) {
+      // Debug point 2: Check if this block is executed
+      console.log("Deleting row");
     } else {
-      // Individual row checkbox
-      if (selectedIndex === -1) {
-        newSelectedRows = newSelectedRows.concat(selectedRows, rowId);
-      } else if (selectedIndex === 0) {
-        newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
-      } else if (selectedIndex === selectedRows.length - 1) {
-        newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelectedRows = newSelectedRows.concat(
-          selectedRows.slice(0, selectedIndex),
-          selectedRows.slice(selectedIndex + 1)
-        );
-      }
+      // Debug point 3: Log if this block is executed
+      console.log("Row's month does not match current month");
     }
-   setSelectedRows(newSelectedRows);
   };
 
-  
+  const handleRowSelection = (id) => {
+    const newSelectedRows = selectedRows?.includes(id)
+      ? selectedRows?.filter((rowId) => rowId !== id)
+      : [...selectedRows, id];
+
+    setSelectedRows(newSelectedRows);
+  };
+
+  // New function to save selected rows
+  const saveSelectedRows = () => {
+    const selectedRowData = selectedRows.map((index) => filteredData[index]);
+    onSaveSelectedRows(selectedRowData);
+  };
 
   return (
     <>
@@ -295,20 +260,25 @@ const ReusableTable = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              {/* {withCheckbox && monthData === currentMonth && ( */}
-              <StyledTableCell
-                key="checkbox"
-                classes={{ root: classes.tableHeader }}
-              >
-                <Checkbox
-                  indeterminate={
-                    selectedRows.length > 0 && selectedRows.length < data.length
-                  }
-                  checked={selectedRows.length === data?.length}
-                  onChange={() => handleRowSelection("all")}
-                />
-              </StyledTableCell>
-              {/* )} */}
+              {withCheckbox && monthData === currentMonth ? (
+                <StyledTableCell
+                  key="checkbox"
+                  classes={{ root: classes.tableHeader }}
+                >
+                  <Checkbox
+                    indeterminate={
+                      selectedRows.length > 0 &&
+                      selectedRows.length < data.length
+                    }
+                    checked={selectedRows.length === data?.length}
+                    onChange={() => handleRowSelection("all")}
+                  />
+                </StyledTableCell>
+              ) : (
+                <StyledTableCell className="d-flex align-items-center  justify-content-center ">
+                  ---
+                </StyledTableCell>
+              )}
               {columns?.map((column) => (
                 <StyledTableCell
                   key={column.id}
@@ -367,18 +337,6 @@ const ReusableTable = ({
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row, index) => (
                   <StyledTableRow key={index}>
-                    {/* {withCheckbox && (
-                      <StyledTableCell
-                        key={`${index}-checkbox`}
-                        classes={{ root: classes.tableHeader }}
-                      >
-                        <Checkbox
-                          checked={selectedRows.indexOf(index) !== -1}
-                          onChange={() => handleRowSelection(index)}
-                        />
-                      </StyledTableCell>
-                    )} */}
-
                     {withCheckbox && row?.month === currentMonth ? (
                       <StyledTableCell
                         key={`${index}-checkbox`}
@@ -394,6 +352,7 @@ const ReusableTable = ({
                         ---
                       </StyledTableCell>
                     )}
+
                     {columns &&
                       columns?.map((column) => (
                         <StyledTableCell
@@ -413,9 +372,8 @@ const ReusableTable = ({
                             : 0}
                         </StyledTableCell>
                       ))}
-                    {currentYearAndMonth &&
-                    row?.month === currentMonth &&
-                    withCheckbox ? (
+
+                    {currentYearAndMonth && row?.month === currentMonth ? (
                       <StyledTableCell>
                         <IconButton
                           onClick={() => {
@@ -459,7 +417,6 @@ const ReusableTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {/* )} */}
       <TablePagination
         rowsPerPageOptions={[5, 10, 15]}
         component="div"
@@ -468,6 +425,53 @@ const ReusableTable = ({
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      {withCheckbox ? (
+        <Button
+          onClick={() => {
+            saveSelectedRows();
+            setOpen(true);
+          }}
+          variant="contained"
+          sx={{ backgroundColor: blue[900] }}
+        >
+          Delete Details
+        </Button>
+      ) : null}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <Typography>Are you sure you want to delete?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Back</Button>
+          <Button
+            onClick={() => {
+              handleConfirmDelete();
+              handleClick({
+                vertical: "bottom",
+                horizontal: "center",
+              });
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={opened}
+        anchorOrigin={{ vertical, horizontal }}
+        autoHideDuration={3000}
+        onClose={handleClosed}
+        action={action}
+        message="Bulk Provision Deleted"
+        key={vertical + horizontal}
+        variant="success"
       />
     </>
   );

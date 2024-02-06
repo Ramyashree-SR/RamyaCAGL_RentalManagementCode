@@ -56,8 +56,8 @@ export default function MenuComponent({
   rentStartDate,
   rentEndDate,
   agreementTenure,
-  openProvisionsModal,
-  setOpenProvisionsModal,
+  openProvisionsListModal,
+  setOpenProvisionsListModal,
   setMonthlyRent,
   monthlyRent,
   lessorName,
@@ -66,7 +66,6 @@ export default function MenuComponent({
   openPaymentReportData,
   setOpenPaymentReportData,
   activationStatusFilterDue,
-  setStateValue,
 }) {
   const { addToast } = useToasts();
   const [fullscreen, setFullscreen] = useState(true);
@@ -82,8 +81,8 @@ export default function MenuComponent({
     remark: "",
     dateTime: "",
   });
+
   const [typeProvisionsData, setTypeProvisionsData] = useState(null);
-  // const [reload, setReload] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -135,7 +134,7 @@ export default function MenuComponent({
         remark: "",
         dateTime: "",
       });
-      setOpenProvisionsModal(false);
+      setOpenProvisionsListModal(false);
       if (typeProvisionsData === "Make") {
         addToast("Provision Successfully Made......", {
           appearance: "success",
@@ -152,7 +151,7 @@ export default function MenuComponent({
           appearance: "error",
           autoClose: 9000,
         });
-        setOpenProvisionsModal(false);
+        setOpenProvisionsListModal(false);
       } else if (typeProvisionsData === "Reverse") {
         // addToast(errRes?.msg, {
         //   appearance: "error",
@@ -161,7 +160,7 @@ export default function MenuComponent({
           appearance: "error",
           autoClose: 9000,
         });
-        setOpenProvisionsModal(false);
+        setOpenProvisionsListModal(false);
       }
     }
   };
@@ -289,8 +288,8 @@ export default function MenuComponent({
       />
       {activationStatusFilter === "Open" && (
         <ProvisionsDetails
-          show={openProvisionsModal}
-          close={() => setOpenProvisionsModal(false)}
+          show={openProvisionsListModal}
+          close={() => setOpenProvisionsListModal(false)}
           fullscreen={fullscreen}
           branchIDforDue={branchIDforDue}
           rentEndDate={rentEndDate}

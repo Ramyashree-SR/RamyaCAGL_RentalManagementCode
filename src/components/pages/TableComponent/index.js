@@ -120,8 +120,8 @@ const TableComponent = ({
   activationStatusFilter,
   handleActivationStatusFilterChange,
   handleEdit,
-  openProvisionsModal,
-  setOpenProvisionsModal,
+  openProvisionsListModal,
+  setOpenProvisionsListModal,
   setOpenRentDueModal,
   openRentDueModal,
   branchIDforDue,
@@ -201,7 +201,7 @@ const TableComponent = ({
     //   (activationStatusFilter === "All" && "agreementActivationStatus" === "open") ||
     //   activationStatusFilter === "Open"
     // ) {
-    setOpenProvisionsModal(true);
+    setOpenProvisionsListModal(true);
 
     // }
   };
@@ -392,13 +392,15 @@ const TableComponent = ({
                                     rentEndDate={rentEndDate}
                                     agreementTenure={agreementTenure}
                                     rentContractDetails={rentContractDetails}
-                                    openProvisionsModal={openProvisionsModal}
+                                    openProvisionsListModal={
+                                      openProvisionsListModal
+                                    }
                                     monthlyRent={monthlyRent}
                                     activationStatusFilter={
                                       activationStatusFilter
                                     }
-                                    setOpenProvisionsModal={
-                                      setOpenProvisionsModal
+                                    setOpenProvisionsListModal={
+                                      setOpenProvisionsListModal
                                     }
                                     lessorName={lessorName}
                                     lesseeBranchName={lesseeBranchName}

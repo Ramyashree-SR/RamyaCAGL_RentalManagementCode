@@ -37,7 +37,8 @@ const ProvisionsDetails = (props) => {
   const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
   const { vertical, horizontal, open } = state;
-
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
   };
@@ -81,7 +82,7 @@ const ProvisionsDetails = (props) => {
     { id: 11, label: "November" },
     { id: 12, label: "December" },
   ];
-  const [selectedMonth, setSelectedMonth] = useState(null);
+ 
 
   const handleMonthChange = (name, newValue) => {
     setAddProvisions({
