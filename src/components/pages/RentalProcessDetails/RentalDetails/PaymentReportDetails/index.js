@@ -27,6 +27,7 @@ import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import { AddRentActualDetails } from "../../../../services/RentActualApi";
 import { useToasts } from "react-toast-notifications";
 import ShowProvisionDetails from "../ShowProvisionDetails";
+import SwitchComponent from "../../../../atoms/SwitchComponent";
 
 const PaymentReportDetails = (props) => {
   const {
@@ -51,6 +52,7 @@ const PaymentReportDetails = (props) => {
     horizontal: "center",
   });
   // const [reload, setReload] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const { vertical, horizontal, open } = state;
 
@@ -205,7 +207,26 @@ const PaymentReportDetails = (props) => {
       window.location.reload();
     }
   };
-  console.log(getPaymentReport, "getPaymentReport");
+
+  const calculateTDS = () => {
+    return getPaymentReport?.gross > 20000
+      ? (getPaymentReport?.gross * (10 / 100)).toFixed(2)
+      : "";
+  };
+
+  const tdsData = calculateTDS(getPaymentReport?.gross);
+  console.log(tdsData, "tdsData");
+
+  const handleSwitchTDSChange = (checked) => {
+    setChecked(checked);
+    // If the switch is turned off, reset the GST value to null
+    if (!checked) {
+      setSettlementAmt((prevDetails) => ({
+        ...prevDetails,
+        gst: null,
+      }));
+    }
+  };
 
   const getPaymentReportData = Object.values([getPaymentReport])?.map(
     (item) => ({
@@ -413,6 +434,22 @@ const PaymentReportDetails = (props) => {
                   className="d-flex flex-row"
                   sx={{ flexBasis: "100%" }}
                 >
+                  <Typography>TDS Applicable?</Typography>
+                  <SwitchComponent
+                    // checked={parseInt(allNewContractDetails?.lessorRentAmount) > 20000}
+                    checked={checked}
+                    onChange={(isChecked) => handleSwitchTDSChange(isChecked)}
+                  />
+
+                  {checked && (
+                    <InputBoxComponent
+                      label="TDS Amount (10%)  "
+                      type="number"
+                      placeholder="Enter Amount"
+                      value={tdsData}
+                      onChange={(e) => updatedChange(e)}
+                    />
+                  )}
                   <InputBoxComponent
                     label="Amount"
                     type="number"
@@ -423,8 +460,6 @@ const PaymentReportDetails = (props) => {
                     onChange={(e) => {
                       updatedChange(e);
                     }}
-                    // errorText={settlementAmt.sdAmount}
-                    // required={true}
                   />
 
                   {settlementAmt?.amount ? (
@@ -447,7 +482,7 @@ const PaymentReportDetails = (props) => {
                         backgroundColor: green[900],
                       }}
                     >
-                      Make Settlement
+                      Make Payment
                     </Button>
                   ) : null}
 

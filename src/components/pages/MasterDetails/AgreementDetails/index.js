@@ -903,7 +903,6 @@ const AgreementDetails = ({
                       // handleRefresh();
                     }}
                     fontSize="large"
-                    // sx={{ background: "#FFFFF", color: "green" }}
                     required
                   />
                   <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
@@ -932,7 +931,6 @@ const AgreementDetails = ({
                 label="Payment Date"
                 placeholder="Enter Payment Date"
                 sx={{ width: 300, mt: 4.5 }}
-                // name="securityDepositPaymentDate"
                 value={allNewContractDetails?.securityDepositPaymentDate}
                 onChange={handlePaymentDate}
                 required
