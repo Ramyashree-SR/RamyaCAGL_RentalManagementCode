@@ -219,12 +219,12 @@ const RentActualPaymentTable = ({
                         onBlur={(e) =>
                           handleEdit(
                             row?.info?.uniqueID,
-                            "tds",
+                            "reporttds",
                             e.target.innerText
                           )
                         }
                       >
-                        {editedData?.[row?.info?.uniqueID]?.tds || row?.tds}
+                        {editedData?.[row?.info?.uniqueID]?.reporttds || row?.reporttds}
                       </StyledTableCell>
                       <StyledTableCell>{row?.net}</StyledTableCell>
                       <StyledTableCell>{row?.gstamt}</StyledTableCell>

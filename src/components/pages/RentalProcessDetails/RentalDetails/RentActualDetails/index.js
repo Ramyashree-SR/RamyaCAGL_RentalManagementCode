@@ -24,6 +24,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 const RentActualDetails = (props) => {
   const { addToast } = useToasts();
+  const { refreshKey, setRefreshKey } = props;
   const [getActualPaymentReport, setGetAcualPaymentReport] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
@@ -60,6 +61,19 @@ const RentActualDetails = (props) => {
     { id: 11, label: "November" },
     { id: 12, label: "December" },
   ];
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setSelectedYear(null);
+      setSelectedMonth(null);
+      setGetAcualPaymentReport([]);
+      // Fetch new data based on the new month and year
+      getAllActualPaymentReportDetailsOfMonth();
+    }
+  }, [refreshKey]);
+
   useEffect(() => {
     getAllActualPaymentReportDetailsOfMonth();
   }, [selectedMonth]);
@@ -200,6 +214,9 @@ const RentActualDetails = (props) => {
       contractID: selectRow?.info?.uniqueID,
       branchID: selectRow?.info?.branchID,
       year: selectedYear,
+      tdsAmount:
+        editedData?.[selectRow?.info?.uniqueID]?.reporttds ||
+        selectRow?.reporttds,
       amount:
         editedData?.[selectRow?.info?.uniqueID]?.actualAmount ||
         selectRow?.actualAmount,
@@ -229,7 +246,6 @@ const RentActualDetails = (props) => {
         close={props.close}
         fullscreen={props.fullscreen}
         centered
-
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -416,7 +432,13 @@ const RentActualDetails = (props) => {
               </DialogActions>
             </Dialog>
           </Grid>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

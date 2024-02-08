@@ -26,6 +26,7 @@ const RentDue = (props) => {
     handleBranchID,
     activationStatusFilterDue,
     handleActivationStatusFilterChangeDue,
+    setRefreshKey,
   } = props;
   const [monthlyTotal, setMonthlyTotal] = useState({});
   const [dataToExcel, setDataToExcel] = useState([]);
@@ -34,7 +35,7 @@ const RentDue = (props) => {
   // Calculate monthly totals
   const calculateMonthlyTotal = () => {
     const total = {};
-    rentDueDataByBranchId.forEach((entry) => {
+    rentDueDataByBranchId?.forEach((entry) => {
       Object.keys(entry).forEach((month) => {
         if (
           month !== "rentDueID" &&
@@ -100,7 +101,7 @@ const RentDue = (props) => {
     const filtered = rentDueDataByBranchId?.filter((value) => {
       if (activationStatusFilterDue === "All") {
         return value;
-      } else if (value?.status.includes?.(activationStatusFilterDue)) {
+      } else if (value?.status?.includes?.(activationStatusFilterDue)) {
         return value;
       }
     });
@@ -108,7 +109,7 @@ const RentDue = (props) => {
   }, [rentDueDataByBranchId, activationStatusFilterDue]);
 
   const getRentExcelData = Object.values(filterDetails)?.map((item) => ({
-    ContractID: item.contractID,
+    ContractID: item?.contractID,
     BranchID: item.info?.branchID,
     BranchName: item.info?.lesseeBranchName,
     AreaName: item.info?.lesseeAreaName,
@@ -202,19 +203,6 @@ const RentDue = (props) => {
                   )}
                 />
               </Grid>
-              {/* <Grid
-                item
-                className="d-flex align-items-end justify-content-end"
-                sx={{
-                  flexBasis: "100%",
-                  mt: -2,
-                  mr: 2,
-                  width: 100,
-                  height: 40,
-                }}
-              >
-                <ExportToCSV excelData={getRentExcelData} fileName={fileName} />
-              </Grid> */}
               <Grid
                 item
                 className="d-flex align-items-end justify-content-end"
@@ -258,7 +246,13 @@ const RentDue = (props) => {
           </Box>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              setRefreshKey((prevKey) => prevKey + 1);
+              props.close();
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

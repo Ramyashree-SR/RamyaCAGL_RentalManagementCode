@@ -10,14 +10,15 @@ import BranchReportTable from "./../../../../molecules/BranchReportTable/index";
 
 const RentDueDetails = (props) => {
   const {
-    branchIDforDue,
+    branchIDData,
     rentDueDetails,
     rentStartDate,
     rentEndDate,
     lesseeBranchName,
     lessorName,
     uniqueID,
-    activationStatusFilterDue
+    activationStatusFilterDue,
+    setRefreshKey,
   } = props;
 
   const getRentExcelData = rentDueDetails?.map((item) => ({
@@ -97,7 +98,7 @@ const RentDueDetails = (props) => {
                     <Typography
                       sx={{ fontSize: 15, fontWeight: 700, color: pink[500] }}
                     >
-                      {branchIDforDue}
+                      {branchIDData}
                     </Typography>
                   </Grid>
                   <Grid
@@ -209,7 +210,13 @@ const RentDueDetails = (props) => {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

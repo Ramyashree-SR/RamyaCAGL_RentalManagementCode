@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import { green, red } from "@mui/material/colors";
+import { blue, green, pink, purple, red } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import ShowProvisionDetails from "../ShowProvisionDetails";
 import { getProvisionDetailsOfTheBranch } from "../../../../services/ProvisionsApi";
@@ -19,7 +19,7 @@ const ProvisionsDetails = (props) => {
   const {
     rentEndDate,
     rentStartDate,
-    branchIDforDue,
+    branchIDData,
     lessorName,
     AddProvisionFortheMonth,
     addProvisions,
@@ -28,6 +28,7 @@ const ProvisionsDetails = (props) => {
     lesseeBranchName,
     typeProvisionsData,
     setTypeProvisionsData,
+    setRefreshKey,
   } = props;
   const [state, setState] = useState({
     open: false,
@@ -36,9 +37,10 @@ const ProvisionsDetails = (props) => {
   });
   const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
+
   const { vertical, horizontal, open } = state;
   const [selectedMonth, setSelectedMonth] = useState(null);
-  
+
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
   };
@@ -82,16 +84,15 @@ const ProvisionsDetails = (props) => {
     { id: 11, label: "November" },
     { id: 12, label: "December" },
   ];
- 
 
   const handleMonthChange = (name, newValue) => {
     setAddProvisions({
       ...addProvisions,
       [name]: newValue,
     });
-    if (newValue && newValue.month) {
+    if (newValue && newValue?.label) {
       // Access newValue.month here
-      setSelectedMonth(newValue);
+      setSelectedMonth(newValue?.label);
     } else {
       console.error("newValue or newValue.month is undefined");
     }
@@ -103,7 +104,7 @@ const ProvisionsDetails = (props) => {
       [e.target.name]: e.target.value,
     });
   };
-
+  console.log(selectedMonth, "selectedMonth");
   const typeProvision = [
     { id: 1, label: "Make" },
     { id: 2, label: "Reverse" },
@@ -126,6 +127,9 @@ const ProvisionsDetails = (props) => {
 
   // Extract the year from the rent end date
   const currentYear = endDateObject?.getFullYear();
+  const currentMonth = endDateObject?.toLocaleString("default", {
+    month: "long",
+  });
 
   // Generate an array of years, including the current MOnth
   const yearOptions = Array.from({ length: 1 }, (_, index) => ({
@@ -149,6 +153,7 @@ const ProvisionsDetails = (props) => {
       console.error("Error fetching provision details:", error);
     }
   };
+
   return (
     <>
       <Modal
@@ -189,7 +194,7 @@ const ProvisionsDetails = (props) => {
                     <Typography
                       sx={{ fontSize: 15, fontWeight: 700, color: red[900] }}
                     >
-                      {branchIDforDue}
+                      {branchIDData}
                     </Typography>
                   </Grid>
                   <Grid className="d-flex flex-row" sx={{ flexBasis: "35%" }}>
@@ -253,7 +258,7 @@ const ProvisionsDetails = (props) => {
                       setOpenShowProvisionModal(true);
                       getProvisionListOftheBranch();
                     }}
-                    sx={{backgroundColor:green[800]}}
+                    sx={{ backgroundColor: green[800] }}
                   >
                     View Provisions Details
                   </Button>
@@ -376,9 +381,17 @@ const ProvisionsDetails = (props) => {
                           });
                         }}
                         variant="contained"
-                        sx={{ m: 1, background: "#238520" }}
+                        sx={{
+                          m: 1,
+                          background:
+                            selectedMonth === `${currentMonth}`
+                              ? "#238520"
+                              : blue[900],
+                        }}
                       >
-                        Reverse
+                        {selectedMonth === `${currentMonth}`
+                          ? "Reverse Provision(same Month)"
+                          : "Reverse Provision(previous month)"}
                       </Button>
                     </Grid>
                   ) : null}
@@ -409,7 +422,13 @@ const ProvisionsDetails = (props) => {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

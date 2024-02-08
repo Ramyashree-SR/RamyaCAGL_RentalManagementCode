@@ -51,7 +51,7 @@ export default function MenuComponent({
   openRentDueModal,
   setOpenRentDueModal,
   uniqueID,
-  branchIDforDue,
+  branchIDData,
   rentContractDetails,
   rentStartDate,
   rentEndDate,
@@ -83,7 +83,7 @@ export default function MenuComponent({
   });
 
   const [typeProvisionsData, setTypeProvisionsData] = useState(null);
-
+  const [refreshKey, setRefreshKey] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -92,6 +92,18 @@ export default function MenuComponent({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setAddProvisions([]);
+      setRentDueDetails([]);
+      handleClose();
+      // Fetch new data based on the new month and year
+      getAllRentDueDetailsByUniqueID();
+    }
+  }, [refreshKey]);
 
   useEffect(() => {
     getAllRentDueDetailsByUniqueID();
@@ -111,7 +123,7 @@ export default function MenuComponent({
     let payload = {
       provisiontype: typeProvisionsData,
       contractID: uniqueID,
-      branchID: branchIDforDue,
+      branchID: branchIDData,
       year: addProvisions?.year?.label,
       month: addProvisions?.month?.label,
       provisionAmount: addProvisions?.provisionAmount,
@@ -144,6 +156,7 @@ export default function MenuComponent({
           appearance: "success",
         });
       }
+      setRefreshKey((prevKey) => prevKey + 1);
     } else if (!data?.error) {
       if (typeProvisionsData === "Make") {
         // addToast(errRes?.msg, { appearance: "error" });
@@ -153,9 +166,6 @@ export default function MenuComponent({
         });
         setOpenProvisionsListModal(false);
       } else if (typeProvisionsData === "Reverse") {
-        // addToast(errRes?.msg, {
-        //   appearance: "error",
-        // });
         addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
           appearance: "error",
           autoClose: 9000,
@@ -250,7 +260,10 @@ export default function MenuComponent({
 
         {activationStatusFilter === "Open" ? (
           <MenuItem
-            onClick={handleEditProvisions}
+            onClick={() => {
+              handleEditProvisions();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
             sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
           >
             <LockIcon fontSize="small" sx={{ color: blue[900] }} />
@@ -262,8 +275,6 @@ export default function MenuComponent({
           <MenuItem
             onClick={() => {
               handleEditReport();
-              // setReload(!reload);
-              // getAllPaymentReportDetailsOfMonth();
             }}
             sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
           >
@@ -276,7 +287,7 @@ export default function MenuComponent({
         show={openRentDueModal}
         close={() => setOpenRentDueModal(false)}
         fullscreen={fullscreen}
-        branchIDforDue={branchIDforDue}
+        branchIDData={branchIDData}
         rentDueDetails={rentDueDetails}
         rentContractDetails={rentContractDetails}
         rentStartDate={rentStartDate}
@@ -285,13 +296,14 @@ export default function MenuComponent({
         lessorName={lessorName}
         lesseeBranchName={lesseeBranchName}
         activationStatusFilterDue={activationStatusFilterDue}
+        setRefreshKey={setRefreshKey}
       />
       {activationStatusFilter === "Open" && (
         <ProvisionsDetails
           show={openProvisionsListModal}
           close={() => setOpenProvisionsListModal(false)}
           fullscreen={fullscreen}
-          branchIDforDue={branchIDforDue}
+          branchIDData={branchIDData}
           rentEndDate={rentEndDate}
           rentStartDate={rentStartDate}
           agreementTenure={agreementTenure}
@@ -304,6 +316,7 @@ export default function MenuComponent({
           lesseeBranchName={lesseeBranchName}
           setTypeProvisionsData={setTypeProvisionsData}
           typeProvisionsData={typeProvisionsData}
+          setRefreshKey={setRefreshKey}
         />
       )}
 
@@ -313,13 +326,12 @@ export default function MenuComponent({
           close={() => setOpenPaymentReportData(false)}
           fullscreen={fullscreen}
           uniqueID={uniqueID}
-          branchIDforDue={branchIDforDue}
+          branchIDData={branchIDData}
           rentEndDate={rentEndDate}
           rentStartDate={rentStartDate}
           lessorName={lessorName}
           lesseeBranchName={lesseeBranchName}
           monthlyRent={monthlyRent}
-          // reload={reload}
         />
       )}
     </React.Fragment>

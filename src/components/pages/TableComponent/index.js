@@ -124,7 +124,8 @@ const TableComponent = ({
   setOpenProvisionsListModal,
   setOpenRentDueModal,
   openRentDueModal,
-  branchIDforDue,
+  // branchIDforDue,
+  branchIDData,
   uniqueID,
   rentContractDetails,
   rentEndDate,
@@ -386,7 +387,8 @@ const TableComponent = ({
                                     openRentDueModal={openRentDueModal}
                                     setOpenRentDueModal={setOpenRentDueModal}
                                     selectedItem={selectedItem}
-                                    branchIDforDue={branchIDforDue}
+                                    // branchIDforDue={branchIDforDue}
+                                    branchIDData={branchIDData}
                                     uniqueID={uniqueID}
                                     rentStartDate={rentStartDate}
                                     rentEndDate={rentEndDate}

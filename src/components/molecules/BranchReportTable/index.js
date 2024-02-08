@@ -140,7 +140,7 @@ const BranchReportTable = ({
   const filterOptions =
     data &&
     data?.reduce((options, item) => {
-      if (!options.includes(item["status"])) {
+      if (!options?.includes?.(item["status"])) {
         options?.push(item["status"]);
       }
       return options;
@@ -153,13 +153,13 @@ const BranchReportTable = ({
           <TableHead>
             <StyledTableRow>
               {columns &&
-                columns.map((column) => (
+                columns?.map((column) => (
                   <StyledTableCell
                     key={column.id}
                     classes={{ root: classes.tableHeader }}
                   >
-                    {column.label}
-                    {column && column.label === "Status" && (
+                    {column?.label}
+                    {column && column?.label === "Status" && (
                       <select
                         value={activationStatusFilterDue || "All"}
                         onChange={handleActivationStatusFilterChangeDue}

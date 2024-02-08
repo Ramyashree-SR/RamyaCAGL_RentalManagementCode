@@ -18,12 +18,15 @@ import ExcelExport from "../../../../../ExcelExport";
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 
 const PaymentReport = (props) => {
+  const { refreshKey, setRefreshKey } = props;
   const [getPaymentReport, setGetPaymentReport] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [showClearIcon, setShowClearIcon] = useState("none");
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(getPaymentReport);
+  const [loading, setLoading] = useState(false);
+
   const months = [
     { id: 1, label: "January" },
     { id: 2, label: "February" },
@@ -38,6 +41,19 @@ const PaymentReport = (props) => {
     { id: 11, label: "November" },
     { id: 12, label: "December" },
   ];
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setSelectedYear([]);
+      setSelectedMonth([]);
+      setGetPaymentReport([]);
+      // Fetch new data based on the new month and year
+      getAllPaymentReportDetailsOfMonth();
+    }
+  }, [refreshKey]);
+
   useEffect(() => {
     getAllPaymentReportDetailsOfMonth();
   }, [selectedMonth]);
@@ -69,6 +85,7 @@ const PaymentReport = (props) => {
     if (value) {
       // Access value.month here
       setSelectedMonth(value);
+      setLoading(!loading);
     } else {
       console.error("value or value.month is undefined");
     }
@@ -120,6 +137,7 @@ const PaymentReport = (props) => {
       if (data) {
         let getData = data?.data;
         setGetPaymentReport(getData);
+        setLoading(false);
       } else {
         setGetPaymentReport([]);
       }
@@ -267,23 +285,42 @@ const PaymentReport = (props) => {
             /> */}
           </Grid>
 
+          {/* //spinner-border */}
           <Grid sx={{ mt: 8 }}>
-            {selectedMonth && (
-              <PaymentTableComponent
-                data={getPaymentReport}
-                columns={AllPaymentColumns}
-                searchText={searchText}
-                filteredData={filteredData}
-                sx={{
-                  width: "100%",
-                  mt: 5,
-                }}
-              />
+            {loading ? (
+              <div className="d-flex align-items-center justify-content-center">
+                <div
+                  className="spinner-border text-success"
+                  role="status"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              selectedMonth && (
+                <PaymentTableComponent
+                  data={getPaymentReport}
+                  columns={AllPaymentColumns}
+                  searchText={searchText}
+                  filteredData={filteredData}
+                  sx={{
+                    width: "100%",
+                    mt: 5,
+                  }}
+                />
+              )
             )}
           </Grid>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

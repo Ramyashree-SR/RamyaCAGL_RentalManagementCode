@@ -105,7 +105,7 @@ const ProvisionDetailsTable = ({
   };
 
   const handleDeleteClick = (row) => {
-    console.log(row, "row");
+    // console.log(row, "row");
     // Handle delete logic here
     setOpen(true);
     setconfirmDeleteVal(row);

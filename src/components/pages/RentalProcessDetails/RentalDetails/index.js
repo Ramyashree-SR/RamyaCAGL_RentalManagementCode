@@ -127,6 +127,7 @@ const RentalDetails = (props) => {
   const [branchFilter, setBranchFilter] = useState("");
   const [branchNameFilter, setBranchNameFilter] = useState("");
   const [branchIDforDue, setbranchIDforDue] = useState("");
+  const [branchIDData, setbranchIDData] = useState("");
   const [rentDueDataByBranchId, setRentDueDataByBranchId] = useState([]);
   const [rentStartDate, setRentStartDate] = useState(null);
   const [rentEndDate, setRentEndDate] = useState(null);
@@ -135,6 +136,7 @@ const RentalDetails = (props) => {
   const [lessorName, setLessorName] = useState(null);
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleStateChange = (value) => {
     // console.log(value.target.outerText, "newValue");
@@ -146,6 +148,19 @@ const RentalDetails = (props) => {
     getBranchDistrictByState(value.target.outerText);
     getContractDetails(value.target.outerText);
   };
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setbranchIDforDue([]);
+
+      setRentDueDataByBranchId([]);
+      handleClose();
+      // Fetch new data based on the new month and year
+      getAllRentDueDetailsByBranchID();
+    }
+  }, [refreshKey]);
 
   useEffect(() => {
     getBranchStates();
@@ -237,6 +252,7 @@ const RentalDetails = (props) => {
       let getData = data?.data;
       setRentContractDetails(getData);
       setbranchIDforDue(getData);
+      setbranchIDData(getData)
       setUniqueIDs(getData);
     }
   };
@@ -251,6 +267,7 @@ const RentalDetails = (props) => {
       branchID: value.target.outerText,
     });
     setbranchIDforDue(value.target.outerText);
+    setbranchIDData(value.target.outerText)
     getAllContractDetails(value.target.outerText);
 
     getAllRentDueDetailsByBranchID(value.target.outerText);
@@ -325,27 +342,7 @@ const RentalDetails = (props) => {
     setActivationStatusFilter(e.target.value);
   };
 
-  // const handleActivationStatusFilterChangeDue = (name, selectedValue) => {
-  //   let value = selectedValue?.label;
-  //   setRentDueDataByBranchId({
-  //     ...rentDueDataByBranchId,
-  //     [name]: value,
-  //   });
 
-  //   if (value === "All") {
-  //     return setRentDueDataByBranchId(rentDueDataByBranchId);
-  //   } else {
-  //     // Filter the data based on the selected activation status
-  //     const filteredData = rentDueDataByBranchId?.filter((item) => {
-  //       return item?.status === value;
-  //     });
-
-  //     // Update your state or whatever data structure you are using for the table
-  //     setRentDueDataByBranchId(filteredData);
-  //   }
-  //   // Also, update the state for the activation status filter
-  //   setActivationStatusFilterDue(value);
-  // };
 
   const handleActivationStatusFilterChangeDue = (e) => {
     setActivationStatusFilterDue(e.target.value);
@@ -425,7 +422,6 @@ const RentalDetails = (props) => {
                 setSearchText(e.target.value);
               }}
               sx={{
-                // backgroundColor: "#FAFAFA",
                 borderRadius: "100px",
                 "& .MuiOutlinedInput-root:hover": {
                   "& > fieldset": {
@@ -460,10 +456,6 @@ const RentalDetails = (props) => {
               onBtnClick={() => {
                 setOpenLessorModal(true);
                 setModalType("add");
-                // setOpenEditLessorModal(false);
-                // setEditLessorRenewData(null);
-                // setEditLessorData(null);
-                // setRentRenewContract(null);
               }}
               sx={{ width: 200 }}
             />
@@ -475,7 +467,7 @@ const RentalDetails = (props) => {
               getContractDetails={getContractDetails}
               fullscreen={fullscreen}
               setFullscreen={setFullscreen}
-              branchIDforDue={branchIDforDue}
+              branchIDData={branchIDData}
               branchFilter={branchFilter}
               handleBranchID={handleBranchID}
               type={openEditLessorModal && modalType ? "edit" : "add"}
@@ -515,6 +507,7 @@ const RentalDetails = (props) => {
                 close={() => setOpenPaymentModal(false)}
                 fullscreen={fullscreen}
                 uniqueID={uniqueID}
+                setRefreshKey={setRefreshKey}
               />
 
               <RentActual
@@ -524,6 +517,8 @@ const RentalDetails = (props) => {
                 uniqueIDs={uniqueIDs}
                 rentStartDate={rentStartDate}
                 rentEndDate={rentEndDate}
+                setRefreshKey={setRefreshKey}
+                refreshKey={refreshKey}
               />
               <RentDue
                 show={openRentDueDataModal}
@@ -539,6 +534,7 @@ const RentalDetails = (props) => {
                   handleActivationStatusFilterChangeDue
                 }
                 lesseeBranchName={rentContractDetails?.lesseeBranchName}
+                setRefreshKey={setRefreshKey}
               />
               <Provisions
                 show={openProvisionsModal}
@@ -860,7 +856,8 @@ const RentalDetails = (props) => {
           openProvisionsListModal={openProvisionsListModal}
           setOpenProvisionsListModal={setOpenProvisionsListModal}
           setOpenRentDueModal={setOpenRentDueModal}
-          branchIDforDue={branchIDforDue}
+          // branchIDforDue={branchIDforDue}
+          branchIDData={branchIDData}
           rentStartDate={rentStartDate}
           setRentStartDate={setRentStartDate}
           rentEndDate={rentEndDate}

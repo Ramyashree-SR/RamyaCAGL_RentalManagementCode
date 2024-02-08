@@ -32,7 +32,7 @@ import SwitchComponent from "../../../../atoms/SwitchComponent";
 const PaymentReportDetails = (props) => {
   const {
     uniqueID,
-    branchIDforDue,
+    branchIDData,
     rentStartDate,
     rentEndDate,
     lesseeBranchName,
@@ -183,6 +183,7 @@ const PaymentReportDetails = (props) => {
         year: selectedYear,
         month: selectedMonth,
         amount: settlementAmt?.amount,
+        tdsAmount: checked ? tdsData : 0,
         startDate: getPaymentReport?.info?.rentStartDate,
         endDate: getPaymentReport?.info?.rentEndDate,
         monthRent: getPaymentReport?.monthRent,
@@ -195,6 +196,7 @@ const PaymentReportDetails = (props) => {
       getAllPaymentReportDetailsOfMonth();
       addToast("Amount Settled", { appearance: "success" });
       props.close();
+      setRefreshKey((prevKey) => prevKey + 1);
       // window.location.reload();
     } else if (!data?.error) {
       // addToast(errRes?.msg, { appearance: "error" });
@@ -203,27 +205,27 @@ const PaymentReportDetails = (props) => {
         autoClose: 9000,
       });
       props.close();
-
-      window.location.reload();
     }
   };
 
+  // const calculateTDS = () => {
+  //   return getPaymentReport?.gross > 20000
+  //     ? (getPaymentReport?.gross * (10 / 100)).toFixed(0)
+  //     : 0;
+  // };
   const calculateTDS = () => {
-    return getPaymentReport?.gross > 20000
-      ? (getPaymentReport?.gross * (10 / 100)).toFixed(2)
-      : "";
+    return (getPaymentReport?.gross * (10 / 100)).toFixed(0);
   };
 
   const tdsData = calculateTDS(getPaymentReport?.gross);
-  console.log(tdsData, "tdsData");
 
-  const handleSwitchTDSChange = (checked) => {
-    setChecked(checked);
-    // If the switch is turned off, reset the GST value to null
+  const handleSwitchTDSChange = () => {
+    setChecked(!checked);
+    // If the switch is turned off, reset the TDS value to null
     if (!checked) {
       setSettlementAmt((prevDetails) => ({
         ...prevDetails,
-        gst: null,
+        tdsAmount: null,
       }));
     }
   };
@@ -253,14 +255,13 @@ const PaymentReportDetails = (props) => {
       Gst: item?.gst,
     })
   );
-  // console.log(refreshKey, "refreshKey");
+
   return (
     <>
       <Modal
         show={props.show}
         close={() => {
           props.close();
-          // setReload(true);
         }}
         fullscreen={props.fullscreen}
         animation={true}
@@ -299,7 +300,7 @@ const PaymentReportDetails = (props) => {
               <Typography
                 sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
               >
-                {branchIDforDue}
+                {branchIDData}
               </Typography>
             </Grid>
             <Grid className="d-flex flex-row" sx={{ flexBasis: "35%" }}>
@@ -446,7 +447,8 @@ const PaymentReportDetails = (props) => {
                       label="TDS Amount (10%)  "
                       type="number"
                       placeholder="Enter Amount"
-                      value={tdsData}
+                      name="tdsData"
+                      value={checked ? tdsData : 0}
                       onChange={(e) => updatedChange(e)}
                     />
                   )}

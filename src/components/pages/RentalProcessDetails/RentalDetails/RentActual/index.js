@@ -29,6 +29,7 @@ import { paymentColumn } from "../../../../../constants/PaymentReport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 
 const RentActual = (props) => {
+  const { setRefreshKey, refreshKey } = props;
   const { addToast } = useToasts();
   const [RentActualIDs, setRentActualIDs] = useState("");
   const [fullscreen, setFullscreen] = useState(true);
@@ -83,6 +84,21 @@ const RentActual = (props) => {
       </IconButton>
     </React.Fragment>
   );
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setRentActualIDs("");
+      setSelectedYear(null);
+      setSelectedMonth(null);
+      setGetPaymentReport([]);
+      // Fetch new data based on the new month and year
+      getAllPaymentReportDetailsOfMonth();
+      getAllRentActualDetailsByUniqueID();
+    }
+  }, [refreshKey]);
+
   useEffect(() => {
     getAllRentActualDetailsByUniqueID();
   }, [RentActualIDs]);
@@ -153,7 +169,6 @@ const RentActual = (props) => {
 
   const getAllRentActualDetailsByUniqueID = async () => {
     const { data } = await getAllRentContractDetailsByContractID(RentActualIDs);
-    // console.log(uniqueID, "ActualId");
     if (data) {
       if (data) {
         let getData = data?.data;
@@ -270,6 +285,8 @@ const RentActual = (props) => {
                   show={openActualDetailsModal}
                   close={() => setOpenActualDetailsModal(false)}
                   fullscreen={fullscreen}
+                  refreshKey={refreshKey}
+                  setRefreshKey={setRefreshKey}
                 />
                 {RentActualIDs && (
                   <Grid
@@ -570,7 +587,13 @@ const RentActual = (props) => {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={props.close} variant="contained">
+          <Button
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+            variant="contained"
+          >
             Close
           </Button>
         </Modal.Footer>

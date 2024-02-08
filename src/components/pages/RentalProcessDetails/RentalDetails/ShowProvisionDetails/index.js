@@ -208,7 +208,13 @@ const ShowProvisionDetails = (props) => {
         </Modal.Body>
 
         <Modal.Footer className="bg-dark">
-          <Button variant="contained" onClick={props.close}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
+            }}
+          >
             Close
           </Button>
         </Modal.Footer>

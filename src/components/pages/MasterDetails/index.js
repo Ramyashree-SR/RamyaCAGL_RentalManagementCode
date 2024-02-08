@@ -1543,11 +1543,11 @@ const MasterDetails = (props) => {
 
   useEffect(() => {
     editAllRenewRentContractDetails();
-  }, [props.branchIDforDue]);
+  }, [props.branchIDData]);
 
   const editAllRenewRentContractDetails = async () => {
     const { data, errRes } = await EditRentRenewContractDetails(
-      props.branchIDforDue
+      props.branchIDData
     );
     // console.log(data, "resdata");
     if (data) {
@@ -1713,7 +1713,7 @@ const MasterDetails = (props) => {
                 value === "" ||
                 option?.label === value?.label
               }
-              value={props.branchIDforDue}
+              value={props.branchIDData}
               onChange={props.handleBranchID}
               renderInput={(params) => (
                 <TextField {...params} label="Branch ID" variant="outlined" />
@@ -1753,7 +1753,7 @@ const MasterDetails = (props) => {
               </Box>
             ) : null}
 
-            {props.branchIDforDue ? (
+            {props.branchIDData ? (
               <Box
                 className="w-20 h-100 rounded d-flex px-0 py-0"
                 sx={{ border: "1px solid #70B3D1" }}
