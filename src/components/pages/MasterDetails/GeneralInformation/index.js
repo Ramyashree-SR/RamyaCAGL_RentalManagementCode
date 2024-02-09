@@ -197,7 +197,7 @@ const GeneralInformation = ({
       close();
     }
   };
-console.log(contractStatus,"contractStatus");
+  console.log(contractStatus, "contractStatus");
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -742,6 +742,26 @@ console.log(contractStatus,"contractStatus");
                       readOnly
                     />
                   )}
+                  {/* </Grid>
+
+                <Grid
+                  item
+                  className="d-flex flex-column align-items-start justify-content-start m-3"
+                  md={12}
+                > */}
+                  <InputBoxComponent
+                    // label="Remarks."
+                    textLabel="Remarks"
+                    placeholder="Type here...."
+                    sx={{ width: 500 }}
+                    multiline
+                    rows={4}
+                    // name="lessorDoorNumber"
+                    // value={allNewContractDetails?.lessorDoorNumber}
+                    // onChange={(e) => updateChange(e)}
+                    // errorText={allNewContractDetailsErr?.lessorDoorNumber}
+                    required
+                  />
                 </Grid>
               </Grid>
             </Grid>

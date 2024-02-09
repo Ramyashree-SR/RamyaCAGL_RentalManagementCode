@@ -46,6 +46,7 @@ const RentActualDetails = (props) => {
   const [searchText, setSearchText] = useState("");
   const [showClearIcon, setShowClearIcon] = useState("none");
   const [filteredData, setFilteredData] = useState(getActualPaymentReport);
+  const [loading, setLoading] = useState(false);
 
   const months = [
     { id: 1, label: "January" },
@@ -131,6 +132,7 @@ const RentActualDetails = (props) => {
     if (value) {
       // Access value.month here
       setSelectedMonth(value);
+      setLoading(!loading);
     } else {
       console.error("value or value.month is undefined");
     }
@@ -148,6 +150,7 @@ const RentActualDetails = (props) => {
       if (data) {
         let getData = data?.data;
         setGetAcualPaymentReport(getData);
+        setLoading(false);
       } else {
         setGetAcualPaymentReport([]);
         setRentActualData([]);
@@ -367,20 +370,31 @@ const RentActualDetails = (props) => {
                 </Grid>
               </Col>
               <Box sm={12} xs={12}>
-                {selectedMonth && (
-                  <RentActualPaymentTable
-                    data={getActualPaymentReport}
-                    sx={{ mt: 2 }}
-                    selectedRows={selectedRows}
-                    setSelectedRows={setSelectedRows}
-                    getSelectedRowDetails={getSelectedRowDetails}
-                    tableData={tableData}
-                    setTableData={setTableData}
-                    editedData={editedData}
-                    setEditedData={setEditedData}
-                    searchText={searchText}
-                    filteredData={filteredData}
-                  />
+                {loading ? (
+                  <div className="d-flex align-items-center justify-content-center py-5 flex-column">
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                      style={{ width: "2rem", height: "2rem" }}
+                    ></div>
+                    <span className="visible text-primary">Loading...</span>
+                  </div>
+                ) : (
+                  selectedMonth && (
+                    <RentActualPaymentTable
+                      data={getActualPaymentReport}
+                      sx={{ mt: 2 }}
+                      selectedRows={selectedRows}
+                      setSelectedRows={setSelectedRows}
+                      getSelectedRowDetails={getSelectedRowDetails}
+                      tableData={tableData}
+                      setTableData={setTableData}
+                      editedData={editedData}
+                      setEditedData={setEditedData}
+                      searchText={searchText}
+                      filteredData={filteredData}
+                    />
+                  )
                 )}
               </Box>
             </Row>

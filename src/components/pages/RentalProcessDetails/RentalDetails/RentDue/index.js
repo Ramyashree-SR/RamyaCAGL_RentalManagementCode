@@ -236,6 +236,7 @@ const RentDue = (props) => {
                   data={rentDueDataByBranchId}
                   columns={rentDueData}
                   showTotal={true}
+                  sx={{ height: 350 }}
                   activationStatusFilterDue={activationStatusFilterDue}
                   handleActivationStatusFilterChangeDue={
                     handleActivationStatusFilterChangeDue
@@ -248,8 +249,8 @@ const RentDue = (props) => {
         <Modal.Footer>
           <Button
             onClick={() => {
-              setRefreshKey((prevKey) => prevKey + 1);
               props.close();
+              setRefreshKey((prevKey) => prevKey + 1);
             }}
             variant="contained"
           >

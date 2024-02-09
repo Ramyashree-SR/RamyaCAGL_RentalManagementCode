@@ -445,6 +445,18 @@ const LesseeInformation = ({
               Premesis Details
             </Typography>
             <Grid container spacing={2} className="px-2 py-2 mt-1">
+              <Grid item className="d-flex " lg={12}>
+                <InputBoxComponent
+                  label="Privious Contract ID."
+                  placeholder="Enter contract Id."
+                  sx={{ width: 300, mt: -5, ml: 3 }}
+                  // name=""
+                  // value={allNewContractDetails?.premesisDoorNumber}
+                  // onChange={(e) => updateChange(e)}
+                  // errorText={allNewContractDetailsErr?.premesisDoorNumber}
+                  required={true}
+                />
+              </Grid>
               <Grid item className="d-flex m-2" lg={12}>
                 {/* <DropDownComponent
                   label="Entity Details "
@@ -463,6 +475,7 @@ const LesseeInformation = ({
                   onChange={handleEntityDetails}
                   required={true}
                 /> */}
+
                 <SimpleDropDown
                   options={EntityDetails}
                   label="Select an option"

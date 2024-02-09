@@ -27,13 +27,10 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { useToasts } from "react-toast-notifications";
 
 const Provisions = (props) => {
-  const addToast = useToasts();
-  const [dataSelect, setDataSelect] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [provisionsList, setProvisionsList] = useState([]);
   const [provisionMonthFilter, setProvisionMonthFilter] = useState("All");
-  const [selectedYear, setSelectedYear] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [showClearIcon, setShowClearIcon] = useState("none");
   const [searchText, setSearchText] = useState("");
   const [filterDetails, setFilterDetails] = useState(provisionsList);
@@ -46,46 +43,12 @@ const Provisions = (props) => {
   const [removeRowData, setRemoveRowData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     opened: false,
     vertical: "bottom",
     horizontal: "center",
   });
-
-  const months = [
-    { id: 1, label: "January" },
-    { id: 2, label: "February" },
-    { id: 3, label: "March" },
-    { id: 4, label: "April" },
-    { id: 5, label: "May" },
-    { id: 6, label: "June" },
-    { id: 7, label: "July" },
-    { id: 8, label: "August" },
-    { id: 9, label: "September" },
-    { id: 10, label: "October" },
-    { id: 11, label: "November" },
-    { id: 12, label: "December" },
-  ];
-
-  const handleMonthChange = (newValue) => {
-    const value = newValue?.label;
-    if (value) {
-      // Access value.month here
-      setSelectedMonth(value);
-    } else {
-      console.error("value or value.month is undefined");
-    }
-  };
-
-  const handleChange = (newValue) => {
-    // console.log(newValue, "newValue");
-    setSelectedYear(newValue.label);
-  };
-
-  const handleSelectChange = (value) => {
-    // console.log(value, "value");
-    setDataSelect(value.label);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -103,6 +66,22 @@ const Provisions = (props) => {
     });
     setFilterDetails(filtered);
   }, [provisionsList, provisionMonthFilter]);
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      //     // Clear existing data
+      setInputValue("");
+      setSelectedYear(null);
+      setRemoveRowData([]);
+      //     // handleClose();
+    }
+  }, [refreshKey]);
+
+  const handleChange = (newValue) => {
+    setSelectedYear(newValue?.label);
+    setLoading(!loading);
+  };
 
   useEffect(() => {
     getProvisionListDetails();
@@ -135,10 +114,12 @@ const Provisions = (props) => {
       inputValue,
       selectedYear
     );
+    console.log(data, "Provisiondata");
     if (data) {
       if (data) {
         let getData = data?.data;
         setProvisionsList(getData);
+        setLoading(false);
       } else {
         setProvisionsList([]);
       }
@@ -147,6 +128,7 @@ const Provisions = (props) => {
 
   const handleBranchIDChange = (e) => {
     setInputValue(e.target.value);
+    // setLoading(!loading);
   };
 
   const handleProvisionMonthChange = (e) => {
@@ -167,9 +149,10 @@ const Provisions = (props) => {
         if (data) {
           // Set response data to removeRowData state
           setRemoveRowData([]);
-          props.close();
+          handleClose();
         }
       } catch (error) {
+        setRemoveRowData([]);
         console.error("Error deleting provisions:", error);
         // Handle error if needed
       }
@@ -207,14 +190,25 @@ const Provisions = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="80px"
+            height="40px"
+            margnTop="-2px"
+          />
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: 25,
+              fontWeight: 700,
+            }}
+          >
             Provisions Information
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <Container>
-            <Row>
-              <Col xs={12}> */}
           <Grid className="d-flex flex-column m-2" sx={{ position: "fixed" }}>
             <Grid className="d-flex" sx={{ mt: -2 }}>
               <InputBoxComponent
@@ -321,40 +315,52 @@ const Provisions = (props) => {
             sm={12}
             xs={12}
             sx={{
-              marginLeft: "1px auto auto 1px",
+              // position: "fixed",
               width: "100%",
+              mt: -2.3,
             }}
           >
-            {selectedYear && ( 
-              <ReusableTable
-                data={provisionsList}
-                columns={ProvisionsColumns}
-                sx={{ mt: 8 }} // height: 320
-                searchText={searchText}
-                provisionMonthFilter={provisionMonthFilter}
-                handleProvisionMonthChange={handleProvisionMonthChange}
-                setconfirmDeleteVal={setconfirmDeleteVal}
-                setconfirmDelete={setconfirmDelete}
-                setYearData={setYearData}
-                setContractID={setContractID}
-                setMonthData={setMonthData}
-                yearData={yearData}
-                withCheckbox={withCheckbox && currentMonth}
-                currentYearAndMonth={currentYearAndMonth}
-                currentMonth={currentMonth}
-                setRefreshKey={setRefreshKey}
-                monthData={monthData}
-                onSaveSelectedRows={deleteSelectedProvisionDetailsFromTable} // Pass onSaveSelectedRows prop
-                selectedRows={selectedRows}
-                setSelectedRows={setSelectedRows}
-                open={open}
-                setOpen={setOpen}
-                handleClose={handleClose}
-                refreshKey={refreshKey}
-                setRemoveRowData={setRemoveRowData}
-                setInputValue={setInputValue}
-                setSelectedYear={setSelectedYear}
-              />
+            {loading ? (
+              <div className="d-flex align-items-center justify-content-center flex-column py-5 mt-5">
+                <div
+                  className="spinner-border text-success"
+                  role="status"
+                  style={{ width: "2rem", height: "2rem" }}
+                ></div>
+                <span className="visible text-success">Loading...</span>
+              </div>
+            ) : (
+              selectedYear && (
+                <ReusableTable
+                  data={provisionsList}
+                  columns={ProvisionsColumns}
+                  sx={{ mt: 8, height: 350 }} // height: 320
+                  searchText={searchText}
+                  provisionMonthFilter={provisionMonthFilter}
+                  handleProvisionMonthChange={handleProvisionMonthChange}
+                  setconfirmDeleteVal={setconfirmDeleteVal}
+                  setconfirmDelete={setconfirmDelete}
+                  setYearData={setYearData}
+                  setContractID={setContractID}
+                  setMonthData={setMonthData}
+                  yearData={yearData}
+                  withCheckbox={withCheckbox && currentMonth}
+                  currentYearAndMonth={currentYearAndMonth}
+                  currentMonth={currentMonth}
+                  setRefreshKey={setRefreshKey}
+                  monthData={monthData}
+                  onSaveSelectedRows={deleteSelectedProvisionDetailsFromTable} // Pass onSaveSelectedRows prop
+                  selectedRows={selectedRows}
+                  setSelectedRows={setSelectedRows}
+                  open={open}
+                  setOpen={setOpen}
+                  handleClose={handleClose}
+                  refreshKey={refreshKey}
+                  setRemoveRowData={setRemoveRowData}
+                  setInputValue={setInputValue}
+                  setSelectedYear={setSelectedYear}
+                />
+              )
             )}
           </Box>
         </Modal.Body>

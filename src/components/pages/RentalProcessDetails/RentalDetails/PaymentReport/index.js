@@ -46,8 +46,8 @@ const PaymentReport = (props) => {
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
       // Clear existing data
-      setSelectedYear([]);
-      setSelectedMonth([]);
+      setSelectedYear(null);
+      setSelectedMonth(null);
       setGetPaymentReport([]);
       // Fetch new data based on the new month and year
       getAllPaymentReportDetailsOfMonth();
@@ -288,14 +288,13 @@ const PaymentReport = (props) => {
           {/* //spinner-border */}
           <Grid sx={{ mt: 8 }}>
             {loading ? (
-              <div className="d-flex align-items-center justify-content-center">
+              <div className="d-flex align-items-center justify-content-center flex-column">
                 <div
-                  className="spinner-border text-success"
+                  className="spinner-border text-primary"
                   role="status"
                   style={{ width: "2rem", height: "2rem" }}
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
+                ></div>
+                <span className="visible text-primary">Loading...</span>{" "}
               </div>
             ) : (
               selectedMonth && (

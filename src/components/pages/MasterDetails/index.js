@@ -1128,7 +1128,7 @@ const MasterDetails = (props) => {
       glEmpId: allNewContractDetails?.glEmpId,
       signedDate: allNewContractDetails?.signedDate,
 
-      monthlyRent: allNewContractDetails?.monthlyRent,
+      monthlyRent: allNewContractDetails?.lessorRentAmount,
     };
     const { data, errRes } = await AddRentContractDetails(payload);
     if (data?.data) {
@@ -1286,6 +1286,9 @@ const MasterDetails = (props) => {
       contractStatus:
         allNewContractDetails?.contractStatus &&
         allNewContractDetails?.contractStatus,
+      recipiants: allNewContractDetails?.recipiants?.map((recipient, index) => ({
+        lessorRentAmount: recipient?.lessorRentAmount,
+      })),
       recipiantsID: allNewContractDetails?.recipiantsID,
       lessorRecipiantsName: allNewContractDetails?.lessorRecipiantsName,
       lessorBankName: allNewContractDetails?.lessorBankName,
@@ -1407,7 +1410,7 @@ const MasterDetails = (props) => {
       glEmpId: allNewContractDetails?.glEmpId,
       signedDate: allNewContractDetails?.signedDate,
 
-      monthlyRent: allNewContractDetails?.monthlyRent,
+      monthlyRent: allNewContractDetails?.lessorRentAmount,
     };
     const { data, errRes } = await EditRentContractDetails(
       props.uniqueID,
@@ -1450,6 +1453,11 @@ const MasterDetails = (props) => {
         lessorPanNumber: props.EditLessorData?.lessorPanNumber,
         lessorGstNumber: props.EditLessorData?.lessorGstNumber,
         paymentMode: props.EditLessorData?.paymentMode,
+        recipiants: props.EditLessorData?.recipiants?.map(
+          (recipient, index) => ({
+            lessorRentAmount: recipient?.lessorRentAmount,
+          })
+        ),
         nationality: props.EditLessorData?.nationality,
         contractStatus: props.EditLessorData?.contractStatus,
         recipiantsID: props.EditLessorData?.recipiantsID,
@@ -1536,7 +1544,7 @@ const MasterDetails = (props) => {
         glEmpId: props.EditLessorData?.glEmpId,
         signedDate: props.EditLessorData?.signedDate,
 
-        monthlyRent: props?.EditLessorData?.monthlyRent,
+        monthlyRent: props?.EditLessorData?.lessorRentAmount,
       });
     }
   }, [props.EditLessorData]);

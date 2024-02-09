@@ -952,14 +952,14 @@ const AgreementDetails = ({
                 label="Monthly Rent"
                 placeholder="Enter Monthly Rent"
                 sx={{ width: 300 }}
-                name="monthlyRent"
+                name="lessorRentAmount"
                 value={
                   type === "edit"
-                    ? allNewContractDetails?.monthlyRent
-                    : allNewContractDetails?.monthlyRent
+                    ? allNewContractDetails?.lessorRentAmount
+                    : allNewContractDetails?.lessorRentAmount
                 }
                 onChange={(e) => updateChange(e)}
-                errorText={allNewContractDetailsErr?.monthlyRent}
+                errorText={allNewContractDetailsErr?.lessorRentAmount}
                 required
               />
               <DatePickerComponent
@@ -1108,9 +1108,11 @@ const AgreementDetails = ({
                             name={`lessorRentAmount-${index}`}
                             value={
                               recipientCount && recipientCount?.length > 1
-                                ? calculateSplitAmount()
-                                : calculateSplitAmount() ||
-                                  allNewContractDetails?.recipiants?.[index]
+                                ? allNewContractDetails?.recipiants?.[index]
+                                    ?.lessorRentAmount
+                                : allNewContractDetails?.recipiants?.[index] //calculateSplitAmount()
+                                    ?.lessorRentAmount ||
+                                  allNewContractDetails?.recipiants?.[index] //calculateSplitAmount()
                                     ?.lessorRentAmount
                             }
                             onChange={(e) =>

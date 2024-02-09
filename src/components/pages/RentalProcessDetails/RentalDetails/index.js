@@ -154,8 +154,7 @@ const RentalDetails = (props) => {
     if (refreshKey !== 0) {
       // Clear existing data
       setbranchIDforDue([]);
-
-      setRentDueDataByBranchId([]);
+       setRentDueDataByBranchId([]);
       handleClose();
       // Fetch new data based on the new month and year
       getAllRentDueDetailsByBranchID();
@@ -252,7 +251,7 @@ const RentalDetails = (props) => {
       let getData = data?.data;
       setRentContractDetails(getData);
       setbranchIDforDue(getData);
-      setbranchIDData(getData)
+      setbranchIDData(getData);
       setUniqueIDs(getData);
     }
   };
@@ -267,7 +266,7 @@ const RentalDetails = (props) => {
       branchID: value.target.outerText,
     });
     setbranchIDforDue(value.target.outerText);
-    setbranchIDData(value.target.outerText)
+    setbranchIDData(value.target.outerText);
     getAllContractDetails(value.target.outerText);
 
     getAllRentDueDetailsByBranchID(value.target.outerText);
@@ -341,8 +340,6 @@ const RentalDetails = (props) => {
   const handleActivationStatusFilterChange = (e) => {
     setActivationStatusFilter(e.target.value);
   };
-
-
 
   const handleActivationStatusFilterChangeDue = (e) => {
     setActivationStatusFilterDue(e.target.value);
@@ -508,6 +505,7 @@ const RentalDetails = (props) => {
                 fullscreen={fullscreen}
                 uniqueID={uniqueID}
                 setRefreshKey={setRefreshKey}
+                refreshKey={refreshKey}
               />
 
               <RentActual

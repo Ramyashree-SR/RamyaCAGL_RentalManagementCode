@@ -13,7 +13,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { deepOrange, green, pink } from "@mui/material/colors";
+import { deepOrange, green, pink, red, yellow } from "@mui/material/colors";
 import Checkbox from "@mui/material/Checkbox";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -104,30 +104,6 @@ const BranchReportTable = ({
     setPage(0);
   };
 
-  // Calculate monthly totals
-  useEffect(() => {
-    const total = {};
-    data &&
-      data?.map((entry) => {
-        return Object.keys(entry).forEach((month) => {
-          if (
-            month !== "rentDueID" &&
-            month !== "contractID" &&
-            month !== "year" &&
-            month !== "escalation" &&
-            month !== "status"
-          ) {
-            total[month] = (total[month] || 0) + entry[month];
-          }
-        });
-      });
-    setMonthlyTotal(total);
-  }, [data]);
-
-  const calculateTotal = (row) => {
-    return Object.values(row).reduce((acc, value) => acc + value, 0);
-  };
-
   const filteredData =
     data &&
     data?.filter((item) => {
@@ -145,6 +121,29 @@ const BranchReportTable = ({
       }
       return options;
     }, []);
+  // Calculate monthly totals
+  useEffect(() => {
+    const total = {};
+    filteredData &&
+      filteredData?.map((entry) => {
+        return Object.keys(entry).forEach((month) => {
+          if (
+            month !== "rentDueID" &&
+            month !== "contractID" &&
+            month !== "year" &&
+            month !== "escalation" &&
+            month !== "status"
+          ) {
+            total[month] = (total[month] || 0) + entry[month];
+          }
+        });
+      });
+    setMonthlyTotal(total);
+  }, [filteredData]);
+
+  const calculateTotal = (row) => {
+    return Object.values(row).reduce((acc, value) => acc + value, 0);
+  };
 
   return (
     <>
@@ -164,7 +163,6 @@ const BranchReportTable = ({
                         value={activationStatusFilterDue || "All"}
                         onChange={handleActivationStatusFilterChangeDue}
                       >
-                        {/* <option value=""></option> */}
                         <option value="All">All</option>
                         {filterOptions?.map((option) => (
                           <option key={option} value={option}>
@@ -208,13 +206,31 @@ const BranchReportTable = ({
                       )
                     ) {
                       return (
-                        <StyledTableCell key={column.id}>-</StyledTableCell>
+                        <TableCell
+                          key={column.id}
+                          sx={{
+                            background: yellow[900],
+                            fontSize: 12,
+                            fontWeight: 650,
+                            padding: "5px",
+                          }}
+                        >
+                          -
+                        </TableCell>
                       );
                     } else if (column.id in monthlyTotal) {
                       return (
-                        <StyledTableCell key={column.id}>
+                        <TableCell
+                          key={column.id}
+                          sx={{
+                            background: yellow[900],
+                            fontSize: 12,
+                            fontWeight: 650,
+                            padding: "5px",
+                          }}
+                        >
                           ₹{monthlyTotal[column.id]}
-                        </StyledTableCell>
+                        </TableCell>
                       );
                     }
                     return null;
@@ -225,7 +241,7 @@ const BranchReportTable = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 9, 50]}
+        rowsPerPageOptions={[5, 9, 15]}
         component="div"
         count={filteredData?.length}
         rowsPerPage={rowsPerPage}

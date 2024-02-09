@@ -119,7 +119,7 @@ const ReusableTable = ({
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [monthlyTotal, setMonthlyTotal] = useState({});
   const [state, setState] = useState({
     opened: false,
@@ -156,11 +156,6 @@ const ReusableTable = ({
   useEffect(() => {
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
-      // Clear existing data
-      setInputValue("");
-      setSelectedYear([]);
-      setRemoveRowData([]);
-      handleClose();
       // Fetch new data based on the new month and year
       saveSelectedRows();
     }
@@ -245,7 +240,7 @@ const ReusableTable = ({
 
   // New function to save selected rows
   const saveSelectedRows = () => {
-    const selectedRowData = selectedRows.map((index) => filteredData[index]);
+    const selectedRowData = selectedRows?.map((index) => filteredData[index]);
     onSaveSelectedRows(selectedRowData);
   };
 
@@ -260,7 +255,7 @@ const ReusableTable = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              {withCheckbox && monthData === currentMonth ? (
+              {withCheckbox || (withCheckbox && monthData === currentMonth) ? (
                 <StyledTableCell
                   key="checkbox"
                   classes={{ root: classes.tableHeader }}
@@ -268,9 +263,9 @@ const ReusableTable = ({
                   <Checkbox
                     indeterminate={
                       selectedRows.length > 0 &&
-                      selectedRows.length < data.length
+                      selectedRows.length < filteredData.length
                     }
-                    checked={selectedRows.length === data?.length}
+                    checked={selectedRows.length === filteredData?.length}
                     onChange={() => handleRowSelection("all")}
                   />
                 </StyledTableCell>
@@ -426,18 +421,18 @@ const ReusableTable = ({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {withCheckbox ? (
+      {withCheckbox && (
         <Button
           onClick={() => {
-            saveSelectedRows();
             setOpen(true);
+            saveSelectedRows();
           }}
           variant="contained"
           sx={{ backgroundColor: blue[900] }}
         >
           Delete Details
         </Button>
-      ) : null}
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
