@@ -154,6 +154,10 @@ let errObj = {
   glEmpId: "",
   signedDate: "",
   monthlyRent: "",
+  joinaddress_Vendor: "",
+  joinaddress_Premesis: "",
+  priviousContractID: "",
+  remarks: "",
 };
 
 const MasterDetails = (props) => {
@@ -275,6 +279,10 @@ const MasterDetails = (props) => {
     glEmpId: "",
     signedDate: "",
     monthlyRent: "",
+    joinaddress_Vendor: "",
+    joinaddress_Premesis: "",
+    priviousContractID: "",
+    remarks: "",
   });
 
   // console.log("allNewContractDetails", allNewContractDetails);
@@ -409,6 +417,10 @@ const MasterDetails = (props) => {
       glEmpId: "",
       signedDate: "",
       monthlyRent: "",
+      joinaddress_Vendor: "",
+      joinaddress_Premesis: "",
+      priviousContractID: "",
+      remarks: "",
     };
     setAllNewContractDetailsErr(errObj);
   }, []);
@@ -970,14 +982,6 @@ const MasterDetails = (props) => {
 
   const [rentContractStatus, setRentContractStatus] = useState([]);
 
-  // const handleContractChange = (value) => {
-  //   setAllNewContractDetails({
-  //     ...allNewContractDetails,
-  //     contractStatus: value,
-  //   });
-  //   setRentContractStatus(value);
-  // };
-
   const handleContractChange = (newValue) => {
     console.log(newValue.label, "newValue");
     setAllNewContractDetails((prevDetails) => ({
@@ -1129,6 +1133,10 @@ const MasterDetails = (props) => {
       signedDate: allNewContractDetails?.signedDate,
 
       monthlyRent: allNewContractDetails?.lessorRentAmount,
+      joinaddress_Vendor: allNewContractDetails?.joinaddress_Vendor,
+      joinaddress_Premesis: allNewContractDetails?.joinaddress_Premesis,
+      priviousContractID: allNewContractDetails?.priviousContractID,
+      remarks: allNewContractDetails?.remarks,
     };
     const { data, errRes } = await AddRentContractDetails(payload);
     if (data?.data) {
@@ -1239,6 +1247,10 @@ const MasterDetails = (props) => {
         glEmpId: "",
         signedDate: "",
         monthlyRent: "",
+        joinaddress_Vendor: "",
+        joinaddress_Premesis: "",
+        priviousContractID: "",
+        remarks: "",
       });
       setBranchDetails((prev) => ({
         ...prev,
@@ -1286,9 +1298,11 @@ const MasterDetails = (props) => {
       contractStatus:
         allNewContractDetails?.contractStatus &&
         allNewContractDetails?.contractStatus,
-      recipiants: allNewContractDetails?.recipiants?.map((recipient, index) => ({
-        lessorRentAmount: recipient?.lessorRentAmount,
-      })),
+      recipiants: allNewContractDetails?.recipiants?.map(
+        (recipient, index) => ({
+          lessorRentAmount: recipient?.lessorRentAmount,
+        })
+      ),
       recipiantsID: allNewContractDetails?.recipiantsID,
       lessorRecipiantsName: allNewContractDetails?.lessorRecipiantsName,
       lessorBankName: allNewContractDetails?.lessorBankName,
@@ -1411,6 +1425,10 @@ const MasterDetails = (props) => {
       signedDate: allNewContractDetails?.signedDate,
 
       monthlyRent: allNewContractDetails?.lessorRentAmount,
+      joinaddress_Vendor: allNewContractDetails?.joinaddress_Vendor,
+      joinaddress_Premesis: allNewContractDetails?.joinaddress_Premesis,
+      priviousContractID: allNewContractDetails?.priviousContractID,
+      remarks: allNewContractDetails?.remarks,
     };
     const { data, errRes } = await EditRentContractDetails(
       props.uniqueID,
@@ -1545,9 +1563,15 @@ const MasterDetails = (props) => {
         signedDate: props.EditLessorData?.signedDate,
 
         monthlyRent: props?.EditLessorData?.lessorRentAmount,
+        joinaddress_Vendor: props?.EditLessorData?.joinaddress_Vendor,
+        joinaddress_Premesis: props?.EditLessorData?.joinaddress_Premesis,
+        priviousContractID: props?.EditLessorData?.priviousContractID,
+        remarks: props?.EditLessorData?.remarks,
       });
     }
   }, [props.EditLessorData]);
+
+  console.log(allNewContractDetails, "all");
 
   useEffect(() => {
     editAllRenewRentContractDetails();

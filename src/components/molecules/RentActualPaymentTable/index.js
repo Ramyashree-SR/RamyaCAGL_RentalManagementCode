@@ -165,6 +165,7 @@ const RentActualPaymentTable = ({
                 <StyledTableCell>Monthly Rent</StyledTableCell>
                 <StyledTableCell>Due</StyledTableCell>
                 <StyledTableCell>Provision</StyledTableCell>
+                <StyledTableCell>Gross</StyledTableCell>
                 <StyledTableCell>TDS</StyledTableCell>
                 <StyledTableCell>Net</StyledTableCell>
                 <StyledTableCell>GST Amount</StyledTableCell>
@@ -211,9 +212,10 @@ const RentActualPaymentTable = ({
                       <StyledTableCell>
                         {row?.info?.lesseeBranchName}
                       </StyledTableCell>
-                      <StyledTableCell>{row?.monthlyRent}</StyledTableCell>
+                      <StyledTableCell>{row?.monthRent}</StyledTableCell>
                       <StyledTableCell>{row?.due}</StyledTableCell>
                       <StyledTableCell>{row?.provision}</StyledTableCell>
+                      <StyledTableCell>{row?.gross}</StyledTableCell>
                       <StyledTableCell
                         contentEditable
                         onBlur={(e) =>
@@ -288,6 +290,7 @@ const RentActualPaymentTable = ({
                     <StyledTableCell>Monthly Rent</StyledTableCell>
                     <StyledTableCell>Due</StyledTableCell>
                     <StyledTableCell>Provision</StyledTableCell>
+                    <StyledTableCell>Gross</StyledTableCell>
                     <StyledTableCell>TDS</StyledTableCell>
                     <StyledTableCell>Net</StyledTableCell>
                     <StyledTableCell>GST Amount</StyledTableCell>
@@ -303,9 +306,10 @@ const RentActualPaymentTable = ({
                       <StyledTableCell>
                         {row?.info?.lesseeBranchName}
                       </StyledTableCell>
-                      <StyledTableCell>{row?.monthlyRent}</StyledTableCell>
+                      <StyledTableCell>{row?.monthRent}</StyledTableCell>
                       <StyledTableCell>{row?.due}</StyledTableCell>
                       <StyledTableCell>{row?.provision}</StyledTableCell>
+                      <StyledTableCell>{row?.gross}</StyledTableCell>
                       <StyledTableCell>
                         {editedData?.[row?.info?.uniqueID]?.tds || row?.tds}
                       </StyledTableCell>

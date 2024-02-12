@@ -44,13 +44,18 @@ const GeneralInformation = ({
   EditLessorData,
   EditLessorRenewData,
 }) => {
-  const [address, setAddress] = useState("");
+  // const [address, setAddress] = useState(
+  //   allNewContractDetails?.joinaddress_Vendor
+  // );
   const { addToast } = useToasts();
   const joinAddress = () => {
     // Combine the address components into a single string with proper formatting.
-    const joinedAddress = `${allNewContractDetails.lessorDoorNumber}, ${allNewContractDetails.lessorFloorNumber}, ${allNewContractDetails.lessorLandMark}, ${allNewContractDetails.lessorStreet},${allNewContractDetails.lessorWardNo},
-    ${allNewContractDetails.lessorCity},${allNewContractDetails.lessorPinCode},${allNewContractDetails.lessorTaluka},${allNewContractDetails.lessorDistrict},${allNewContractDetails.lessorState}`;
-    setAddress(joinedAddress);
+    const joinedAddress = `${allNewContractDetails.lessorDoorNumber}, ${allNewContractDetails.lessorFloorNumber}, ${allNewContractDetails.lessorLandMark}, ${allNewContractDetails.lessorStreet},${allNewContractDetails.lessorWardNo},${allNewContractDetails.lessorCity},${allNewContractDetails.lessorPinCode},${allNewContractDetails.lessorTaluka},${allNewContractDetails.lessorDistrict},${allNewContractDetails.lessorState}`;
+    // setAddress(joinedAddress);
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      joinaddress_Vendor: joinedAddress,
+    }));
   };
 
   let PaymentMode = [{ id: "3", label: "NEFT" }];
@@ -197,7 +202,7 @@ const GeneralInformation = ({
       close();
     }
   };
-  console.log(contractStatus, "contractStatus");
+  // console.log(contractStatus, "contractStatus");
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -731,24 +736,19 @@ const GeneralInformation = ({
                   md={12}
                 >
                   <Button onClick={joinAddress}>Join Address</Button>
-                  {address && (
+                  {/* {address && ( */}
                     <InputBoxComponent
                       label="Address"
                       placeholder="Enter Address"
                       multiline
                       sx={{ width: 300 }}
                       size="large"
-                      value={address}
+                      value={allNewContractDetails?.joinaddress_Vendor}
+                      // onChange={(e) => updateChange(e)}
                       readOnly
                     />
-                  )}
-                  {/* </Grid>
+                  {/* )} */}
 
-                <Grid
-                  item
-                  className="d-flex flex-column align-items-start justify-content-start m-3"
-                  md={12}
-                > */}
                   <InputBoxComponent
                     // label="Remarks."
                     textLabel="Remarks"
@@ -756,9 +756,9 @@ const GeneralInformation = ({
                     sx={{ width: 500 }}
                     multiline
                     rows={4}
-                    // name="lessorDoorNumber"
-                    // value={allNewContractDetails?.lessorDoorNumber}
-                    // onChange={(e) => updateChange(e)}
+                    name="remarks"
+                    value={allNewContractDetails?.remarks}
+                    onChange={(e) => updateChange(e)}
                     // errorText={allNewContractDetailsErr?.lessorDoorNumber}
                     required
                   />

@@ -854,7 +854,6 @@ const RentalDetails = (props) => {
           openProvisionsListModal={openProvisionsListModal}
           setOpenProvisionsListModal={setOpenProvisionsListModal}
           setOpenRentDueModal={setOpenRentDueModal}
-          // branchIDforDue={branchIDforDue}
           branchIDData={branchIDData}
           rentStartDate={rentStartDate}
           setRentStartDate={setRentStartDate}

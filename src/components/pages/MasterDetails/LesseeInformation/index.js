@@ -31,7 +31,9 @@ const LesseeInformation = ({
   setBranchDetails,
   contractStatus,
 }) => {
-  const [address, setAddress] = useState("");
+  // const [address, setAddress] = useState(
+  //   allNewContractDetails?.joinaddress_Premesis
+  // );
   const [branchData, setBranchData] = useState([]);
   // console.log(type, "type");
   const [showBranchID, setShowBranchID] = useState(false);
@@ -40,7 +42,7 @@ const LesseeInformation = ({
   const [showInputComponent, setShowInputComponent] = useState(false);
 
   const updateChange = (e) => {
-    // console.log(e,"e");
+    console.log(e, "e");
     e.preventDefault();
     setAllNewContractDetails((prev) => ({
       ...prev,
@@ -57,16 +59,18 @@ const LesseeInformation = ({
   ];
 
   const handleEntityDetails = (value) => {
-    // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
-    // setAllNewContractDetails({
-    //   ...allNewContractDetails,
-    //   [name]: value,
-    // });
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
       lesseeEntityDetails: value ? value?.label : null,
     }));
   };
+
+  const updateAddressChange = (value) => {
+    console.log(value);
+    setAllNewContractDetails(value);
+  };
+
+  console.log(allNewContractDetails?.joinaddress_Premesis, "address");
 
   let BranchType = [
     { id: "GL-Office", label: "GL-Office" },
@@ -134,14 +138,17 @@ const LesseeInformation = ({
   ];
   const joinAddress = () => {
     // Combine the address components into a single string with proper formatting.
-    const joinedAddress = `${allNewContractDetails.premesisDoorNumber}, ${allNewContractDetails.premesisFloorNumber}, ${allNewContractDetails.premesisLandMark}, ${allNewContractDetails.premesisStreet},${allNewContractDetails.premesisWardNo},
-    ${allNewContractDetails.premesisCity},${allNewContractDetails.premesisPinCode},${allNewContractDetails.premesisTaluka},${allNewContractDetails.premesisDistrict},${allNewContractDetails.lessorState}`;
-    setAddress(joinedAddress);
+    const joinedAddress = `${allNewContractDetails.premesisDoorNumber}, ${allNewContractDetails.premesisFloorNumber}, ${allNewContractDetails.premesisLandMark}, ${allNewContractDetails.premesisStreet},${allNewContractDetails.premesisWardNo},${allNewContractDetails.premesisCity},${allNewContractDetails.premesisPinCode},${allNewContractDetails.premesisTaluka},${allNewContractDetails.premesisDistrict},${allNewContractDetails.lessorState}`;
+    // setAddress(joinedAddress);
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      joinaddress_Premesis: joinedAddress,
+    }));
   };
 
   const handleBranchType = (value) => {
     // setAllNewContractDetails((prev) => ({ ...prev, [name]: value }));
-    console.log(value?.label, "value");
+    // console.log(value?.label, "value");
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
       lesseeBranchType: value ? value?.label : null,
@@ -151,12 +158,12 @@ const LesseeInformation = ({
   };
 
   const handleBranchID = (_, value) => {
-    setShowBranchID(true);
     getBranchIdDetails(value);
     setAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
       branchID: value ? value?.label : null,
     }));
+    setShowBranchID(true);
   };
 
   useEffect(() => {
@@ -167,6 +174,7 @@ const LesseeInformation = ({
     const { data } = await getBranchIDForBranchDetails(branchType?.label);
     if (data) {
       setBranchData(data || []);
+      setShowBranchID(true);
     } else {
       setShowBranchID(true);
       setBranchData([]);
@@ -277,7 +285,6 @@ const LesseeInformation = ({
                   <Autocomplete
                     size="small"
                     sx={{ width: 300, ml: 1, borderRadius: 10 }}
-                    // defaultValue={null}
                     options={branchData}
                     getOptionLabel={(option) =>
                       option?.label ? option?.label : option || ""
@@ -290,7 +297,7 @@ const LesseeInformation = ({
                     value={
                       type === "edit"
                         ? allNewContractDetails?.branchID
-                        : allNewContractDetails?.branchID || null
+                        : allNewContractDetails?.branchID || ""
                     }
                     onChange={handleBranchID}
                     renderInput={(params) => (
@@ -317,10 +324,53 @@ const LesseeInformation = ({
                         <Typography>No Options Available</Typography>
                       )
                     }
-                    disableCloseOnSelect={false}
-                    disableClearable={false}
-                    required={<span className="text-danger ms-1">*</span>}
                   />
+
+                  // <Autocomplete
+                  //   size="small"
+                  //   sx={{ width: 300, ml: 1, borderRadius: 10 }}
+                  //   defaultValue={null}
+                  //   options={branchData}
+                  //   getOptionLabel={(option) =>
+                  //     option?.label ? option?.label : option || ""
+                  //   }
+                  //   isOptionEqualToValue={(option, value) =>
+                  //     value === undefined ||
+                  //     value === "" ||
+                  //     option?.label === value?.label
+                  //   }
+                  //   value={
+                  //     type === "edit"
+                  //       ? allNewContractDetails?.branchID
+                  //       : allNewContractDetails?.branchID || null
+                  //   }
+                  //   onChange={handleBranchID}
+                  //   renderInput={(params) => (
+                  //     <TextField
+                  //       {...params}
+                  //       label="Branch ID"
+                  //       variant="outlined"
+                  //     />
+                  //   )}
+                  //   noOptionsText={
+                  //     showBranchID ? (
+                  //       <Typography
+                  //         onClick={addButtonClick}
+                  //         variant="body1"
+                  //         className="fs-14"
+                  //       >
+                  //         <Box className="d-flex align-center">
+                  //           <AddIcon className="color-blue" />
+                  //           <span>Add Branch</span>
+                  //         </Box>
+                  //       </Typography>
+                  //     ) : (
+                  //       <Typography variant="body1">
+                  //         No Options Available
+                  //       </Typography>
+                  //     )
+                  //   }
+                  // />
                 )}
               </Grid>
 
@@ -446,16 +496,17 @@ const LesseeInformation = ({
             </Typography>
             <Grid container spacing={2} className="px-2 py-2 mt-1">
               <Grid item className="d-flex " lg={12}>
-                <InputBoxComponent
-                  label="Privious Contract ID."
-                  placeholder="Enter contract Id."
-                  sx={{ width: 300, mt: -5, ml: 3 }}
-                  // name=""
-                  // value={allNewContractDetails?.premesisDoorNumber}
-                  // onChange={(e) => updateChange(e)}
-                  // errorText={allNewContractDetailsErr?.premesisDoorNumber}
-                  required={true}
-                />
+                {contractStatus === "Renewal" ? (
+                  <InputBoxComponent
+                    label="Previous Contract ID."
+                    placeholder="Enter contract Id."
+                    sx={{ width: 300, mt: -5, ml: 3 }}
+                    name="priviousContractID"
+                    value={allNewContractDetails?.priviousContractID}
+                    onChange={(e) => updateChange(e)}
+                    required={true}
+                  />
+                ) : null}
               </Grid>
               <Grid item className="d-flex m-2" lg={12}>
                 {/* <DropDownComponent
@@ -671,18 +722,19 @@ const LesseeInformation = ({
                   md={12}
                 >
                   <Button onClick={joinAddress}>Join Address</Button>
-                  {address && (
-                    <InputBoxComponent
-                      label="Address"
-                      placeholder="Enter Address"
-                      multiline
-                      sx={{ width: 300 }}
-                      size="large"
-                      value={address}
-                      readOnly
-                      required={true}
-                    />
-                  )}
+                  {/* {address ? ( */}
+                  <InputBoxComponent
+                    label="Address"
+                    placeholder="Enter Address"
+                    multiline
+                    sx={{ width: 300 }}
+                    size="large"
+                    value={allNewContractDetails?.joinaddress_Premesis}
+                    // onChange={() => updateAddressChange()}
+                    readOnly
+                    required={true}
+                  />
+                  {/* ) : null} */}
                 </Grid>
 
                 <Box>

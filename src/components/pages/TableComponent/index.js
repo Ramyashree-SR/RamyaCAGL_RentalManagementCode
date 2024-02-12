@@ -36,6 +36,7 @@ import ViewRentDocumentModal from "../RentalProcessDetails/RentalDetails/ViewRen
 import GavelIcon from "@mui/icons-material/Gavel";
 import DropDownComponent from "../../atoms/DropDownComponent";
 import MenuComponent from "../../molecules/MenuComponent";
+import RentContractInformation from "../../molecules/RentContractInformation";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.root}`]: {
@@ -153,7 +154,6 @@ const TableComponent = ({
   const [branchModal, setBranchModal] = useState(false);
   const [agreementModal, setAgreementModal] = useState(false);
   const [customInputModalOpen, setCustomInputModalOpen] = useState(false);
-  // const [selectProvisionDetails, setSelectProvisionDetails] = useState([])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -418,7 +418,7 @@ const TableComponent = ({
                                   />
                                 )}
 
-                                {column?.actions.includes("viewBank") && (
+                                {/* {column?.actions.includes("viewBank") && (
                                   <ColorIcon
                                     sx={{
                                       display: "flex",
@@ -438,15 +438,15 @@ const TableComponent = ({
                                       Bank Details
                                     </Typography>
                                   </ColorIcon>
-                                )}
+                                )} */}
 
-                                <ViewDetailsModal
+                                {/* <ViewDetailsModal
                                   show={modalOpen}
                                   close={handleModalClose}
                                   selectedItem={selectedItem}
-                                />
+                                /> */}
 
-                                {column?.actions.includes("viewBranch") && (
+                                {/* {column?.actions.includes("viewBranch") && (
                                   <ColorIcon
                                     sx={{
                                       display: "flex",
@@ -466,15 +466,15 @@ const TableComponent = ({
                                       Branch Details
                                     </Typography>
                                   </ColorIcon>
-                                )}
+                                )} */}
 
-                                <BranchDetailsModal
+                                {/* <BranchDetailsModal
                                   show={branchModal}
                                   close={() => setBranchModal(false)}
                                   selectedItem={selectedItem}
-                                />
+                                /> */}
 
-                                {column?.actions.includes("viewAgreement") && (
+                                {/* {column?.actions.includes("viewAgreement") && (
                                   <ColorIcon
                                     sx={{
                                       display: "flex",
@@ -496,42 +496,41 @@ const TableComponent = ({
                                       Agreement Details
                                     </Typography>
                                   </ColorIcon>
-                                )}
+                                )} */}
                               </Box>
                             )}
 
-                            <CustomModal
+                            {/* <CustomModal
                               show={customInputModalOpen}
                               close={handleCustomInputModalClose}
                               selectedItem={selectedItem}
-                            />
-                            {/* 
+                            /> */}
+
                             {column?.actions?.includes(
                               "viewUploadedAgreement"
                             ) && (
-                              <ColorIcon
-                                sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
+                              
+                              <RentContractInformation
+                                handleBranch={() => {
+                                  handleBranchModalOpen(row);
                                 }}
-                              >
-                                <GavelIcon
-                                  size="small"
-                                  onClick={() => handleDocumentModalOpen(row)}
-                                />
-
-                                <Typography
-                                  sx={{ fontSize: 9, fontWeight: 800 }}
-                                >
-                                  Rent Agreement
-                                </Typography>
-                              </ColorIcon>
+                                handleBank={() => {
+                                  handleModalOpen(row);
+                                }}
+                                handleAgreement={() => {
+                                  handleCustomInputModalOpen(row);
+                                }}
+                                modalOpen={modalOpen}
+                                handleModalClose={handleModalClose}
+                                selectedItem={selectedItem}
+                                customInputModalOpen={customInputModalOpen}
+                                handleCustomInputModalClose={
+                                  handleCustomInputModalClose
+                                }
+                                branchModal={branchModal}
+                                setBranchModal={setBranchModal}
+                              />
                             )}
-
-                            <ViewRentDocumentModal
-                              show={agreementModal}
-                              close={() => setAgreementModal(false)}
-                            /> */}
                           </StyledTableCell>
                         );
                       })}

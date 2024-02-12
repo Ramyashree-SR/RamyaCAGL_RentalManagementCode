@@ -101,9 +101,12 @@ const AgreementDetails = ({
   ];
 
   let LockinPeriod = [
-    { id: "1", label: "1years" },
-    { id: "2", label: "2years" },
-    { id: "3", label: "3years" },
+    { id: "1", label: "1months" },
+    { id: "2", label: "2months" },
+    { id: "3", label: "3months" },
+    { id: "4", label: "1years" },
+    { id: "5", label: "2years" },
+    { id: "6", label: "3years" },
   ];
 
   let DocumentType = [{ id: "1", label: "Rental Agreement" }];
@@ -142,7 +145,6 @@ const AgreementDetails = ({
     setIFSCCodes(Array(newValue.id).fill(""));
     setBankAndBranch(Array(newValue.id).fill({ bank: "", branch: "" }));
   };
-
   const updateChange = (e) => {
     const { name, value } = e.target;
 
