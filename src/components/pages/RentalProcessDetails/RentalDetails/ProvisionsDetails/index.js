@@ -165,7 +165,14 @@ const ProvisionsDetails = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="90px"
+            height="43px"
+            margnTop="-2px"
+          />
+          <Modal.Title id="contained-modal-title-vcenter" style={{ fontWeight: 600, fontFamily: "sans-serif" }}>
             Provisions Information
           </Modal.Title>
         </Modal.Header>

@@ -1272,7 +1272,7 @@ const MasterDetails = (props) => {
       setTimeout(() => {
         props.getContractDetails();
       }, 9000);
-      // window.location.reload();
+      window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
@@ -1571,17 +1571,17 @@ const MasterDetails = (props) => {
     }
   }, [props.EditLessorData]);
 
-  console.log(allNewContractDetails, "all");
+  // console.log(allNewContractDetails, "all");
 
   useEffect(() => {
-    editAllRenewRentContractDetails();
+    AddAllRenewRentContractDetails();
   }, [props.branchIDData]);
 
-  const editAllRenewRentContractDetails = async () => {
+  const AddAllRenewRentContractDetails = async () => {
     const { data, errRes } = await EditRentRenewContractDetails(
       props.branchIDData
     );
-    // console.log(data, "resdata");
+
     if (data) {
       if (data) {
         let renewData = data?.data;
@@ -1589,6 +1589,7 @@ const MasterDetails = (props) => {
       }
     }
   };
+console.log(allNewContractDetails?.contractStatus,"contractStatus");
 
   const steps = [
     {
@@ -1611,7 +1612,7 @@ const MasterDetails = (props) => {
           }
           branchDetails={branchDetails}
           setBranchDetails={setBranchDetails}
-          contractStatus={allNewContractDetails?.contractStatus?.label}
+          contractStatus={allNewContractDetails?.contractStatus}
         />
       ),
     },

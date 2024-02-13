@@ -222,9 +222,16 @@ const RentActual = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title id="contained-modal-title-vcenter" style={{ fontWeight: 600, fontFamily: "sans-serif" }}>
             Rent Actual Information
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="90px"
+            height="43px"
+            margnTop="-2px"
+          />
         </Modal.Header>
         <Modal.Body>
           <Container>

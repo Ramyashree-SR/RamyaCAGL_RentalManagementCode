@@ -199,11 +199,7 @@ const Provisions = (props) => {
           />
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{
-              fontFamily: "sans-serif",
-              fontSize: 25,
-              fontWeight: 700,
-            }}
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
           >
             Provisions Information
           </Modal.Title>

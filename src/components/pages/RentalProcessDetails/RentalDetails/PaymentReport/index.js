@@ -164,7 +164,7 @@ const PaymentReport = (props) => {
     Due: item.due,
     Provision: item.provision,
     Gross: item.gross,
-    Tds: item.tds,
+    Tds: item.reporttds,
     net: item.net,
     gst: item.gst,
   }));
@@ -184,10 +184,17 @@ const PaymentReport = (props) => {
         <Modal.Header>
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ fontWeight: 900, fontFamily: "sans-serif" }}
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
           >
             Payment Report
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="90px"
+            height="43px"
+            margnTop="-2px"
+          />
         </Modal.Header>
         <Modal.Body>
           <Grid item className="d-flex mt-0" sx={{ position: "fixed" }}>

@@ -146,9 +146,26 @@ const RentDue = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
+          {/* <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="80px"
+            height="40px"
+            margnTop="-2px"
+          /> */}
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
+          >
             Branch-wise Rent Due Information
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="90px"
+            height="43px"
+            margnTop="-2px"
+          />
         </Modal.Header>
         <Modal.Body>
           <Box sx={{ height: "100%", width: "100%" }}>

@@ -273,11 +273,19 @@ const PaymentReportDetails = (props) => {
         <Modal.Header>
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ fontWeight: 900, fontFamily: "sans-serif" }}
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
           >
             Payment Report
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="90px"
+            height="43px"
+            margnTop="-2px"
+          />
         </Modal.Header>
+
         <Modal.Body>
           <Grid
             className="d-flex flex-row m-2"
