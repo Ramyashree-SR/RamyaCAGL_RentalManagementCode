@@ -34,7 +34,6 @@ import {
   getBranchID,
   getBranchNameDetails,
   getRentContractDetailsByBranchName,
-  getRentContractDetailsOnBranchID,
 } from "../../../services/RentContractsApi";
 import {
   getDistrictByStateFilter,
@@ -42,11 +41,6 @@ import {
 } from "../../../services/FilterApis";
 import { makeStyles } from "@mui/styles";
 import { blue, green } from "@mui/material/colors";
-import {
-  getAllRentDueDetails,
-  getRentDueDetails,
-} from "../../../services/RentDueApi";
-import { EditRentRenewContractDetails } from "../../../services/EditContractApi";
 
 const useStyles = makeStyles({
   customTextField: {
@@ -144,20 +138,28 @@ const RentalDetails = (props) => {
       ...filterState,
       lesseeState: value.target.outerText,
     });
-
     getBranchDistrictByState(value.target.outerText);
     getContractDetails(value.target.outerText);
+    // setRefreshKey((prevKey) => prevKey + 1);
   };
 
   useEffect(() => {
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
       // Clear existing data
-      setbranchIDforDue([]);
-       setRentDueDataByBranchId([]);
-      handleClose();
+      setRentContractDetails([]);
+      // setBranchFilter([]);
+      setFilterBranch([]);
+      // setBranchNameFilter([]);
+      setFilterBranchName([]);
+      // setStateFilter([]);
+      setFilterState([]);
+      setFilterDistrict([]);
+      // setDistrictFilter([]);
       // Fetch new data based on the new month and year
-      getAllRentDueDetailsByBranchID();
+      // getAllContractDetailsByBranchName();
+      // getAllRentContractDetailsByBranchID();
+      // getAllContractDetails();
     }
   }, [refreshKey]);
 
@@ -268,8 +270,8 @@ const RentalDetails = (props) => {
     setbranchIDforDue(value.target.outerText);
     setbranchIDData(value.target.outerText);
     getAllContractDetails(value.target.outerText);
-
-    getAllRentDueDetailsByBranchID(value.target.outerText);
+    // setRefreshKey((prevKey) => prevKey + 1);
+    // getAllRentDueDetailsByBranchID(value.target.outerText);
   };
 
   const getBranchId = async () => {
@@ -301,11 +303,13 @@ const RentalDetails = (props) => {
   }, []);
 
   const handleBranchName = (value) => {
+    console.log(value, "value");
     setFilterBranchName({
       ...filterBranchName,
       lesseeBranchName: value.target.outerText,
     });
     getAllContractDetailsByBranchName(value.target.outerText);
+    // setRefreshKey((prevKey) => prevKey + 1);
   };
 
   const getBranchName = async () => {
@@ -343,17 +347,6 @@ const RentalDetails = (props) => {
 
   const handleActivationStatusFilterChangeDue = (e) => {
     setActivationStatusFilterDue(e.target.value);
-  };
-
-  const getAllRentDueDetailsByBranchID = async (branchID) => {
-    const { data } = await getAllRentDueDetails(branchID);
-    if (data)
-      if (data) {
-        let getData = data?.data;
-        setRentDueDataByBranchId(getData || {});
-      } else {
-        setRentDueDataByBranchId([]);
-      }
   };
 
   return (
@@ -533,6 +526,7 @@ const RentalDetails = (props) => {
                 }
                 lesseeBranchName={rentContractDetails?.lesseeBranchName}
                 setRefreshKey={setRefreshKey}
+                setRentDueDataByBranchId={setRentDueDataByBranchId}
               />
               <Provisions
                 show={openProvisionsModal}
@@ -775,7 +769,7 @@ const RentalDetails = (props) => {
           onClick={() => {
             handleClose();
             setOpenRentDueDataModal(true);
-            getAllRentDueDetailsByBranchID();
+            // getAllRentDueDetailsByBranchID();
           }}
         >
           Branch Rent Due
@@ -829,49 +823,51 @@ const RentalDetails = (props) => {
           position: "fixed",
         }}
       >
-        <TableComponent
-          data={rentContractDetails}
-          // data={branchFilter || rentContractDetails}
-          columns={columns}
-          getContractDetails={getContractDetails}
-          setEditLessorData={setEditLessorData}
-          setOpenEditLessorModal={setOpenEditLessorModal}
-          setOpenLessorModal={setOpenLessorModal}
-          modalType={modalType}
-          setUniqueID={setUniqueID}
-          uniqueID={uniqueID}
-          setModalType={setModalType}
-          EditLessorData={EditLessorData}
-          searchText={searchText}
-          setSearchText={setSearchText}
-          branchTypeFilter={branchTypeFilter}
-          activationStatusFilter={activationStatusFilter}
-          handleBranchTypeFilterChange={handleBranchTypeFilterChange}
-          handleActivationStatusFilterChange={
-            handleActivationStatusFilterChange
-          }
-          openRentDueModal={openRentDueModal}
-          openProvisionsListModal={openProvisionsListModal}
-          setOpenProvisionsListModal={setOpenProvisionsListModal}
-          setOpenRentDueModal={setOpenRentDueModal}
-          branchIDData={branchIDData}
-          rentStartDate={rentStartDate}
-          setRentStartDate={setRentStartDate}
-          rentEndDate={rentEndDate}
-          setRentEndDate={setRentEndDate}
-          agreementTenure={agreementTenure}
-          setAgreementTenure={setAgreementTenure}
-          monthlyRent={monthlyRent}
-          setMonthlyRent={setMonthlyRent}
-          lessorName={lessorName}
-          setLessorName={setLessorName}
-          setLesseeBranchName={setLesseeBranchName}
-          lesseeBranchName={lesseeBranchName}
-          setEditLessorRenewData={setEditLessorRenewData}
-          openPaymentReportData={openPaymentReportData}
-          setOpenPaymentReportData={setOpenPaymentReportData}
-          activationStatusFilterDue={activationStatusFilterDue}
-        />
+        {/* {refreshKey && ( */}
+          <TableComponent
+            data={rentContractDetails}
+            // data={branchFilter || rentContractDetails}
+            columns={columns}
+            getContractDetails={getContractDetails}
+            setEditLessorData={setEditLessorData}
+            setOpenEditLessorModal={setOpenEditLessorModal}
+            setOpenLessorModal={setOpenLessorModal}
+            modalType={modalType}
+            setUniqueID={setUniqueID}
+            uniqueID={uniqueID}
+            setModalType={setModalType}
+            EditLessorData={EditLessorData}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            branchTypeFilter={branchTypeFilter}
+            activationStatusFilter={activationStatusFilter}
+            handleBranchTypeFilterChange={handleBranchTypeFilterChange}
+            handleActivationStatusFilterChange={
+              handleActivationStatusFilterChange
+            }
+            openRentDueModal={openRentDueModal}
+            openProvisionsListModal={openProvisionsListModal}
+            setOpenProvisionsListModal={setOpenProvisionsListModal}
+            setOpenRentDueModal={setOpenRentDueModal}
+            branchIDData={branchIDData}
+            rentStartDate={rentStartDate}
+            setRentStartDate={setRentStartDate}
+            rentEndDate={rentEndDate}
+            setRentEndDate={setRentEndDate}
+            agreementTenure={agreementTenure}
+            setAgreementTenure={setAgreementTenure}
+            monthlyRent={monthlyRent}
+            setMonthlyRent={setMonthlyRent}
+            lessorName={lessorName}
+            setLessorName={setLessorName}
+            setLesseeBranchName={setLesseeBranchName}
+            lesseeBranchName={lesseeBranchName}
+            setEditLessorRenewData={setEditLessorRenewData}
+            openPaymentReportData={openPaymentReportData}
+            setOpenPaymentReportData={setOpenPaymentReportData}
+            activationStatusFilterDue={activationStatusFilterDue}
+          />
+        {/* )} */}
       </Box>
     </Box>
   );

@@ -13,7 +13,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { deepOrange, green, pink } from "@mui/material/colors";
+import { blue, deepOrange, green, pink, red } from "@mui/material/colors";
 import Checkbox from "@mui/material/Checkbox";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -103,25 +103,25 @@ const PaymentTableComponent = ({
     setPage(0);
   };
 
-  const handleRowSelection = (rowId) => {
-    const selectedIndex = selectedRows.indexOf(rowId);
-    let newSelectedRows = [];
+  // const handleRowSelection = (rowId) => {
+  //   const selectedIndex = selectedRows.indexOf(rowId);
+  //   let newSelectedRows = [];
 
-    if (selectedIndex === -1) {
-      newSelectedRows = newSelectedRows.concat(selectedRows, rowId);
-    } else if (selectedIndex === 0) {
-      newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
-    } else if (selectedIndex === selectedRows.length - 1) {
-      newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedRows = newSelectedRows.concat(
-        selectedRows.slice(0, selectedIndex),
-        selectedRows.slice(selectedIndex + 1)
-      );
-    }
+  //   if (selectedIndex === -1) {
+  //     newSelectedRows = newSelectedRows.concat(selectedRows, rowId);
+  //   } else if (selectedIndex === 0) {
+  //     newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
+  //   } else if (selectedIndex === selectedRows.length - 1) {
+  //     newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelectedRows = newSelectedRows.concat(
+  //       selectedRows.slice(0, selectedIndex),
+  //       selectedRows.slice(selectedIndex + 1)
+  //     );
+  //   }
 
-    setSelectedRows(newSelectedRows);
-  };
+  //   setSelectedRows(newSelectedRows);
+  // };
 
   return (
     <>
@@ -199,11 +199,13 @@ const PaymentTableComponent = ({
                     )} */}
                     {columns &&
                       columns?.map((column) => (
-                        
                         <StyledTableCell
                           key={column.id}
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
+                          style={{
+                            backgroundColor: row.paymentFlag ? "" : red[900],
+                          }}
                         >
                           {(row[column.id] !== undefined &&
                             row[column.id] !== null) ||
@@ -221,7 +223,7 @@ const PaymentTableComponent = ({
       <TablePagination
         rowsPerPageOptions={[10, 15, 100]}
         component="div"
-        count={ filteredData?.length}
+        count={filteredData?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

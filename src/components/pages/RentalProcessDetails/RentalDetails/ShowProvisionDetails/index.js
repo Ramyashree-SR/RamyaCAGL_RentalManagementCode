@@ -105,7 +105,11 @@ const ShowProvisionDetails = (props) => {
       if (data) {
         setRemoveRowData([]);
         handleClose();
+        // setRefreshKey((prevKey) => prevKey + 1);
         props.close();
+        addToast("Provision Deleted Successfully", { apprearance: "success" });
+      } else if (errRes) {
+        addToast(errRes?.msg, { apprearance: "success" });
       }
     }
   };
@@ -151,15 +155,22 @@ const ShowProvisionDetails = (props) => {
                     <Typography>Are you sure you want to delete?</Typography>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={handleClose}>Back</Button>
+                    <Button
+                      onClick={() => {
+                        handleClose();
+                        setRefreshKey((prevKey) => prevKey + 1);
+                      }}
+                    >
+                      Back
+                    </Button>
                     <Button
                       onClick={() => {
                         handleConfirmDelete();
+                        setRefreshKey((prevKey) => prevKey + 1);
                         handleClick({
                           vertical: "bottom",
                           horizontal: "center",
                         });
-                        setRefreshKey((prevKey) => prevKey + 1);
                       }}
                     >
                       Delete
@@ -170,11 +181,11 @@ const ShowProvisionDetails = (props) => {
                 <Snackbar
                   open={opened}
                   anchorOrigin={{ vertical, horizontal }}
-                  autoHideDuration={3000}
+                  autoHideDuration={5000}
                   onClose={handleClosed}
                   action={action}
                   key={vertical + horizontal}
-                  variant="error"
+                  // variant="error"
                 >
                   <Alert
                     onClose={handleClosed}
@@ -184,7 +195,7 @@ const ShowProvisionDetails = (props) => {
                     Provision Deleted Succesfully
                   </Alert>
                 </Snackbar>
-                <Snackbar
+                {/* <Snackbar
                   open={opened}
                   anchorOrigin={{ vertical, horizontal }}
                   autoHideDuration={3000}
@@ -201,7 +212,7 @@ const ShowProvisionDetails = (props) => {
                     Provision Deletion Failed[ ALLOWED ONLY FOR CURRENT
                     MONTH&YEAR ]
                   </Alert>
-                </Snackbar>
+                </Snackbar> */}
               </Col>
             </Row>
           </Container>

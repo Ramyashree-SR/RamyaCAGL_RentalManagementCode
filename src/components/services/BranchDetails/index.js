@@ -18,8 +18,6 @@ const getRentContractDetailsOnBranchID = (params1, params2) => {
   return serviceUtil
     .get(`getbranchdetails?BranchID=${params1}`)
     .then((res) => {
-      // console.log(params, "params");
-      // console.log(res, "Branchres");
       const data = res.data;
       return { data };
     })

@@ -74,7 +74,6 @@ const Provisions = (props) => {
       setInputValue("");
       setSelectedYear(null);
       setRemoveRowData([]);
-      //     // handleClose();
     }
   }, [refreshKey]);
 
@@ -114,7 +113,7 @@ const Provisions = (props) => {
       inputValue,
       selectedYear
     );
-    console.log(data, "Provisiondata");
+    // console.log(data, "Provisiondata");
     if (data) {
       if (data) {
         let getData = data?.data;

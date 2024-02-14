@@ -16,14 +16,16 @@ const Variance = (props) => {
 
   const handleVarianceIDChange = (e) => {
     setRentContractID(e.target.value);
-  };
-  useEffect(() => {
     getVarianceReport();
-  }, [RentContractID]);
+  };
+
+  // useEffect(() => {
+  //   getVarianceReport();
+  // }, [RentContractID]);
 
   const getVarianceReport = async () => {
     const { data } = await getVarianceDetails(RentContractID);
-    console.log(data, "Alldata");
+    // console.log(data, "Alldata");
     if (data) {
       if (data) {
         let getData = data?.data;

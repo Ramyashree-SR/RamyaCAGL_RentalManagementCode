@@ -4,6 +4,7 @@ import { Modal } from "react-bootstrap";
 import ReusableTable from "../../../../molecules/ReusableTable";
 import { rentDueData } from "../../../../../constants/RentDueData";
 import {
+  getAllRentDueDetails,
   getRentDueDetails,
   getRentDueExcelDetails,
 } from "../../../../services/RentDueApi";
@@ -20,42 +21,61 @@ import BranchReportTable from "../../../../molecules/BranchReportTable";
 
 const RentDue = (props) => {
   const {
-    branchIDforDue,
     rentDueDataByBranchId,
-    branchFilter,
-    handleBranchID,
+    setRentDueDataByBranchId,
     activationStatusFilterDue,
     handleActivationStatusFilterChangeDue,
-    setRefreshKey,
   } = props;
-  const [monthlyTotal, setMonthlyTotal] = useState({});
-  const [dataToExcel, setDataToExcel] = useState([]);
   const [filterDetails, setFilterDetails] = useState(rentDueDataByBranchId);
+  const [filterBranch, setFilterBranch] = useState([]);
+  const [branchFilter, setBranchFilter] = useState("");
+  const [branchIDforDue, setbranchIDforDue] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  // Calculate monthly totals
-  const calculateMonthlyTotal = () => {
-    const total = {};
-    rentDueDataByBranchId?.forEach((entry) => {
-      Object.keys(entry).forEach((month) => {
-        if (
-          month !== "rentDueID" &&
-          month !== "startDate" &&
-          month !== "endDate" &&
-          month !== "year" &&
-          month !== "escalation" &&
-          month !== "contractID"
-        ) {
-          total[month] = (total[month] || 0) + entry[month];
-        }
-      });
+  useEffect(() => {
+    getBranchId();
+  }, []);
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setFilterBranch([]);
+      setBranchFilter([]);
+      setbranchIDforDue([]);
+      setRentDueDataByBranchId([]);
+      // Fetch new data based on the new month and year
+      getAllRentDueDetailsByBranchID();
+    }
+  }, [refreshKey]);
+
+  useEffect(() => {
+    getAllRentDueDetailsByBranchID();
+  }, [filterBranch?.branchID]);
+
+  const handleBranchID = (value) => {
+    setFilterBranch({
+      ...filterBranch,
+      branchID: value.target.outerText,
     });
-    setMonthlyTotal(total);
+    setbranchIDforDue(value.target.outerText);
+    getAllRentDueDetailsByBranchID(value.target.outerText);
   };
 
-  // Calculate totals on component mount
-  useEffect(() => {
-    calculateMonthlyTotal();
-  }, [rentDueDataByBranchId]);
+  const getBranchId = async () => {
+    const { data } = await getBranchID();
+    if (data) {
+      if (data) {
+        let branchIDData = [];
+        data?.data?.map((val) => {
+          branchIDData.push([val]);
+        });
+        setBranchFilter(branchIDData);
+      } else {
+        setBranchFilter([]);
+      }
+    }
+  };
 
   let activationStatus = [
     { id: "1", label: "All" },
@@ -79,22 +99,16 @@ const RentDue = (props) => {
   ];
 
   const fileName = "Rent Due Excel"; // here enter filename for your excel file
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await getRentDueExcelDetails(branchIDforDue);
-      // console.log(data?.data, "duedata");
+  const getAllRentDueDetailsByBranchID = async (branchID) => {
+    const { data } = await getAllRentDueDetails(branchID);
+    if (data)
       if (data) {
-        if (data) {
-          let getDueData = data?.data;
-          setDataToExcel(getDueData);
-        } else {
-          setDataToExcel([]);
-        }
+        let getData = data?.data;
+        setRentDueDataByBranchId(getData || {});
+      } else {
+        setRentDueDataByBranchId([]);
       }
-    };
-    fetchData();
-  }, [branchIDforDue]);
+  };
 
   useEffect(() => {
     // Filter the data based on Status
@@ -209,7 +223,7 @@ const RentDue = (props) => {
                     },
                   }}
                   options={Array.isArray(branchFilter) ? branchFilter : []}
-                  value={branchIDforDue}
+                  value={filterBranch?.branchID}
                   onChange={handleBranchID}
                   renderInput={(params) => (
                     <TextField
@@ -280,3 +294,17 @@ const RentDue = (props) => {
 };
 
 export default RentDue;
+// useEffect(() => {
+//   const fetchData = async () => {
+//     const { data } = await getRentDueExcelDetails(branchIDforDue);
+//     if (data) {
+//       if (data) {
+//         let getDueData = data?.data;
+//         setDataToExcel(getDueData);
+//       } else {
+//         setDataToExcel([]);
+//       }
+//     }
+//   };
+//   fetchData();
+// }, [branchIDforDue]);

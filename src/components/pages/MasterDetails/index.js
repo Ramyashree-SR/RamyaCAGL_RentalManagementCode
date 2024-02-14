@@ -1279,11 +1279,7 @@ const MasterDetails = (props) => {
     }
   };
 
-  const editAllNewRentContractDetails = async (EditLessorData) => {
-    // console.log(
-    //   EditLessorData,
-    //   "EditLessorData in Other component while editing"
-    // );
+  const editAllNewRentContractDetails = async () => {
     let payload = {
       branchID: allNewContractDetails?.branchID,
       lessorName: allNewContractDetails?.lessorName,
@@ -1461,7 +1457,7 @@ const MasterDetails = (props) => {
 
   useEffect(() => {
     if (props.type === "edit") {
-      console.log(props.EditLessorData, "inside useEffect");
+      // console.log(props.EditLessorData, "inside useEffect");
       setAllNewContractDetails({
         uniqueID: props.EditLessorData?.uniqueID,
         branchID: props.EditLessorData?.branchID,
@@ -1571,11 +1567,9 @@ const MasterDetails = (props) => {
     }
   }, [props.EditLessorData]);
 
-  // console.log(allNewContractDetails, "all");
-
   useEffect(() => {
     AddAllRenewRentContractDetails();
-  }, [props.branchIDData]);
+  }, [props.branchIDData, props.EditLessorData]);
 
   const AddAllRenewRentContractDetails = async () => {
     const { data, errRes } = await EditRentRenewContractDetails(
@@ -1589,7 +1583,6 @@ const MasterDetails = (props) => {
       }
     }
   };
-console.log(allNewContractDetails?.contractStatus,"contractStatus");
 
   const steps = [
     {
@@ -1672,7 +1665,7 @@ console.log(allNewContractDetails?.contractStatus,"contractStatus");
 
           contractStatus={allNewContractDetails?.contractStatus?.label}
           // EditLessorRenewData={props.EditLessorRenewData?.uniqueID}
-          // AddAllRenewRentContractDetails={AddAllRenewRentContractDetails}
+          AddAllRenewRentContractDetails={AddAllRenewRentContractDetails}
         />
       ),
     },
@@ -1702,20 +1695,6 @@ console.log(allNewContractDetails?.contractStatus,"contractStatus");
               : "Add New Rent Contract Information"}
           </Modal.Title>
 
-          {/* <DropDownComponent
-            label="Contract Status"
-            options={RentContractStatus}
-            sx={{ width: 300, ml: 30 }}
-            getOptionLabel={(option) =>
-              option?.label || allNewContractDetails?.contractStatus
-            }
-            value={
-              props.type === "edit"
-                ? allNewContractDetails?.contractStatus || null
-                : allNewContractDetails?.contractStatus || null
-            }
-            onChange={handleContractChange}
-          /> */}
           <SimpleDropDown
             options={RentContractStatus}
             label="Select an option"

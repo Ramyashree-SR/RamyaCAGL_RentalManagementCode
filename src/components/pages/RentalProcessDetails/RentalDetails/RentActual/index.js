@@ -27,6 +27,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
+import SwitchComponent from "../../../../atoms/SwitchComponent";
 
 const RentActual = (props) => {
   const { setRefreshKey, refreshKey } = props;
@@ -39,6 +40,7 @@ const RentActual = (props) => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [openActualDetailsModal, setOpenActualDetailsModal] = useState(false);
   const [settlementAmt, setSettlementAmt] = useState([]);
+  const [checked, setChecked] = useState(false);
 
   const months = [
     { id: 1, label: "January" },
@@ -99,6 +101,27 @@ const RentActual = (props) => {
     }
   }, [refreshKey]);
 
+  const handleMonthChange = (newValue) => {
+    const value = newValue?.label;
+    // console.log(value, "value");
+
+    if (value) {
+      // Access value.month here
+      setSelectedMonth(value);
+    } else {
+      console.error("value or value.month is undefined");
+    }
+  };
+  const updateChange = (e) => {
+    setRentActualIDs(e.target.value);
+    // getAllRentActualDetailsByUniqueID(e.target.value);
+  };
+
+  const handleChange = (newValue) => {
+    let value = newValue?.label;
+    setSelectedYear(value);
+  };
+
   useEffect(() => {
     getAllRentActualDetailsByUniqueID();
   }, [RentActualIDs]);
@@ -106,10 +129,6 @@ const RentActual = (props) => {
   useEffect(() => {
     getAllPaymentReportDetailsOfMonth();
   }, [selectedMonth]);
-
-  const updateChange = (e) => {
-    setRentActualIDs(e.target.value);
-  };
 
   const updatedChange = (e) => {
     setSettlementAmt({
@@ -131,24 +150,6 @@ const RentActual = (props) => {
     id: currentYear - index, // currentYear
     label: `${currentYear - index}`,
   }));
-
-  const handleMonthChange = (newValue) => {
-    const value = newValue?.label;
-    // console.log(value, "value");
-    if (value) {
-      // Access value.month here
-      setSelectedMonth(value);
-    } else {
-      console.error("value or value.month is undefined");
-    }
-    getAllPaymentReportDetailsOfMonth(value);
-  };
-
-  const handleChange = (newValue) => {
-    let value = newValue?.label;
-    setSelectedYear(value);
-    // getAllPaymentReportDetailsOfMonth(value);
-  };
 
   const getAllPaymentReportDetailsOfMonth = async () => {
     const { data } = await getRentPaymentReportDetails(
@@ -185,6 +186,7 @@ const RentActual = (props) => {
         year: selectedYear,
         month: selectedMonth,
         amount: settlementAmt?.amount,
+        tdsAmount: checked ? tdsData : 0,
         startDate: getPaymentReport?.info?.rentStartDate,
         endDate: getPaymentReport?.info?.rentEndDate,
         monthRent: getPaymentReport?.monthRent,
@@ -207,6 +209,23 @@ const RentActual = (props) => {
     }
   };
 
+  const calculateTDS = () => {
+    return (getPaymentReport?.gross * (10 / 100)).toFixed(0);
+  };
+
+  const tdsData = calculateTDS(getPaymentReport?.gross);
+
+  const handleSwitchTDSChange = () => {
+    setChecked(!checked);
+    // If the switch is turned off, reset the TDS value to null
+    if (!checked) {
+      setSettlementAmt((prevDetails) => ({
+        ...prevDetails,
+        tdsAmount: null,
+      }));
+    }
+  };
+
   const handleActualClick = () => {
     setOpenActualDetailsModal(true);
   };
@@ -222,7 +241,10 @@ const RentActual = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter" style={{ fontWeight: 600, fontFamily: "sans-serif" }}>
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
+          >
             Rent Actual Information
           </Modal.Title>
           <img
@@ -465,6 +487,7 @@ const RentActual = (props) => {
                         <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
                           Actual Amount:
                         </Typography>
+
                         <Typography
                           sx={{
                             fontSize: 15,
@@ -527,6 +550,25 @@ const RentActual = (props) => {
                         className="d-flex flex-row"
                         sx={{ flexBasis: "100%" }}
                       >
+                        <Typography>TDS Applicable?</Typography>
+                        <SwitchComponent
+                          // checked={parseInt(allNewContractDetails?.lessorRentAmount) > 20000}
+                          checked={checked}
+                          onChange={(isChecked) =>
+                            handleSwitchTDSChange(isChecked)
+                          }
+                        />
+
+                        {checked && (
+                          <InputBoxComponent
+                            label="TDS Amount (10%)  "
+                            type="number"
+                            placeholder="Enter Amount"
+                            name="tdsData"
+                            value={checked ? tdsData : 0}
+                            onChange={(e) => updatedChange(e)}
+                          />
+                        )}
                         <InputBoxComponent
                           label="Amount"
                           type="number"

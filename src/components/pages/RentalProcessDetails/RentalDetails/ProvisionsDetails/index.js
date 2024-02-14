@@ -29,6 +29,7 @@ const ProvisionsDetails = (props) => {
     typeProvisionsData,
     setTypeProvisionsData,
     setRefreshKey,
+    monthlyRent,
   } = props;
   const [state, setState] = useState({
     open: false,
@@ -165,14 +166,17 @@ const ProvisionsDetails = (props) => {
         className="w-100"
       >
         <Modal.Header>
-        <img
+          <img
             src="./assets/cagllogo1.png"
             alt="logo"
             width="90px"
             height="43px"
             margnTop="-2px"
           />
-          <Modal.Title id="contained-modal-title-vcenter" style={{ fontWeight: 600, fontFamily: "sans-serif" }}>
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
+          >
             Provisions Information
           </Modal.Title>
         </Modal.Header>
@@ -338,7 +342,7 @@ const ProvisionsDetails = (props) => {
                       placeholder="Provision Amount"
                       sx={{ width: 200, mt: -4.2, ml: 3 }}
                       name="provisionAmount"
-                      value={addProvisions?.provisionAmount}
+                      value={monthlyRent || addProvisions?.provisionAmount}
                       onChange={(e) => updateChange(e)}
                       required={true}
                     />

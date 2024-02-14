@@ -12,6 +12,7 @@ import {
   tableCellClasses,
   TablePagination,
   IconButton,
+  Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { deepOrange, green, pink, red } from "@mui/material/colors";
@@ -162,16 +163,21 @@ const ProvisionDetailsTable = ({
                             : 0}
                         </StyledTableCell>
                       ))}
+
                     <StyledTableCell>
-                      <IconButton
-                        onClick={() => {
-                          handleDeleteClick(row);
-                        }}
-                        borderBottom="1px"
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {row.deleteFlag ? (
+                        <IconButton
+                          onClick={() => {
+                            handleDeleteClick(row);
+                          }}
+                          borderBottom="1px"
+                          color="error"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : (
+                        <StyledTableCell>---</StyledTableCell>
+                      )}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

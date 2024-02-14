@@ -85,6 +85,7 @@ const PaymentReport = (props) => {
     if (value) {
       // Access value.month here
       setSelectedMonth(value);
+
       setLoading(!loading);
     } else {
       console.error("value or value.month is undefined");
@@ -123,7 +124,6 @@ const PaymentReport = (props) => {
   const handleChange = (newValue) => {
     let value = newValue?.label;
     setSelectedYear(value);
-    // getAllPaymentReportDetailsOfMonth(value);
   };
 
   const getAllPaymentReportDetailsOfMonth = async () => {
@@ -132,7 +132,6 @@ const PaymentReport = (props) => {
       selectedMonth,
       selectedYear
     );
-    // console.log(data?.data, "allData");
     if (data) {
       if (data) {
         let getData = data?.data;
@@ -293,7 +292,7 @@ const PaymentReport = (props) => {
             /> */}
           </Grid>
 
-          {/* //spinner-border */}
+          
           <Grid sx={{ mt: 8 }}>
             {loading ? (
               <div className="d-flex align-items-center justify-content-center flex-column">
