@@ -529,7 +529,7 @@ const LesseeInformation = ({
 
                 <SimpleDropDown
                   options={EntityDetails}
-                  label="Select an option"
+                  label="Entity Details"
                   onChange={handleEntityDetails}
                   value={
                     EntityDetails?.find(

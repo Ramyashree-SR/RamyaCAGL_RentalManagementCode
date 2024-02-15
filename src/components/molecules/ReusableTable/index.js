@@ -368,6 +368,7 @@ const ReusableTable = ({
                         </StyledTableCell>
                       ))}
 
+                    {/* {row.deleteFlag ?( */}
                     {currentYearAndMonth && row?.month === currentMonth ? (
                       <StyledTableCell>
                         <IconButton
@@ -383,6 +384,8 @@ const ReusableTable = ({
                     ) : (
                       <StyledTableCell>----</StyledTableCell>
                     )}
+                    {/* ):( <StyledTableCell>----</StyledTableCell>
+                      )} */}
                   </StyledTableRow>
                 ))}
 

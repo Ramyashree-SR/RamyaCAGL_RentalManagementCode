@@ -104,7 +104,7 @@ const columns = [
   {
     id: "viewUploadedAgreement",
     label: "",
-    minWidth: 70,
+    minWidth: 10,
     align: "center",
     icon: null,
     actions: ["viewUploadedAgreement"],

@@ -105,7 +105,7 @@ const ProvisionsDetails = (props) => {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(selectedMonth, "selectedMonth");
+  
   const typeProvision = [
     { id: 1, label: "Make" },
     { id: 2, label: "Reverse" },

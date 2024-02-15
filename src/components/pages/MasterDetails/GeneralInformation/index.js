@@ -202,7 +202,7 @@ const GeneralInformation = ({
       close();
     }
   };
-  // console.log(contractStatus, "contractStatus");
+ 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };

@@ -991,18 +991,6 @@ const MasterDetails = (props) => {
     setRentContractStatus(newValue);
   };
 
-  useEffect(() => {
-    // Set initial values in branchDetails when allNewContractDetails changes
-    setBranchDetails({
-      branchID: allNewContractDetails?.branchID,
-      branchName: allNewContractDetails?.lesseeBranchName,
-      areaName: allNewContractDetails?.lesseeAreaName,
-      region: allNewContractDetails?.lesseeDivision,
-      zone: allNewContractDetails?.lesseeZone,
-      state: allNewContractDetails?.lesseeState,
-    });
-  }, [allNewContractDetails]);
-
   const AddAllNewRentContactInformation = async () => {
     let payload = {
       branchID: allNewContractDetails?.branchID,

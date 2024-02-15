@@ -64,11 +64,13 @@ const RentContractInformation = ({
               sx={{
                 display: "flex",
                 flexDirection: "column",
+                minWidth: "5px",
+                padding: "1px -1px",
               }}
             >
               <GavelIcon size="small" />
             </ColorIcon>
-            <Typography sx={{ fontSize: 9, fontWeight: 800, color: pink[900] }}>
+            <Typography sx={{ fontSize: 8, fontWeight: 800, color: pink[900] }}>
               Contract <br />
               Details
             </Typography>

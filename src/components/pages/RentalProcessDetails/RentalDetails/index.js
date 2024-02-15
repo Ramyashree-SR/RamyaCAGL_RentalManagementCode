@@ -270,7 +270,7 @@ const RentalDetails = (props) => {
     setbranchIDforDue(value.target.outerText);
     setbranchIDData(value.target.outerText);
     getAllContractDetails(value.target.outerText);
-    // setRefreshKey((prevKey) => prevKey + 1);
+    setRefreshKey((prevKey) => prevKey + 1);
     // getAllRentDueDetailsByBranchID(value.target.outerText);
   };
 
@@ -823,7 +823,7 @@ const RentalDetails = (props) => {
           position: "fixed",
         }}
       >
-        {/* {refreshKey && ( */}
+        {refreshKey && (
           <TableComponent
             data={rentContractDetails}
             // data={branchFilter || rentContractDetails}
@@ -867,7 +867,7 @@ const RentalDetails = (props) => {
             setOpenPaymentReportData={setOpenPaymentReportData}
             activationStatusFilterDue={activationStatusFilterDue}
           />
-        {/* )} */}
+        )}
       </Box>
     </Box>
   );

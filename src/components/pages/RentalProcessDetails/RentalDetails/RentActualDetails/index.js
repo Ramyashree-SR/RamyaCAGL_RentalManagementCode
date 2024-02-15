@@ -47,6 +47,7 @@ const RentActualDetails = (props) => {
   const [showClearIcon, setShowClearIcon] = useState("none");
   const [filteredData, setFilteredData] = useState(getActualPaymentReport);
   const [loading, setLoading] = useState(false);
+  const [paymentProcessed, setPaymentProcessed] = useState(false);
 
   const months = [
     { id: 1, label: "January" },
@@ -70,7 +71,9 @@ const RentActualDetails = (props) => {
       setSelectedYear(null);
       setSelectedMonth(null);
       setGetAcualPaymentReport([]);
+      setSearchText("");
       // Fetch new data based on the new month and year
+
       getAllActualPaymentReportDetailsOfMonth();
     }
   }, [refreshKey]);
@@ -199,15 +202,33 @@ const RentActualDetails = (props) => {
   };
 
   // Function to get the details of the selected rows
+  // const getSelectedRowDetails = () => {
+  //   return selectedRows?.map((rowId) =>
+  //     getActualPaymentReport?.find((row) => row?.info?.uniqueID === rowId)
+  //   );
+  // };
+
   const getSelectedRowDetails = () => {
-    return selectedRows?.map((rowId) =>
-      getActualPaymentReport?.find((row) => row?.info?.uniqueID === rowId)
+    return filteredData?.filter((row) =>
+      selectedRows.includes(row?.info?.uniqueID)
     );
   };
 
+  // const getSelectedRowDetails = () => {
+  //   return tableData?.filter((row) =>
+  //     selectedRows.includes(row?.info?.uniqueID)
+  //   );
+  // };
   const handleConfirmSubmit = () => {
     setconfirmSubmit(true);
     AddRentActualFortheMonth();
+    // Clear selectedRows after payment
+    localStorage.removeItem("selectedRows");
+    setSelectedRows([]);
+    // Update the filteredData state to remove the selected rows
+    setFilteredData(
+      filteredData?.filter((row) => !selectedRows?.includes(row.info.uniqueID))
+    );
   };
 
   const AddRentActualFortheMonth = async () => {
@@ -226,6 +247,7 @@ const RentActualDetails = (props) => {
       month: selectedMonth,
       startDate: selectRow?.info?.rentStartDate,
       endDate: selectRow?.info?.rentEndDate,
+      monthRent: selectRow?.monthRent,
     }));
     const { data, errRes } = await AddRentActualDetails(payload);
     if (data) {
@@ -235,7 +257,7 @@ const RentActualDetails = (props) => {
       addToast("Rent Actual Payment Done Successfully", {
         appearance: "success",
       });
-      window.location.reload();
+      // window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
@@ -403,6 +425,9 @@ const RentActualDetails = (props) => {
                       setEditedData={setEditedData}
                       searchText={searchText}
                       filteredData={filteredData}
+                      setRefreshKey={setRefreshKey}
+                      refreshKey={refreshKey}
+                      paymentProcessed={paymentProcessed}
                     />
                   )
                 )}

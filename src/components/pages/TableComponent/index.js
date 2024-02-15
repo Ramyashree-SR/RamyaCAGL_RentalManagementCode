@@ -40,7 +40,8 @@ import RentContractInformation from "../../molecules/RentContractInformation";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.root}`]: {
-    padding: "5px",
+    padding: "4px",
+    paddingX: "4px",
     width: 8,
   },
   [`&.${tableCellClasses.head}`]: {
@@ -89,20 +90,19 @@ const ColorIcon = styled(Button)(({ theme }) => ({
 const useStyles = makeStyles({
   tableHeader: {
     fontWeight: "600 !important",
-    fontSize: "12px !important",
+    fontSize: "11px !important",
     borderBottom: "1px solid #70B3D1 !important",
     borderRight: "1px solid #70B3D1  !!!important",
     // minWidth: "10px",
-    // padding: "4px -1px",
+    padding: "4px -1px",
   },
   tableRow: {
     border: "none !important",
     color: "#373737",
     // color:red[900],
     fontWeight: "500",
-    fontSize: "12px",
+    fontSize: "11px",
     // minWidth: "10px",
-    // padding: "4px -1px",
   },
 });
 
@@ -148,7 +148,7 @@ const TableComponent = ({
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selectedItem, setSelectedItem] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [branchModal, setBranchModal] = useState(false);
@@ -237,12 +237,14 @@ const TableComponent = ({
     }, []);
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer
-        sx={{
-          height: "363px",
-        }}
-      >
+    <Paper
+      sx={{
+        width: "100%",
+        // overflowY: "scroll",
+        // overflowX: "scroll",
+      }}
+    >
+      <TableContainer sx={{ height: "360px" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
@@ -509,7 +511,6 @@ const TableComponent = ({
                             {column?.actions?.includes(
                               "viewUploadedAgreement"
                             ) && (
-                              
                               <RentContractInformation
                                 handleBranch={() => {
                                   handleBranchModalOpen(row);
@@ -541,7 +542,7 @@ const TableComponent = ({
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[10, 15, 100]}
+        rowsPerPageOptions={[5, 10, 15]}
         component="div"
         count={filteredData?.length}
         rowsPerPage={rowsPerPage}
