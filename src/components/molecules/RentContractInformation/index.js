@@ -64,8 +64,6 @@ const RentContractInformation = ({
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                minWidth: "5px",
-                padding: "1px -1px",
               }}
             >
               <GavelIcon size="small" />

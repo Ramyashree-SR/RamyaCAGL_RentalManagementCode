@@ -230,10 +230,19 @@ const ReusableTable = ({
     }
   };
 
-  const handleRowSelection = (id) => {
-    const newSelectedRows = selectedRows?.includes(id)
-      ? selectedRows?.filter((rowId) => rowId !== id)
-      : [...selectedRows, id];
+  // const handleRowSelection = (id) => {
+  //   const newSelectedRows = selectedRows?.includes(id)
+  //     ? selectedRows?.filter((rowId) => rowId !== id)
+  //     : [...selectedRows, id];
+
+  //   setSelectedRows(newSelectedRows);
+  // };
+
+  const handleRowSelection = (index) => {
+    const dataIndex = page * rowsPerPage + index; // Calculate the index in the original data array
+    const newSelectedRows = selectedRows.includes(dataIndex)
+      ? selectedRows.filter((rowId) => rowId !== dataIndex)
+      : [...selectedRows, dataIndex];
 
     setSelectedRows(newSelectedRows);
   };
@@ -242,6 +251,15 @@ const ReusableTable = ({
   const saveSelectedRows = () => {
     const selectedRowData = selectedRows?.map((index) => filteredData[index]);
     onSaveSelectedRows(selectedRowData);
+  };
+
+  const handleRowSelectionAll = () => {
+    const newSelectedRows =
+      selectedRows.length === filteredData.length
+        ? [] // Deselect all if all are currently selected
+        : filteredData.map((_, index) => page * rowsPerPage + index); // Select all filtered rows
+
+    setSelectedRows(newSelectedRows);
   };
 
   return (
@@ -255,7 +273,8 @@ const ReusableTable = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              {withCheckbox || (withCheckbox && monthData === currentMonth) ? (
+              {!withCheckbox ? (
+                //  || (withCheckbox && monthData === currentMonth)
                 <StyledTableCell
                   key="checkbox"
                   classes={{ root: classes.tableHeader }}
@@ -265,8 +284,8 @@ const ReusableTable = ({
                       selectedRows.length > 0 &&
                       selectedRows.length < filteredData.length
                     }
-                    checked={selectedRows.length === filteredData?.length}
-                    onChange={() => handleRowSelection("all")}
+                    checked={selectedRows.length === filteredData.length}
+                    onChange={() => handleRowSelectionAll()}
                   />
                 </StyledTableCell>
               ) : (
@@ -332,14 +351,16 @@ const ReusableTable = ({
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row, index) => (
                   <StyledTableRow key={index}>
-                    {withCheckbox && row?.month === currentMonth ? (
+                    {!row.deleteFlag && !withCheckbox ? (
+                      //  &&
+                      // row?.month === currentMonth
                       <StyledTableCell
                         key={`${index}-checkbox`}
                         classes={{ root: classes.tableHeader }}
                       >
                         <Checkbox
                           checked={selectedRows.indexOf(index) !== -1}
-                          onChange={() => handleRowSelection(index)}
+                          onChange={() => handleRowSelectionAll()}
                         />
                       </StyledTableCell>
                     ) : (
@@ -369,7 +390,9 @@ const ReusableTable = ({
                       ))}
 
                     {/* {row.deleteFlag ?( */}
-                    {currentYearAndMonth && row?.month === currentMonth ? (
+                    {!row.deleteFlag && !currentYearAndMonth ? (
+                      //  &&
+                      // row?.month === currentMonth
                       <StyledTableCell>
                         <IconButton
                           onClick={() => {
@@ -424,7 +447,7 @@ const ReusableTable = ({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {withCheckbox && (
+      {!withCheckbox && (
         <Button
           onClick={() => {
             setOpen(true);

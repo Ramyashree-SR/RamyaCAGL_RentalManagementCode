@@ -262,7 +262,7 @@ const RentActualPaymentTable = ({
                     <StyledTableRow
                       key={row?.info?.uniqueID}
                       style={{
-                        backgroundColor: row.paymentFlag ? blue[100] : red[900], // true=bluecolor =paymentdone  ,false=redcolor=payment not done
+                        backgroundColor: row.paymentFlag ? blue[100] : red[300], // true=bluecolor =paymentdone  ,false=redcolor=payment not done
                       }}
                     >
                       <StyledTableCell>

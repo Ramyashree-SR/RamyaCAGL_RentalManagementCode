@@ -51,7 +51,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontWeight: 650,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: 700,
     backgroundColor: "#FFFFFF", //#CFE8F7, #C5EBF6 ,#D5F7DC
     fontFamily: "sans-serif",
@@ -90,7 +90,7 @@ const ColorIcon = styled(Button)(({ theme }) => ({
 const useStyles = makeStyles({
   tableHeader: {
     fontWeight: "600 !important",
-    fontSize: "11px !important",
+    fontSize: "12px !important",
     borderBottom: "1px solid #70B3D1 !important",
     borderRight: "1px solid #70B3D1  !!!important",
     // minWidth: "10px",
@@ -101,7 +101,7 @@ const useStyles = makeStyles({
     color: "#373737",
     // color:red[900],
     fontWeight: "500",
-    fontSize: "11px",
+    fontSize: "12px",
     // minWidth: "10px",
   },
 });
@@ -509,7 +509,7 @@ const TableComponent = ({
                             /> */}
 
                             {column?.actions?.includes(
-                              "viewUploadedAgreement"
+                              "viewContractDetails"
                             ) && (
                               <RentContractInformation
                                 handleBranch={() => {

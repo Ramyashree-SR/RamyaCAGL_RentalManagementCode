@@ -102,12 +102,12 @@ const columns = [
   //   actions: ["viewAgreement"],
   // },
   {
-    id: "viewUploadedAgreement",
+    id: "viewContractDetails",
     label: "",
     minWidth: 10,
     align: "center",
     icon: null,
-    actions: ["viewUploadedAgreement"],
+    actions: ["viewContractDetails"],
   },
 ];
 export { columns };

@@ -156,7 +156,7 @@ export default function MenuComponent({
           appearance: "success",
         });
       }
-      setRefreshKey((prevKey) => prevKey + 1);
+      // setRefreshKey((prevKey) => prevKey + 1);
     } else if (!data?.error) {
       if (typeProvisionsData === "Make") {
         // addToast(errRes?.msg, { appearance: "error" });
@@ -178,7 +178,7 @@ export default function MenuComponent({
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Rent Contract Details">
+        <Tooltip title="Contract Info">
           <IconButton
             onClick={handleClick}
             size="small"

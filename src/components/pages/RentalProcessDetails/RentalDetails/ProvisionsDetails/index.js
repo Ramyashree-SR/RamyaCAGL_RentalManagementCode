@@ -10,7 +10,15 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import { blue, green, pink, purple, red } from "@mui/material/colors";
+import {
+  blue,
+  deepOrange,
+  green,
+  pink,
+  purple,
+  red,
+  yellow,
+} from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import ShowProvisionDetails from "../ShowProvisionDetails";
 import { getProvisionDetailsOfTheBranch } from "../../../../services/ProvisionsApi";
@@ -105,7 +113,7 @@ const ProvisionsDetails = (props) => {
       [e.target.name]: e.target.value,
     });
   };
-  
+
   const typeProvision = [
     { id: 1, label: "Make" },
     { id: 2, label: "Reverse" },
@@ -138,6 +146,15 @@ const ProvisionsDetails = (props) => {
     label: `${currentYear}`,
   }));
 
+  // Generate an array of months, including the current month
+  const monthOptions = Array.from({ length: 3 }, (_, index) => {
+    const date = new Date();
+    date.setMonth(index);
+    return {
+      value: index + 1, // Months are zero-indexed, so add 1
+      label: date.toLocaleString("default", { month: "long" }),
+    };
+  });
   const getProvisionListOftheBranch = async () => {
     try {
       const { data } = await getProvisionDetailsOfTheBranch(uniqueID);
@@ -154,6 +171,7 @@ const ProvisionsDetails = (props) => {
       console.error("Error fetching provision details:", error);
     }
   };
+
 
   return (
     <>
@@ -258,6 +276,21 @@ const ProvisionsDetails = (props) => {
               </Col>
               <hr />
               <Col xs={12}>
+                <Grid className="d-flex flex-row" sx={{ flexBasis: "35%" }}>
+                  <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                    Month Rent :&nbsp;&nbsp;
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: yellow[900],
+                    }}
+                  >
+                    ₹{monthlyRent}
+                  </Typography>
+                </Grid>
+                <br />
                 <Grid className="d-flex align-items-between justify-content-between">
                   <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                     Provision for the month :
@@ -325,7 +358,7 @@ const ProvisionsDetails = (props) => {
                       placeholder="Select "
                       sx={{ width: 200 }}
                       size="small"
-                      options={months}
+                      options={monthOptions}
                       name="month"
                       value={addProvisions?.month || null}
                       onChange={(val) => {
@@ -342,7 +375,7 @@ const ProvisionsDetails = (props) => {
                       placeholder="Provision Amount"
                       sx={{ width: 200, mt: -4.2, ml: 3 }}
                       name="provisionAmount"
-                      value={monthlyRent || addProvisions?.provisionAmount}
+                      value={addProvisions?.provisionAmount}
                       onChange={(e) => updateChange(e)}
                       required={true}
                     />
@@ -352,10 +385,10 @@ const ProvisionsDetails = (props) => {
                 typeProvisionsData === "Reverse" ? (
                   <Grid className="d-flex flex-row ">
                     <InputBoxComponent
-                      textLabel="&nbsp;&nbsp;&nbsp;Remarks :"
+                      label="&nbsp;&nbsp;&nbsp;Remarks :"
                       placeholder="Type here..."
-                      sx={{ width: 400, ml: 2 }}
-                      rows={3}
+                      sx={{ width: 400, ml: 2, mt: -3 }}
+                      rows={2}
                       name="remark"
                       value={addProvisions?.remark}
                       multiline
@@ -386,10 +419,10 @@ const ProvisionsDetails = (props) => {
                       <Button
                         onClick={() => {
                           AddProvisionFortheMonth();
-                          handleClick({
-                            vertical: "bottom",
-                            horizontal: "center",
-                          });
+                          // handleClick({
+                          //   vertical: "bottom",
+                          //   horizontal: "center",
+                          // });
                         }}
                         variant="contained"
                         sx={{
@@ -402,13 +435,13 @@ const ProvisionsDetails = (props) => {
                       >
                         {selectedMonth === `${currentMonth}`
                           ? "Reverse Provision(same Month)"
-                          : "Reverse Provision(previous month)"}
+                          : "Reverse Provision"}
                       </Button>
                     </Grid>
                   ) : null}
                 </Grid>
               </Col>
-              {/* 
+
               <Snackbar
                 open={open}
                 anchorOrigin={{ vertical, horizontal }}
@@ -416,19 +449,19 @@ const ProvisionsDetails = (props) => {
                 onClose={handleClose}
                 action={action}
                 key={vertical + horizontal}
-                variant="success"
+                variant="error"
               >
                 <Alert
                   onClose={handleClose}
-                  severity="success"
+                  severity="error"
                   variant="filled"
                   sx={{ width: "30%" }}
                 >
-                  {typeProvisionsData === "Make"
-                    ? "Provision Made Successfully"
-                    : "Provision Reversed Successfully"}
+                  {currentYear && selectedMonth === `${currentMonth}`
+                    ? "Note:Please do the payment for the previous month"
+                    : "Provision Done"}
                 </Alert>
-              </Snackbar> */}
+              </Snackbar>
             </Row>
           </Container>
         </Modal.Body>
