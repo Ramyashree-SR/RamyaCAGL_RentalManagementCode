@@ -113,9 +113,7 @@ const ReusableTable = ({
   setOpen,
   monthData,
   refreshKey,
-  setRemoveRowData,
-  setInputValue,
-  setSelectedYear,
+  yearData,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -247,19 +245,24 @@ const ReusableTable = ({
     setSelectedRows(newSelectedRows);
   };
 
-  // New function to save selected rows
-  const saveSelectedRows = () => {
-    const selectedRowData = selectedRows?.map((index) => filteredData[index]);
-    onSaveSelectedRows(selectedRowData);
-  };
-
   const handleRowSelectionAll = () => {
+    const filteredIndices = filteredData.map(
+      (_, index) => page * rowsPerPage + index
+    );
+    // console.log(filteredIndices, "filteredIndices");
     const newSelectedRows =
       selectedRows.length === filteredData.length
         ? [] // Deselect all if all are currently selected
-        : filteredData.map((_, index) => page * rowsPerPage + index); // Select all filtered rows
+        : filteredIndices.filter((index) => !selectedRows.includes(index)); // Select all filtered rows except the ones already selected
 
     setSelectedRows(newSelectedRows);
+  };
+
+  const saveSelectedRows = () => {
+    const selectedRowData = selectedRows
+      .map((index) => filteredData[index - page * rowsPerPage])
+      .filter(Boolean);
+    onSaveSelectedRows(selectedRowData);
   };
 
   return (
@@ -273,7 +276,7 @@ const ReusableTable = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              {!withCheckbox ? (
+              {withCheckbox && currentYearAndMonth ? (
                 //  || (withCheckbox && monthData === currentMonth)
                 <StyledTableCell
                   key="checkbox"
@@ -285,7 +288,7 @@ const ReusableTable = ({
                       selectedRows.length < filteredData.length
                     }
                     checked={selectedRows.length === filteredData.length}
-                    onChange={() => handleRowSelectionAll()}
+                    onChange={handleRowSelectionAll}
                   />
                 </StyledTableCell>
               ) : (
@@ -351,7 +354,9 @@ const ReusableTable = ({
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row, index) => (
                   <StyledTableRow key={index}>
-                    {!row.deleteFlag && !withCheckbox ? (
+                    {row.deleteFlag ? (
+                      // && withCheckbox && currentYearAndMonth
+                      // && !withCheckbox
                       //  &&
                       // row?.month === currentMonth
                       <StyledTableCell
@@ -359,8 +364,8 @@ const ReusableTable = ({
                         classes={{ root: classes.tableHeader }}
                       >
                         <Checkbox
-                          checked={selectedRows.indexOf(index) !== -1}
-                          onChange={() => handleRowSelectionAll()}
+                          checked={selectedRows.includes(index)}
+                          onChange={() => handleRowSelection(index)}
                         />
                       </StyledTableCell>
                     ) : (
@@ -389,10 +394,8 @@ const ReusableTable = ({
                         </StyledTableCell>
                       ))}
 
-                    {/* {row.deleteFlag ?( */}
-                    {!row.deleteFlag && !currentYearAndMonth ? (
-                      //  &&
-                      // row?.month === currentMonth
+                    {row.deleteFlag ? (
+                      // && currentYearAndMonth
                       <StyledTableCell>
                         <IconButton
                           onClick={() => {
@@ -447,18 +450,19 @@ const ReusableTable = ({
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {!withCheckbox && (
-        <Button
-          onClick={() => {
-            setOpen(true);
-            saveSelectedRows();
-          }}
-          variant="contained"
-          sx={{ backgroundColor: blue[900] }}
-        >
-          Delete Details
-        </Button>
-      )}
+      {/* {withCheckbox && currentYearAndMonth && ( */}
+      <Button
+        onClick={() => {
+          setOpen(true);
+          // saveSelectedRows();
+        }}
+        variant="contained"
+        sx={{ backgroundColor: blue[900] }}
+      >
+        Delete Details
+      </Button>
+      {/* )} */}
+
       <Dialog
         open={open}
         onClose={handleClose}

@@ -73,6 +73,7 @@ const Provisions = (props) => {
       //     // Clear existing data
       setInputValue("");
       setSelectedYear(null);
+      setSearchText("");
       setRemoveRowData([]);
     }
   }, [refreshKey]);
@@ -136,11 +137,13 @@ const Provisions = (props) => {
 
   const deleteSelectedProvisionDetailsFromTable = async (selectedRowsData) => {
     if (confirmDelete) {
-      const payload = selectedRowsData?.map((row) => ({
-        contractID: row?.contractID,
-        year: row?.year,
-        month: row?.month,
-      }));
+      const payload = selectedRowsData
+        ?.filter((row) => row.month === currentMonth)
+        ?.map((row) => ({
+          contractID: row?.contractID,
+          year: row?.year,
+          month: row?.month,
+        }));
 
       try {
         // Make API call to delete selected provisions

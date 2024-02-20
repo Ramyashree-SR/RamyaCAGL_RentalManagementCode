@@ -46,7 +46,7 @@ const ProvisionsDetails = (props) => {
   });
   const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
-
+  
   const { vertical, horizontal, open } = state;
   const [selectedMonth, setSelectedMonth] = useState(null);
 
