@@ -32,22 +32,23 @@ const CustomModal = (props) => {
                 <InputBoxComponent
                   label="Agreement Sign Date"
                   placeholder=" Agreement Sign Dtae"
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.agreementSignDate}
                   readOnly
                 />
-                <InputBoxComponent
-                  label="Tenure Period"
-                  placeholder=" Tenure Period"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.agreementTenure}
-                  readOnly
-                />
+
                 <InputBoxComponent
                   label="Agreement Start Date"
                   placeholder="Agreement Start Date"
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.agreementStartDate}
+                  readOnly
+                />
+                <InputBoxComponent
+                  label="Agreement End Date"
+                  placeholder="Agreement End Date"
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
+                  value={props.selectedItem?.agreementEndDate}
                   readOnly
                 />
               </Grid>
@@ -55,24 +56,24 @@ const CustomModal = (props) => {
             <Col xs={12}>
               <Grid className="d-flex m-2">
                 <InputBoxComponent
-                  label="Agreement End Date"
-                  placeholder="Agreement End Date"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.agreementEndDate}
-                  readOnly
-                />
-                <InputBoxComponent
                   label="Rent Start Date"
                   placeholder=" Rent Start Date "
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.rentStartDate}
                   readOnly
                 />
                 <InputBoxComponent
                   label="Rent End Date"
                   placeholder=" Rent End Date "
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.rentEndDate}
+                  readOnly
+                />
+                <InputBoxComponent
+                  label="Tenure Period"
+                  placeholder=" Tenure Period"
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
+                  value={props.selectedItem?.agreementTenure}
                   readOnly
                 />
               </Grid>
@@ -82,14 +83,14 @@ const CustomModal = (props) => {
                 <InputBoxComponent
                   label="Security Deposit"
                   placeholder="Security Deposit"
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.securityDepositAmount}
                   readOnly
                 />
                 <InputBoxComponent
                   label="Monthly Rent"
                   placeholder=" Monthly Rent"
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.lessorRentAmount}
                   readOnly
                 />
@@ -103,7 +104,7 @@ const CustomModal = (props) => {
                 <InputBoxComponent
                   label="Standard Deduction"
                   placeholder=" Standard Deduction"
-                  sx={{ width: 200 }}
+                  sx={{ width: 200 ,background: "#C5EBF6", borderRadius: "5px" }}
                   value={props.selectedItem?.standardDeducition}
                   readOnly
                 />
@@ -112,53 +113,18 @@ const CustomModal = (props) => {
 
             <Col xs={12}>
               <Grid className="d-flex m-2">
-                {/* <InputBoxComponent
-                  label="Last Month Value"
-                  placeholder="Last Month Value"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.lastMonthvalue}
-                  readOnly
-                /> */}
-                {/* <InputBoxComponent
-                  label="Standard Deduction"
-                  placeholder=" Standard Deduction"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.standardDeducition}
-                  readOnly
-                /> */}
+                
                 <InputBoxComponent
                   label="TDS (%)"
                   placeholder=" TDS %"
-                  sx={{ width: 200 }}
+                  sx={{ width: 200,background: "#C5EBF6", borderRadius: "5px"  }}
                   value={props.selectedItem?.tds}
                   readOnly
                 />
               </Grid>
             </Col>
             <Col xs={12}>
-              <Grid className="d-flex m-2">
-                {/* <InputBoxComponent
-                  label="First Rent Date."
-                  placeholder=" First Rent Date"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.rentStartDate}
-                  readOnly
-                />
-                <InputBoxComponent
-                  label="Last Rent Date"
-                  placeholder="Last Rent Date"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.rentStartDate}
-                  readOnly
-                />
-                <InputBoxComponent
-                  label="Renewal (%)"
-                  placeholder="Renewal (%)"
-                  sx={{ width: 200 }}
-                  value={props.selectedItem?.escalation}
-                  readOnly
-                /> */}
-              </Grid>
+              
             </Col>
           </Row>
         </Container>

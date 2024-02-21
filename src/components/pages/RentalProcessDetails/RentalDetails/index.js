@@ -147,19 +147,10 @@ const RentalDetails = (props) => {
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
       // Clear existing data
-      setRentContractDetails([]);
-      // setBranchFilter([]);
       setFilterBranch([]);
-      // setBranchNameFilter([]);
       setFilterBranchName([]);
-      // setStateFilter([]);
       setFilterState([]);
       setFilterDistrict([]);
-      // setDistrictFilter([]);
-      // Fetch new data based on the new month and year
-      // getAllContractDetailsByBranchName();
-      // getAllRentContractDetailsByBranchID();
-      // getAllContractDetails();
     }
   }, [refreshKey]);
 
@@ -479,6 +470,7 @@ const RentalDetails = (props) => {
                     },
                     display: "flex",
                     flexDirection: "column",
+
                     // mr: 9,
                   }),
                 ]}
@@ -540,6 +532,61 @@ const RentalDetails = (props) => {
                 uniqueIDs={uniqueIDs}
               />
             </Box>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setOpenRentDueDataModal(true);
+                  // getAllRentDueDetailsByBranchID();
+                }}
+              >
+                Branch Rent Due
+              </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  handlePaymentModal();
+                  handleClose();
+                }}
+              >
+                Payment Report
+              </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setOpenRentActualModal(true);
+                }}
+              >
+                Rent Actual
+              </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  setOpenProvisionsModal(true);
+                  handleClose();
+                }}
+              >
+                Provisions
+              </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setOpenVarianceModal(true);
+                }}
+              >
+                Variance
+              </MenuItem>
+            </Menu>
           </Box>
         </Box>
       </Box>
@@ -755,62 +802,7 @@ const RentalDetails = (props) => {
           />
         </Grid>
       </Box>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-        sx={{ background: "" }}
-      >
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            setOpenRentDueDataModal(true);
-            // getAllRentDueDetailsByBranchID();
-          }}
-        >
-          Branch Rent Due
-        </MenuItem>
 
-        <MenuItem
-          onClick={() => {
-            handlePaymentModal();
-            handleClose();
-          }}
-        >
-          Payment Report
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            setOpenRentActualModal(true);
-          }}
-        >
-          Rent Actual
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            setOpenProvisionsModal(true);
-            handleClose();
-          }}
-        >
-          Provisions
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            setOpenVarianceModal(true);
-          }}
-        >
-          Variance
-        </MenuItem>
-      </Menu>
       <Box
         sm={12}
         xs={12}

@@ -16,12 +16,12 @@ const Variance = (props) => {
 
   const handleVarianceIDChange = (e) => {
     setRentContractID(e.target.value);
-    getVarianceReport();
+    // getVarianceReport();
   };
 
-  // useEffect(() => {
-  //   getVarianceReport();
-  // }, [RentContractID]);
+  useEffect(() => {
+    getVarianceReport();
+  }, [RentContractID]);
 
   const getVarianceReport = async () => {
     const { data } = await getVarianceDetails(RentContractID);
@@ -45,7 +45,17 @@ const Variance = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="80px"
+            height="40px"
+            margnTop="-2px"
+          />
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
+          >
             Variance Calculation
           </Modal.Title>
         </Modal.Header>

@@ -38,6 +38,7 @@ const ProvisionsDetails = (props) => {
     setTypeProvisionsData,
     setRefreshKey,
     monthlyRent,
+    refreshKey,
   } = props;
   const [state, setState] = useState({
     open: false,
@@ -46,7 +47,7 @@ const ProvisionsDetails = (props) => {
   });
   const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
-  
+  const [selectedYear, setSelectedYear] = useState(null);
   const { vertical, horizontal, open } = state;
   const [selectedMonth, setSelectedMonth] = useState(null);
 
@@ -57,6 +58,7 @@ const ProvisionsDetails = (props) => {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
+
   const action = (
     <React.Fragment>
       <IconButton
@@ -69,7 +71,17 @@ const ProvisionsDetails = (props) => {
       </IconButton>
     </React.Fragment>
   );
-  const [selectedYear, setSelectedYear] = useState(null);
+
+  useEffect(() => {
+    // This useEffect will run whenever refreshKey changes
+    if (refreshKey !== 0) {
+      // Clear existing data
+      setSelectedYear(null);
+      handleClose();
+      setSelectedMonth();
+      setGetProvisionDetails([]);
+    }
+  }, [refreshKey]);
 
   const handleChange = (name, newValue) => {
     setAddProvisions({
@@ -147,7 +159,7 @@ const ProvisionsDetails = (props) => {
   }));
 
   // Generate an array of months, including the current month
-  const monthOptions = Array.from({ length: 3 }, (_, index) => {
+  const monthOptions = Array.from({ length: 12 }, (_, index) => {
     const date = new Date();
     date.setMonth(index);
     return {
@@ -155,6 +167,7 @@ const ProvisionsDetails = (props) => {
       label: date.toLocaleString("default", { month: "long" }),
     };
   });
+
   const getProvisionListOftheBranch = async () => {
     try {
       const { data } = await getProvisionDetailsOfTheBranch(uniqueID);
@@ -171,7 +184,6 @@ const ProvisionsDetails = (props) => {
       console.error("Error fetching provision details:", error);
     }
   };
-
 
   return (
     <>

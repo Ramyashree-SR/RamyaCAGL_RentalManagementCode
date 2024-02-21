@@ -97,6 +97,7 @@ export default function MenuComponent({
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
       // Clear existing data
+      setTypeProvisionsData(null)
       setAddProvisions([]);
       setRentDueDetails([]);
       handleClose();
@@ -317,6 +318,7 @@ export default function MenuComponent({
           setTypeProvisionsData={setTypeProvisionsData}
           typeProvisionsData={typeProvisionsData}
           setRefreshKey={setRefreshKey}
+          refreshKey={refreshKey}
         />
       )}
 

@@ -19,6 +19,8 @@ import {
   DialogActions,
   Snackbar,
   Alert,
+  Grid,
+  Tooltip,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { blue, deepOrange, green, pink } from "@mui/material/colors";
@@ -119,6 +121,7 @@ const ReusableTable = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [monthlyTotal, setMonthlyTotal] = useState({});
+
   const [state, setState] = useState({
     opened: false,
     vertical: "bottom",
@@ -267,17 +270,51 @@ const ReusableTable = ({
 
   return (
     <>
+      <Grid className="d-flex align-items-end justify-content-end w-100 py-1">
+        {withCheckbox ? (
+          // <Button
+          //   onClick={() => {
+          //     setOpen(true);
+          //     // saveSelectedRows();
+          //   }}
+          //   variant="contained"
+          //   sx={{ backgroundColor: blue[900] }}
+          // >
+          //   Delete Details
+          // </Button>
+          <Tooltip>
+            <IconButton
+              onClick={() => {
+                setOpen(true);
+              }}
+              borderBottom="1px"
+              color="primary"
+              size="lg"
+              sx={{ mt: -5, mb: -3 }}
+              className="d-flex flex-column"
+            >
+              <DeleteIcon />
+              <Typography sx={{ fontSize: 12, fontWeight: 700 }}>
+                Bulk Delete
+              </Typography>
+            </IconButton>
+          </Tooltip>
+        ) : null}
+      </Grid>
       <TableContainer
         component={Paper}
         sx={{
           ...sx,
+          mt: 3,
+          width: "100%",
         }}
       >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <StyledTableRow>
-              {withCheckbox && currentYearAndMonth ? (
-                //  || (withCheckbox && monthData === currentMonth)
+              {/* {!withCheckbox && currentYearAndMonth ? ( 
+                 || (withCheckbox && monthData === currentMonth) */}
+              {withCheckbox ? (
                 <StyledTableCell
                   key="checkbox"
                   classes={{ root: classes.tableHeader }}
@@ -451,17 +488,18 @@ const ReusableTable = ({
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
       {/* {withCheckbox && currentYearAndMonth && ( */}
-      <Button
-        onClick={() => {
-          setOpen(true);
-          // saveSelectedRows();
-        }}
-        variant="contained"
-        sx={{ backgroundColor: blue[900] }}
-      >
-        Delete Details
-      </Button>
-      {/* )} */}
+      {/* {withCheckbox ? (
+        <Button
+          onClick={() => {
+            setOpen(true);
+            // saveSelectedRows();
+          }}
+          variant="contained"
+          sx={{ backgroundColor: blue[900] }}
+        >
+          Delete Details
+        </Button>
+      ) : null} */}
 
       <Dialog
         open={open}

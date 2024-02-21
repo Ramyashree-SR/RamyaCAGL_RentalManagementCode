@@ -29,11 +29,11 @@ const ViewDetailsModal = (props) => {
         {/* {Array.from({ length: recipientCount }, (_, index) =>( */}
 
         {/* {props?.selectedItem?.recipiants?.map((recipient, index) => (key={index} */}
-        <Grid className="d-flex flex-column m-2" >   
+        <Grid className="d-flex flex-column m-2">
           <InputBoxComponent
             label="Bank Name"
             placeholder=" Bank Name"
-            sx={{ width: 400 }}
+            sx={{ width: 400, background: "#C5EBF6", borderRadius: "5px" }}
             value={props?.selectedItem?.lessorBankName}
             readonly={true}
           />
@@ -41,7 +41,7 @@ const ViewDetailsModal = (props) => {
           <InputBoxComponent
             label="Branch Name"
             placeholder=" Branch Name"
-            sx={{ width: 400 }}
+            sx={{ width: 400 ,background: "#C5EBF6", borderRadius: "5px" }}
             value={props?.selectedItem?.lessorBranchName}
             readonly
             // onChange={(e) => updatChange(e)}
@@ -50,7 +50,7 @@ const ViewDetailsModal = (props) => {
           <InputBoxComponent
             label="Account Number"
             placeholder=" Account Number"
-            sx={{ width: 400 }}
+            sx={{ width: 400 ,background: "#C5EBF6", borderRadius: "5px" }}
             value={props?.selectedItem?.lessorAccountNumber}
             readonly
             // onChange={(e) => updatChange(e)}
@@ -58,7 +58,7 @@ const ViewDetailsModal = (props) => {
           <InputBoxComponent
             label="IFSC Code"
             placeholder=" IFSC Code"
-            sx={{ width: 400 }}
+            sx={{ width: 400,background: "#C5EBF6", borderRadius: "5px"  }}
             value={props?.selectedItem?.lessorIfscNumber}
             readonly={true}
             // onChange={(e) => updatChange(e)}

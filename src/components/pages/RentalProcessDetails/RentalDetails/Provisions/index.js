@@ -315,7 +315,7 @@ const Provisions = (props) => {
             sx={{
               // position: "fixed",
               width: "100%",
-              mt: -2.3,
+              mt: 2,
             }}
           >
             {loading ? (
