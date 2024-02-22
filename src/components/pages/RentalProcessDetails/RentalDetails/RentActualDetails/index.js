@@ -72,6 +72,8 @@ const RentActualDetails = (props) => {
       setSelectedMonth(null);
       setGetAcualPaymentReport([]);
       setSearchText("");
+      setSelectedRows([]);
+
       // Fetch new data based on the new month and year
 
       getAllActualPaymentReportDetailsOfMonth();
@@ -250,13 +252,18 @@ const RentActualDetails = (props) => {
       monthRent: selectRow?.monthRent,
     }));
     const { data, errRes } = await AddRentActualDetails(payload);
-    if (data) {
+    if (data.error === "false") {
       let getData = data?.data;
       setAddRentActual(getData);
       props.close();
       addToast("Rent Actual Payment Done Successfully", {
         appearance: "success",
       });
+      // alert(<pre>{JSON.stringify(data?.data, null, 4)}</pre>, {
+      //   appearance: "success",
+      //   autoClose: 9000,
+      // });
+
       // window.location.reload();
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });

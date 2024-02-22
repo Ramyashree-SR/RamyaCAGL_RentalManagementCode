@@ -125,7 +125,6 @@ const TableComponent = ({
   setOpenProvisionsListModal,
   setOpenRentDueModal,
   openRentDueModal,
-  // branchIDforDue,
   branchIDData,
   uniqueID,
   rentContractDetails,
@@ -165,12 +164,10 @@ const TableComponent = ({
   };
 
   const handleEditRow = (event, rowData) => {
-    // console.log(rowData, "rowData");
     setModalType("edit");
     setOpenLessorModal(true);
     setOpenEditLessorModal(true);
     setEditLessorData(rowData);
-    // setEditLessorRenewData(rowData);
   };
 
   const handleModalOpen = (rowData) => {
@@ -198,13 +195,7 @@ const TableComponent = ({
   };
 
   const changeProvisions = () => {
-    // if (
-    //   (activationStatusFilter === "All" && "agreementActivationStatus" === "open") ||
-    //   activationStatusFilter === "Open"
-    // ) {
     setOpenProvisionsListModal(true);
-
-    // }
   };
 
   const handleRentDueDetails = () => {

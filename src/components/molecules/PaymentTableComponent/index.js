@@ -204,7 +204,7 @@ const PaymentTableComponent = ({
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
                           style={{
-                            backgroundColor: row.paymentFlag ? "" : red[900],
+                            backgroundColor: row.paymentFlag ? "" : red[300],
                           }}
                         >
                           {(row[column.id] !== undefined &&

@@ -5,17 +5,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
+import {
+  getDownloadPaymentReportDetails,
+  getRentPaymentReportDetails,
+} from "../../../../services/PaymentReportApi";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
-import { deepOrange, orange, red } from "@mui/material/colors";
+import { deepOrange, green, orange, red } from "@mui/material/colors";
 import PaymentTableComponent from "./../../../../molecules/PaymentTableComponent/index";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExcelExport from "../../../../../ExcelExport";
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 
 const PaymentReport = (props) => {
   const { refreshKey, setRefreshKey } = props;
@@ -26,6 +30,9 @@ const PaymentReport = (props) => {
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(getPaymentReport);
   const [loading, setLoading] = useState(false);
+  const [getBulkPaymentReportDetails, setGetBulkPaymentReportDetails] =
+    useState([]);
+  console.log(getBulkPaymentReportDetails, "getBulkPaymentReportDetails");
 
   const months = [
     { id: 1, label: "January" },
@@ -56,6 +63,10 @@ const PaymentReport = (props) => {
 
   useEffect(() => {
     getAllPaymentReportDetailsOfMonth();
+  }, [selectedMonth]);
+
+  useEffect(() => {
+    getAllPaymentReportDownloadDetails();
   }, [selectedMonth]);
 
   useEffect(() => {
@@ -142,6 +153,22 @@ const PaymentReport = (props) => {
       }
     }
   };
+  const getAllPaymentReportDownloadDetails = async () => {
+    const { data } = await getDownloadPaymentReportDetails(
+      selectedMonth,
+      selectedYear
+    );
+    console.log(data, "getData");
+    if (data) {
+      if (data) {
+        let getData = data;
+        setGetBulkPaymentReportDetails(getData);
+        setLoading(false);
+      } else {
+        setGetBulkPaymentReportDetails([]);
+      }
+    }
+  };
 
   const getPaymentReportData = Object.values(filteredData)?.map((item) => ({
     ID: item.info?.uniqueID,
@@ -167,6 +194,63 @@ const PaymentReport = (props) => {
     net: item.net,
     gst: item.gst,
   }));
+
+  const getPaymentReportDownload = Object.values([
+    getBulkPaymentReportDetails,
+  ])?.map((item) => ({
+    ID: item.info?.uniqueID,
+    MonthYear: item.monthYear,
+    LessorName: item.info?.lessorName,
+    BranchID: item.info?.branchID,
+    BranchName: item.info?.lesseeBranchName,
+    AreaName: item.info?.lesseeAreaName,
+    Division: item.lesseeDivision,
+    Zone: item.info?.lesseeZone,
+    State: item.info?.lesseeState,
+    BankName: item.info?.lessorBankName,
+    IFSCNumber: item.info?.lessorIfscNumber,
+    AccountNumber: item.info?.lessorAccountNumber,
+    MonthlyRent: item.info?.lessorRentAmount,
+    RentStartDate: item.info?.rentStartDate,
+    RentEndDate: item.info?.rentEndDate,
+    EscMonthlyRent: item.monthRent,
+    Due: item.due,
+    Provision: item.provision,
+    Gross: item.gross,
+    Tds: item.reporttds,
+    net: item.net,
+    gst: item.gst,
+  }));
+
+  const handlePaymentReportExcel = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:9888/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const blobImage = await response.blob();
+
+      const href = URL.createObjectURL(blobImage);
+
+      const anchorElement = document.createElement("a");
+      anchorElement.href = href;
+      anchorElement.download = `payment_report.xlsx`;
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+      // setError("");
+    } catch (error) {
+      console.error("Fetch error:", error);
+      // setError("Failed to fetch data. Please try again later.");
+    }
+  };
 
   return (
     <>
@@ -270,13 +354,13 @@ const PaymentReport = (props) => {
                 }}
               />
             </Grid>
-
             <Grid
               item
-              className="d-flex align-items-end justify-content-end"
+              className="d-flex align-items-end justify-content-end "
               sx={{
                 width: 120,
                 height: 40,
+                ml: 2,
                 flexBasis: "50%",
               }}
             >
@@ -286,13 +370,36 @@ const PaymentReport = (props) => {
                 sx={{ color: "#ffffff", backgroundColor: deepOrange[900] }}
               />
             </Grid>
-            {/* <ExportToCSV
-              excelData={getPaymentReportData}
-              fileName={"Payment Report"}
-            /> */}
+
+            <Grid
+              item
+              className="d-flex align-items-end justify-content-end"
+              sx={{
+                flexDirection: "column",
+                ml: 15,
+              }}
+            >
+              <Button
+                variant="contained"
+                name="Download"
+                onClick={() => handlePaymentReportExcel()}
+                sx={{
+                  width: 200,
+
+                  background: green[900],
+                  color: "#FFFFFF",
+                }}
+              >
+                <DownloadRoundedIcon sx={{ color: "#FFFFFF" }} />
+                Payment Report Excel
+              </Button>
+              {/* <ExportToCSV
+                excelData={[getBulkPaymentReportDetails]}
+                fileName={"Bulk Payment Repot"}
+              /> */}
+            </Grid>
           </Grid>
 
-          
           <Grid sx={{ mt: 8 }}>
             {loading ? (
               <div className="d-flex align-items-center justify-content-center flex-column">
