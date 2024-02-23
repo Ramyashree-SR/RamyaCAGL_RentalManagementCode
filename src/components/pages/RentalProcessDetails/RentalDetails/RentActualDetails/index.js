@@ -120,9 +120,9 @@ const RentActualDetails = (props) => {
   }
   const currentYear = endDateObject?.getFullYear();
 
-  const yearOptions = Array.from({ length: 1 }, (_, index) => ({
-    id: currentYear, // currentYear - index,
-    label: `${currentYear}`,
+  const yearOptions = Array.from({ length: 2 }, (_, index) => ({
+    id: currentYear - index, // currentYear - index,
+    label: `${currentYear - index}`,
   }));
 
   const handleChange = (newValue) => {
@@ -224,13 +224,14 @@ const RentActualDetails = (props) => {
   const handleConfirmSubmit = () => {
     setconfirmSubmit(true);
     AddRentActualFortheMonth();
-    // Clear selectedRows after payment
-    localStorage.removeItem("selectedRows");
-    setSelectedRows([]);
-    // Update the filteredData state to remove the selected rows
-    setFilteredData(
-      filteredData?.filter((row) => !selectedRows?.includes(row.info.uniqueID))
-    );
+    setOpen(false);
+    // // Clear selectedRows after payment
+    // localStorage.removeItem("selectedRows");
+    // setSelectedRows([]);
+    // // Update the filteredData state to remove the selected rows
+    // setFilteredData(
+    //   filteredData?.filter((row) => !selectedRows?.includes(row.info.uniqueID))
+    // );
   };
 
   const AddRentActualFortheMonth = async () => {
@@ -252,19 +253,14 @@ const RentActualDetails = (props) => {
       monthRent: selectRow?.monthRent,
     }));
     const { data, errRes } = await AddRentActualDetails(payload);
-    if (data.error === "false") {
+    if (data?.error === "false") {
       let getData = data?.data;
       setAddRentActual(getData);
       props.close();
       addToast("Rent Actual Payment Done Successfully", {
         appearance: "success",
       });
-      // alert(<pre>{JSON.stringify(data?.data, null, 4)}</pre>, {
-      //   appearance: "success",
-      //   autoClose: 9000,
-      // });
-
-      // window.location.reload();
+      // alert(JSON.stringify(data?.data, null, 4))
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();

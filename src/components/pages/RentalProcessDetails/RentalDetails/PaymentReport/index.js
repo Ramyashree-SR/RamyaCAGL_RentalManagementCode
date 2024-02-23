@@ -226,6 +226,7 @@ const PaymentReport = (props) => {
     try {
       const response = await fetch(
         `http://localhost:9888/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
+        // `https://caglcampaignleads.grameenkoota.in/RentManagement/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
       );
 
       if (!response.ok) {

@@ -83,8 +83,6 @@ const RentActualPaymentTable = ({
   searchText,
   filteredData,
   refreshKey,
-  setRefreshKey,
-  paymentProcessed,
 }) => {
   // Track the edited data for saving
   const [page, setPage] = useState(0);
@@ -104,6 +102,7 @@ const RentActualPaymentTable = ({
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
       // Clear existing data
+      setSelectedRows([]);
       handleEdit();
     }
   }, [refreshKey]);
@@ -199,7 +198,7 @@ const RentActualPaymentTable = ({
     setSelectAll(newSelectedRows.length === data.length);
     localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
   };
-  
+
   console.log(filteredData, "filteredData");
   return (
     <Box sx={{ position: "relative" }} className="d-flex flex-column">
