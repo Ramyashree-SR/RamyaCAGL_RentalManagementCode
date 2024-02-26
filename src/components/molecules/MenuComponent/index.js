@@ -35,6 +35,7 @@ import { getRentPaymentReportDetails } from "../../services/PaymentReportApi";
 import ProvisionsDetails from "../../pages/RentalProcessDetails/RentalDetails/ProvisionsDetails";
 import { useToasts } from "react-toast-notifications";
 import CloseIcon from "@mui/icons-material/Close";
+import EditMasterDetails from "../../pages/EditMasterDetails";
 
 const ColorIcon = styled(Icon)(({ theme }) => ({
   //   color: theme.palette?.getContrastText(pink[900]),
@@ -58,7 +59,6 @@ export default function MenuComponent({
   agreementTenure,
   openProvisionsListModal,
   setOpenProvisionsListModal,
-  setMonthlyRent,
   monthlyRent,
   lessorName,
   activationStatusFilter,
@@ -66,6 +66,10 @@ export default function MenuComponent({
   openPaymentReportData,
   setOpenPaymentReportData,
   activationStatusFilterDue,
+  getContractDetails,
+  editAllNewContractData,
+  openEditLessorModal,
+  setOpenEditLessorModal,
 }) {
   const { addToast } = useToasts();
   const [fullscreen, setFullscreen] = useState(true);
@@ -97,7 +101,7 @@ export default function MenuComponent({
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
       // Clear existing data
-      setTypeProvisionsData(null)
+      setTypeProvisionsData(null);
       setAddProvisions([]);
       setRentDueDetails([]);
       handleClose();
@@ -336,6 +340,17 @@ export default function MenuComponent({
           monthlyRent={monthlyRent}
         />
       )}
+
+      <EditMasterDetails
+        show={openEditLessorModal}
+        close={() => setOpenEditLessorModal(false)}
+        openEditLessorModal={openEditLessorModal}
+        getContractDetails={getContractDetails}
+        fullscreen={fullscreen}
+        setFullscreen={setFullscreen}
+        uniqueID={uniqueID}
+        editAllNewContractData={editAllNewContractData}
+      />
     </React.Fragment>
   );
 }

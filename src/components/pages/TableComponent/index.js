@@ -109,7 +109,6 @@ const useStyles = makeStyles({
 const TableComponent = ({
   data,
   columns,
-  setOpenEditLessorModal,
   setOpenLessorModal,
   setEditLessorData,
   getContractDetails,
@@ -153,7 +152,8 @@ const TableComponent = ({
   const [branchModal, setBranchModal] = useState(false);
   const [agreementModal, setAgreementModal] = useState(false);
   const [customInputModalOpen, setCustomInputModalOpen] = useState(false);
-
+  const [editAllNewContractData, setEditAllNewContractData] = useState({});
+  const [openEditLessorModal, setOpenEditLessorModal] = useState(false);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -163,11 +163,15 @@ const TableComponent = ({
     setPage(0);
   };
 
+  // const handleEditRow = (event, rowData) => {
+  //   setModalType("edit");
+  //   setOpenLessorModal(true);
+  //   setOpenEditLessorModal(true);
+  //   setEditLessorData(rowData);
+  // };
   const handleEditRow = (event, rowData) => {
-    setModalType("edit");
-    setOpenLessorModal(true);
     setOpenEditLessorModal(true);
-    setEditLessorData(rowData);
+    setEditAllNewContractData(rowData);
   };
 
   const handleModalOpen = (rowData) => {
@@ -343,10 +347,14 @@ const TableComponent = ({
                                   //  </ColorIcon>
 
                                   <MenuComponent
+                                    // handleEdit={(e) => {
+                                    //   handleEditRow(e, row);
+                                    //   setUniqueID(row.uniqueID);
+                                    //   setEditLessorRenewData(row);
+                                    // }}
                                     handleEdit={(e) => {
                                       handleEditRow(e, row);
                                       setUniqueID(row.uniqueID);
-                                      setEditLessorRenewData(row);
                                     }}
                                     handleEditProvisions={() => {
                                       changeProvisions();
@@ -408,6 +416,10 @@ const TableComponent = ({
                                     activationStatusFilterDue={
                                       activationStatusFilterDue
                                     }
+                                    editAllNewContractData={
+                                      editAllNewContractData
+                                    }
+                                    openEditLessorModal={openEditLessorModal}
                                   />
                                 )}
 

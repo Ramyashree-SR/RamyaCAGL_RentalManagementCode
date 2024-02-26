@@ -185,7 +185,7 @@ const RentDue = (props) => {
           <Box sx={{ height: "100%", width: "100%" }}>
             <Grid
               container
-              className="d-flex m-3 "
+              className="d-flex m-3"
               sx={{ fontSize: 15, fontWeight: 700 }}
             >
               <Grid
@@ -242,7 +242,7 @@ const RentDue = (props) => {
                   height: 40,
                   // flexBasis: "50%",
                   flexBasis: "100%",
-                  mt: -2,
+                  mt: -3,
                   mr: 2,
                 }}
               >
@@ -259,7 +259,7 @@ const RentDue = (props) => {
               sx={{
                 width: "97%",
                 position: "fixed",
-                mt: -1,
+                mt: 0,
               }}
             >
               {branchIDforDue && (

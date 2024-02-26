@@ -351,6 +351,7 @@ const PaymentReport = (props) => {
                     },
                     width: 350,
                     ml: 3,
+                    mt: -2,
                   },
                 }}
               />
@@ -361,7 +362,7 @@ const PaymentReport = (props) => {
               sx={{
                 width: 120,
                 height: 40,
-                ml: 2,
+                ml: 1,
                 flexBasis: "50%",
               }}
             >
