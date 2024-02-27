@@ -255,7 +255,6 @@ export default function MenuComponent({
         <MenuItem
           onClick={() => {
             handleRentDue();
-            // getAllRentDueDetailsByUniqueID(uniqueID);
           }}
           sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
         >

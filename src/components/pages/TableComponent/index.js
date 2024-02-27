@@ -420,6 +420,9 @@ const TableComponent = ({
                                       editAllNewContractData
                                     }
                                     openEditLessorModal={openEditLessorModal}
+                                    setOpenEditLessorModal={
+                                      setOpenEditLessorModal
+                                    }
                                   />
                                 )}
 

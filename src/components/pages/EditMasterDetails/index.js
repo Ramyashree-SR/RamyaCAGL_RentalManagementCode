@@ -368,6 +368,11 @@ const EditMasterDetails = (props) => {
     }
   };
 
+  const RentContractStatus = [
+    { id: "New/Relocate", label: "New/Relocate" },
+    { id: "Renewal", label: "Renewal" },
+  ];
+
   let activationStatus = [
     { id: "1", label: "Open" },
     { id: "2", label: "Closed" },
@@ -931,6 +936,17 @@ const EditMasterDetails = (props) => {
     }
   };
 
+  const [rentContractStatus, setRentContractStatus] = useState([]);
+
+  const handleContractChange = (newValue) => {
+    console.log(newValue.label, "newValue");
+    setEditAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      contractStatus: newValue ? newValue.label : null,
+    }));
+    setRentContractStatus(newValue);
+  };
+
   useEffect(() => {
     setEditAllNewContractDetails({ ...props.editAllNewContractData });
   }, [props.editAllNewContractData]);
@@ -1213,6 +1229,7 @@ const EditMasterDetails = (props) => {
         remarks: "",
       });
       props.close();
+      window.location.reload();
     }
   };
 
@@ -1230,6 +1247,7 @@ const EditMasterDetails = (props) => {
     <>
       <Modal
         show={props.show}
+        close={props.close}
         fullscreen={props.fullscreen}
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -1244,9 +1262,29 @@ const EditMasterDetails = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Box sx={{ height: "calc(100% - 55px)", overflowY: "scroll" }}>
+          {/* sx={{ height: "calc(100% - 55px)", overflowY: "scroll" }}  */}
+          <Box>
+            <Grid className="d-flex m-1 px-1" lg={12}>
+              <SimpleDropDown
+                options={RentContractStatus}
+                label="Select an option"
+                textLabel="Contract Status :"
+                onChange={handleContractChange}
+                value={
+                  RentContractStatus?.find(
+                    (option) =>
+                      option?.label ===
+                      editAllNewContractDetails?.contractStatus
+                  ) || null
+                }
+                sx={{ width: 300 }}
+              />
+            </Grid>
             <Box>
-              <Typography className="fs-20 fw-500 pt-4 px-3">
+              <Typography
+                className=" pt-4 px-3"
+                sx={{ fontWeight: 800, fontSize: 15 }}
+              >
                 Branch/Office Hierarchy Details
               </Typography>
               <Grid container spacing={2} className="px-2 py-2 mt-1">
@@ -1307,11 +1345,7 @@ const EditMasterDetails = (props) => {
                           value === "" ||
                           option?.label === value?.label
                         }
-                        value={
-                          type === "edit"
-                            ? editAllNewContractDetails?.branchID
-                            : editAllNewContractDetails?.branchID || ""
-                        }
+                        value={editAllNewContractDetails?.branchID || ""}
                         onChange={handleBranchID}
                         renderInput={(params) => (
                           <TextField
@@ -1348,12 +1382,9 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       name="branchName"
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.lesseeBranchName ||
-                            editAllNewContractDetails?.branchName
-                          : editAllNewContractDetails?.lesseeBranchName ||
-                            editAllNewContractDetails?.branchName ||
-                            ""
+                        editAllNewContractDetails?.lesseeBranchName ||
+                        editAllNewContractDetails?.branchName ||
+                        ""
                       }
                       onChange={(e) => updateChange(e)}
                       //   errorText={
@@ -1367,12 +1398,9 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       name="areaName"
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.lesseeAreaName ||
-                            editAllNewContractDetails?.areaName
-                          : editAllNewContractDetails?.lesseeAreaName ||
-                            editAllNewContractDetails?.areaName ||
-                            ""
+                        editAllNewContractDetails?.lesseeAreaName ||
+                        editAllNewContractDetails?.areaName ||
+                        ""
                       }
                       onChange={(e) => updateChange(e)}
                       //   errorText={editAllNewContractDetailsErr?.areaName || ""}
@@ -1383,12 +1411,9 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       name="region"
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.lesseeDivision ||
-                            editAllNewContractDetails?.region
-                          : editAllNewContractDetails?.lesseeDivision ||
-                            editAllNewContractDetails?.region ||
-                            ""
+                        editAllNewContractDetails?.lesseeDivision ||
+                        editAllNewContractDetails?.region ||
+                        ""
                       }
                       onChange={(e) => updateChange(e)}
                       //   errorText={editAllNewContractDetailsErr?.region || ""}
@@ -1401,12 +1426,9 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       name="zone"
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.lesseeZone ||
-                            editAllNewContractDetails?.zone
-                          : editAllNewContractDetails?.lesseeZone ||
-                            editAllNewContractDetails?.zone ||
-                            ""
+                        editAllNewContractDetails?.lesseeZone ||
+                        editAllNewContractDetails?.zone ||
+                        ""
                       }
                       onChange={(e) => updateChange(e)}
                       //   errorText={editAllNewContractDetailsErr?.zone || ""}
@@ -1417,12 +1439,9 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       name="state"
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.lesseeState ||
-                            editAllNewContractDetails?.state
-                          : editAllNewContractDetails?.lesseeState ||
-                            editAllNewContractDetails?.state ||
-                            ""
+                        editAllNewContractDetails?.lesseeState ||
+                        editAllNewContractDetails?.state ||
+                        ""
                       }
                       onChange={(e) => updateChange(e)}
                       //   errorText={editAllNewContractDetailsErr?.state}
@@ -1511,7 +1530,7 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       required={true}
                     />
-
+                    {/* 
                     <DropDownComponent
                       label="Location"
                       sx={{ width: 300 }}
@@ -1522,31 +1541,54 @@ const EditMasterDetails = (props) => {
                       }
                       // name="premesisLocation"
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.premesisLocation || null
-                          : editAllNewContractDetails?.premesisLocation || null
+                        editAllNewContractDetails?.premesisLocation || null
                       }
                       onChange={handleLocationChange}
                       required={true}
+                    /> */}
+
+                    <SimpleDropDown
+                      options={location}
+                      label="Location"
+                      onChange={handleLocationChange}
+                      value={
+                        location?.find(
+                          (option) =>
+                            option?.label ===
+                            editAllNewContractDetails?.premesisLocation
+                        ) || null
+                      }
+                      sx={{ width: 300 }}
+                      required={true}
                     />
-                    <DropDownComponent
+
+                    {/* <DropDownComponent
                       label="Building Type"
                       sx={{ width: 300 }}
                       options={typeOfBuliding}
-                      // name="premesisBuildingType"
                       getOptionLabel={(option) =>
                         option?.label ||
                         editAllNewContractDetails?.premesisBuildingType
                       }
                       value={
-                        type === "edit"
-                          ? editAllNewContractDetails?.premesisBuildingType ||
-                            null
-                          : editAllNewContractDetails?.premesisBuildingType ||
-                            null
+                        editAllNewContractDetails?.premesisBuildingType || null
                       }
                       // onSelect={handleBulidingType}
                       onChange={handleBulidingType}
+                      required={true}
+                    /> */}
+                    <SimpleDropDown
+                      options={typeOfBuliding}
+                      label="Building Type"
+                      onChange={handleLocationChange}
+                      value={
+                        typeOfBuliding?.find(
+                          (option) =>
+                            option?.label ===
+                            editAllNewContractDetails?.premesisBuildingType
+                        ) || null
+                      }
+                      sx={{ width: 300 }}
                       required={true}
                     />
                   </Grid>
@@ -1862,10 +1904,12 @@ const EditMasterDetails = (props) => {
               </Box>
             </Box>
           </Box>
-
-          {/* <Box sx={{ height: "calc(100% - 75px)", overflowY: "scroll" }}> */}
+          <hr />
           <Box>
-            <Typography className="fs-20 fw-500 pt-4 px-4">
+            <Typography
+              className="fs-20 fw-500 pt-4 px-4"
+              sx={{ fontWeight: 800, fontSize: 15 }}
+            >
               Agreement Details
             </Typography>
             <Grid container spacing={2} className="px-1 py-3 mt-1 ">
@@ -1893,10 +1937,7 @@ const EditMasterDetails = (props) => {
                   }
                   // name="agreementActivationStatus"
                   value={
-                    type === "edit"
-                      ? editAllNewContractDetails?.agreementActivationStatus
-                      : editAllNewContractDetails?.agreementActivationStatus ||
-                        null
+                    editAllNewContractDetails?.agreementActivationStatus || null
                   }
                   onChange={handleActivationStatus}
                   required
@@ -2065,11 +2106,7 @@ const EditMasterDetails = (props) => {
                     option?.label || editAllNewContractDetails?.documentType
                   }
                   name="documentType"
-                  value={
-                    type === "edit"
-                      ? editAllNewContractDetails?.documentType
-                      : editAllNewContractDetails?.documentType || null
-                  }
+                  value={editAllNewContractDetails?.documentType || null}
                   onChange={(value) =>
                     handleDocumentType("documentType", value)
                   }
@@ -2210,10 +2247,8 @@ const EditMasterDetails = (props) => {
                   }
                   name="securityDepositLockinPeriod"
                   value={
-                    type === "edit"
-                      ? editAllNewContractDetails?.securityDepositLockinPeriod
-                      : editAllNewContractDetails?.securityDepositLockinPeriod ||
-                        null
+                    editAllNewContractDetails?.securityDepositLockinPeriod ||
+                    null
                   }
                   onChange={(value) =>
                     handleLockinPeriod("securityDepositLockinPeriod", value)
@@ -2231,10 +2266,8 @@ const EditMasterDetails = (props) => {
                   }
                   name="securityDepositnoticePeriod"
                   value={
-                    type === "edit"
-                      ? editAllNewContractDetails?.securityDepositnoticePeriod
-                      : editAllNewContractDetails?.securityDepositnoticePeriod ||
-                        null
+                    editAllNewContractDetails?.securityDepositnoticePeriod ||
+                    null
                   }
                   onChange={(value) =>
                     handleNoticePeriod("securityDepositnoticePeriod", value)
@@ -2294,37 +2327,35 @@ const EditMasterDetails = (props) => {
                             index + 1
                           }`}</Typography>
                           <Grid item className="d-flex flex-row m-0" md={12}>
-                            {type === "edit" ? (
-                              <InputBoxComponent
-                                label="Recipiants ID"
-                                placeholder={`Enter Recipiant ID ${
-                                  index + 1
-                                }...`}
-                                sx={{ width: 300 }}
-                                name={`recipiantsID-${index}`}
-                                value={
-                                  type === "edit"
-                                    ? editAllNewContractDetails?.recipiants?.[
-                                        index
-                                      ] &&
-                                      editAllNewContractDetails?.recipiants?.[
-                                        index
-                                      ]?.recipiantsID
-                                    : "" // Clear the value in "add" mode
-                                }
-                                onChange={(e) =>
-                                  handleRecipientChange(
-                                    index,
-                                    "recipiantsID",
-                                    e.target.value
-                                  )
-                                }
-                                // errorText={
-                                //   editAllNewContractDetailsErr?.recipiantsID
-                                // }
-                                required
-                              />
-                            ) : null}
+                            {/* {type === "edit" ? ( */}
+                            <InputBoxComponent
+                              label="Recipiants ID"
+                              placeholder={`Enter Recipiant ID ${index + 1}...`}
+                              sx={{ width: 300 }}
+                              name={`recipiantsID-${index}`}
+                              value={
+                                type === "edit"
+                                  ? editAllNewContractDetails?.recipiants?.[
+                                      index
+                                    ] &&
+                                    editAllNewContractDetails?.recipiants?.[
+                                      index
+                                    ]?.recipiantsID
+                                  : "" // Clear the value in "add" mode
+                              }
+                              onChange={(e) =>
+                                handleRecipientChange(
+                                  index,
+                                  "recipiantsID",
+                                  e.target.value
+                                )
+                              }
+                              // errorText={
+                              //   editAllNewContractDetailsErr?.recipiantsID
+                              // }
+                              required
+                            />
+                            {/* ) : null} */}
 
                             <InputBoxComponent
                               label="Rent Amount"
@@ -2575,107 +2606,84 @@ const EditMasterDetails = (props) => {
                   spacing={2}
                   className="d-flex align-items-center justify-content-center py-1 px-0"
                 >
-                  {/* {Array.from({ length: recipientCount }, (_, index) => (
                   <Grid item className="d-flex m-2" lg={12}>
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Recipiants ID"
-                        placeholder={`Enter Recipiant ID ${index + 1}...`}
-                        sx={{ width: 300 }}
-                        name={`recipiantsID-${index}`}
-                        value={
-                          type === "edit"
-                            ? editAllNewContractDetails?.recipiantsID
-                            : "" // Clear the value in "add" mode
-                        }
-                        onChange={(e) =>
-                          handleRecipientChange(
-                            index,
-                            "recipiantsID",
-                            e.target.value
-                          )
-                        }
-                        // errorText={editAllNewContractDetailsErr?.recipiantsID}
-                      required/>
-                    ) : null} */}
-                  <Grid item className="d-flex m-2" lg={12}>
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Recipiant Rent Amount"
-                        name="lessorRentAmount"
-                        value={editAllNewContractDetails?.lessorRentAmount}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="Recipiant Rent Amount"
+                      name="lessorRentAmount"
+                      value={editAllNewContractDetails?.lessorRentAmount}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
                   </Grid>
                   {/* ))} */}
                   <Grid item className="d-flex m-2" lg={12}>
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Recipiant Name"
-                        name="lessorRecipiantsName"
-                        value={editAllNewContractDetails?.lessorRecipiantsName}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="IFSC Number"
-                        name="lessorIfscNumber"
-                        value={editAllNewContractDetails?.lessorIfscNumber}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Bank Name"
-                        name="lessorBankName"
-                        value={editAllNewContractDetails?.lessorBankName}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="Recipiant Name"
+                      name="lessorRecipiantsName"
+                      value={editAllNewContractDetails?.lessorRecipiantsName}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="IFSC Number"
+                      name="lessorIfscNumber"
+                      value={editAllNewContractDetails?.lessorIfscNumber}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="Bank Name"
+                      name="lessorBankName"
+                      value={editAllNewContractDetails?.lessorBankName}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
                   </Grid>
                   <Grid item className="d-flex m-2" lg={12}>
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Branch Name"
-                        name="lessorBranchName"
-                        value={editAllNewContractDetails?.lessorBranchName}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Account Number"
-                        type="number"
-                        name="lessorAccountNumber"
-                        value={editAllNewContractDetails?.lessorAccountNumber}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
-                    {type === "edit" ? (
-                      <InputBoxComponent
-                        label="Re-Enterered Account Number"
-                        type="number"
-                        name="lessorAccountNumber"
-                        value={editAllNewContractDetails?.lessorAccountNumber}
-                        onChange={(e) => updateChange(e)}
-                        sx={{ width: 300 }}
-                        required
-                      />
-                    ) : null}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="Branch Name"
+                      name="lessorBranchName"
+                      value={editAllNewContractDetails?.lessorBranchName}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="Account Number"
+                      type="number"
+                      name="lessorAccountNumber"
+                      value={editAllNewContractDetails?.lessorAccountNumber}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
+                    {/* {type === "edit" ? ( */}
+                    <InputBoxComponent
+                      label="Re-Enterered Account Number"
+                      type="number"
+                      name="lessorAccountNumber"
+                      value={editAllNewContractDetails?.lessorAccountNumber}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      required
+                    />
+                    {/* ) : null} */}
                   </Grid>
                 </Grid>
               </Box>
@@ -2777,14 +2785,12 @@ const EditMasterDetails = (props) => {
               </Grid>
             </Box>
           </Box>
-          {/* </Box> */}
-
-          {/* <Box
-            sx={{ height: "calc(100% - 55px)", overflowY: "scroll" }}
-            className="d-flex justify-content-center w-100"
-          > */}
+          <hr />
           <Box>
-            <Typography className="fs-20 fw-500 pt-4 px-3">
+            <Typography
+              className="fs-20 fw-500 pt-4 px-3"
+              sx={{ fontWeight: 800, fontSize: 15 }}
+            >
               Vendor/Owner Details
             </Typography>
             <Grid container spacing={2} className="px-2 py-2 mt-1">
@@ -2864,11 +2870,7 @@ const EditMasterDetails = (props) => {
                     option?.label || editAllNewContractDetails?.paymentMode
                   }
                   // name="paymentMode"
-                  value={
-                    type === "edit"
-                      ? editAllNewContractDetails?.paymentMode
-                      : editAllNewContractDetails?.paymentMode || null
-                  }
+                  value={editAllNewContractDetails?.paymentMode}
                   onChange={handlePaymentChange}
                   required
                   //   errorText={editAllNewContractDetailsErr?.paymentMode}
@@ -3348,15 +3350,6 @@ const EditMasterDetails = (props) => {
           <Box className="d-flex  justify-content-end w-100">
             <Button
               //   disabled={activeStep && activeStep === 0}
-              onClick={props.close}
-              variant="contained"
-              sx={{ m: 1 }}
-            >
-              Back
-            </Button>
-
-            <Button
-              //   disabled={activeStep && activeStep === 0}
               onClick={() => {
                 handleSubmit();
               }}
@@ -3364,6 +3357,14 @@ const EditMasterDetails = (props) => {
               sx={{ m: 1, background: "#238520" }}
             >
               Edit Finish
+            </Button>
+            <Button
+              //   disabled={activeStep && activeStep === 0}
+              onClick={props.close}
+              variant="contained"
+              sx={{ m: 1 }}
+            >
+              Close
             </Button>
           </Box>
         </Modal.Footer>
