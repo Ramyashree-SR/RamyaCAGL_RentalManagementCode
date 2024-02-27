@@ -32,7 +32,7 @@ const PaymentReport = (props) => {
   const [loading, setLoading] = useState(false);
   const [getBulkPaymentReportDetails, setGetBulkPaymentReportDetails] =
     useState([]);
-  console.log(getBulkPaymentReportDetails, "getBulkPaymentReportDetails");
+  // console.log(getBulkPaymentReportDetails, "getBulkPaymentReportDetails");
 
   const months = [
     { id: 1, label: "January" },

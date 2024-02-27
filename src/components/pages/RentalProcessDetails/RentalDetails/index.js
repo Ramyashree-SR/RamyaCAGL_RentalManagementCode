@@ -131,6 +131,7 @@ const RentalDetails = (props) => {
   const [lesseeBranchName, setLesseeBranchName] = useState(null);
   const [uniqueIDs, setUniqueIDs] = useState(rentContractDetails.uniqueID);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleStateChange = (value) => {
     // console.log(value.target.outerText, "newValue");
@@ -176,6 +177,8 @@ const RentalDetails = (props) => {
   const handleDistrictChange = (value) => {
     setFilterDistrict(value);
     getContractDetails(value);
+    setLoading(!loading);
+    setRefreshKey((prevKey) => prevKey + 1);
   };
 
   const getBranchDistrictByState = async (state) => {
@@ -246,6 +249,7 @@ const RentalDetails = (props) => {
       setbranchIDforDue(getData);
       setbranchIDData(getData);
       setUniqueIDs(getData);
+      setLoading(false);
     }
   };
 
@@ -300,7 +304,8 @@ const RentalDetails = (props) => {
       lesseeBranchName: value.target.outerText,
     });
     getAllContractDetailsByBranchName(value.target.outerText);
-    // setRefreshKey((prevKey) => prevKey + 1);
+    setRefreshKey((prevKey) => prevKey + 1);
+    setLoading(!loading);
   };
 
   const getBranchName = async () => {
@@ -324,6 +329,7 @@ const RentalDetails = (props) => {
       if (data) {
         let getData = data?.data;
         setRentContractDetails(getData);
+        setLoading(false);
       }
     }
   };
@@ -815,50 +821,61 @@ const RentalDetails = (props) => {
           position: "fixed",
         }}
       >
-        {refreshKey && (
-          <TableComponent
-            data={rentContractDetails}
-            // data={branchFilter || rentContractDetails}
-            columns={columns}
-            getContractDetails={getContractDetails}
-            setEditLessorData={setEditLessorData}
-            setOpenEditLessorModal={setOpenEditLessorModal}
-            setOpenLessorModal={setOpenLessorModal}
-            modalType={modalType}
-            setUniqueID={setUniqueID}
-            uniqueID={uniqueID}
-            setModalType={setModalType}
-            EditLessorData={EditLessorData}
-            searchText={searchText}
-            setSearchText={setSearchText}
-            branchTypeFilter={branchTypeFilter}
-            activationStatusFilter={activationStatusFilter}
-            handleBranchTypeFilterChange={handleBranchTypeFilterChange}
-            handleActivationStatusFilterChange={
-              handleActivationStatusFilterChange
-            }
-            openRentDueModal={openRentDueModal}
-            openProvisionsListModal={openProvisionsListModal}
-            setOpenProvisionsListModal={setOpenProvisionsListModal}
-            setOpenRentDueModal={setOpenRentDueModal}
-            branchIDData={branchIDData}
-            rentStartDate={rentStartDate}
-            setRentStartDate={setRentStartDate}
-            rentEndDate={rentEndDate}
-            setRentEndDate={setRentEndDate}
-            agreementTenure={agreementTenure}
-            setAgreementTenure={setAgreementTenure}
-            monthlyRent={monthlyRent}
-            setMonthlyRent={setMonthlyRent}
-            lessorName={lessorName}
-            setLessorName={setLessorName}
-            setLesseeBranchName={setLesseeBranchName}
-            lesseeBranchName={lesseeBranchName}
-            setEditLessorRenewData={setEditLessorRenewData}
-            openPaymentReportData={openPaymentReportData}
-            setOpenPaymentReportData={setOpenPaymentReportData}
-            activationStatusFilterDue={activationStatusFilterDue}
-          />
+        {loading ? (
+          <div className="d-flex align-items-center justify-content-center flex-column ">
+            <div
+              className="spinner-border text-primary "
+              role="status"
+              style={{ width: "2rem", height: "2rem", margin: "10px" }}
+            ></div>
+            <span className="visible text-primary">Loading...</span>{" "}
+          </div>
+        ) : (
+          refreshKey && (
+            <TableComponent
+              data={rentContractDetails}
+              // data={branchFilter || rentContractDetails}
+              columns={columns}
+              getContractDetails={getContractDetails}
+              setEditLessorData={setEditLessorData}
+              setOpenEditLessorModal={setOpenEditLessorModal}
+              setOpenLessorModal={setOpenLessorModal}
+              modalType={modalType}
+              setUniqueID={setUniqueID}
+              uniqueID={uniqueID}
+              setModalType={setModalType}
+              EditLessorData={EditLessorData}
+              searchText={searchText}
+              setSearchText={setSearchText}
+              branchTypeFilter={branchTypeFilter}
+              activationStatusFilter={activationStatusFilter}
+              handleBranchTypeFilterChange={handleBranchTypeFilterChange}
+              handleActivationStatusFilterChange={
+                handleActivationStatusFilterChange
+              }
+              openRentDueModal={openRentDueModal}
+              openProvisionsListModal={openProvisionsListModal}
+              setOpenProvisionsListModal={setOpenProvisionsListModal}
+              setOpenRentDueModal={setOpenRentDueModal}
+              branchIDData={branchIDData}
+              rentStartDate={rentStartDate}
+              setRentStartDate={setRentStartDate}
+              rentEndDate={rentEndDate}
+              setRentEndDate={setRentEndDate}
+              agreementTenure={agreementTenure}
+              setAgreementTenure={setAgreementTenure}
+              monthlyRent={monthlyRent}
+              setMonthlyRent={setMonthlyRent}
+              lessorName={lessorName}
+              setLessorName={setLessorName}
+              setLesseeBranchName={setLesseeBranchName}
+              lesseeBranchName={lesseeBranchName}
+              setEditLessorRenewData={setEditLessorRenewData}
+              openPaymentReportData={openPaymentReportData}
+              setOpenPaymentReportData={setOpenPaymentReportData}
+              activationStatusFilterDue={activationStatusFilterDue}
+            />
+          )
         )}
       </Box>
     </Box>
