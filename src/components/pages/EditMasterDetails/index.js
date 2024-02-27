@@ -1925,7 +1925,7 @@ const EditMasterDetails = (props) => {
                   required
                 />
 
-                <DropDownComponent
+                {/* <DropDownComponent
                   label="ActivationStatus"
                   placeholder="Enter Activation Status"
                   sx={{ width: 300, ml: 0 }}
@@ -1941,6 +1941,20 @@ const EditMasterDetails = (props) => {
                   }
                   onChange={handleActivationStatus}
                   required
+                /> */}
+                <SimpleDropDown
+                  options={activationStatus}
+                  label="ActivationStatus"
+                  onChange={handleActivationStatus}
+                  value={
+                    activationStatus?.find(
+                      (option) =>
+                        option?.label ===
+                        editAllNewContractDetails?.agreementActivationStatus
+                    ) || null
+                  }
+                  sx={{ width: 300 }}
+                  required={true}
                 />
               </Grid>
             </Grid>
@@ -2237,7 +2251,7 @@ const EditMasterDetails = (props) => {
               </Grid>
 
               <Grid item className="d-flex " md={12}>
-                <DropDownComponent
+                {/* <DropDownComponent
                   label="Lockin Period"
                   sx={{ width: 300, mt: 2, ml: -2 }}
                   options={LockinPeriod}
@@ -2254,9 +2268,24 @@ const EditMasterDetails = (props) => {
                     handleLockinPeriod("securityDepositLockinPeriod", value)
                   }
                   required
+                /> */}
+
+                <SimpleDropDown
+                  options={LockinPeriod}
+                  label="Lockin Period"
+                  onChange={handleLockinPeriod}
+                  value={
+                    LockinPeriod?.find(
+                      (option) =>
+                        option?.label ===
+                        editAllNewContractDetails?.securityDepositLockinPeriod
+                    ) || null
+                  }
+                  sx={{ width: 300 }}
+                  required={true}
                 />
 
-                <DropDownComponent
+                {/* <DropDownComponent
                   label="Notice Period"
                   sx={{ width: 300, mt: 2, ml: 0 }}
                   options={noticePeriod}
@@ -2273,6 +2302,21 @@ const EditMasterDetails = (props) => {
                     handleNoticePeriod("securityDepositnoticePeriod", value)
                   }
                   required
+                /> */}
+
+                <SimpleDropDown
+                  options={noticePeriod}
+                  label="Notice Period"
+                  onChange={handleNoticePeriod}
+                  value={
+                    noticePeriod?.find(
+                      (option) =>
+                        option?.label ===
+                        editAllNewContractDetails?.securityDepositnoticePeriod
+                    ) || null
+                  }
+                  sx={{ width: 300 }}
+                  required={true}
                 />
 
                 <InputBoxComponent
