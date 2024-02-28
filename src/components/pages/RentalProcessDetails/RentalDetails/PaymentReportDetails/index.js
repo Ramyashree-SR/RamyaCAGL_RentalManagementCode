@@ -124,12 +124,27 @@ const PaymentReportDetails = (props) => {
 
   // Generate an array of years between the start and end dates
   const yearOptions = Array.from(
-    { length: endYear - startYear + 1 },
+    { length: endYear - startYear + 2 },
     (_, index) => ({
       id: startYear + index,
       label: `${startYear + index}`,
     })
   );
+
+  // const endDateObject = new Date(rentStartDate);
+
+  // // Check if the provided rent end date is valid
+  // if (isNaN(endDateObject.getTime())) {
+  //   // Handle invalid date
+  //   console.error("Invalid date format");
+  //   return null;
+  // }
+  // const currentYear = endDateObject?.getFullYear();
+
+  // const yearOptions = Array.from({ length: 10 }, (_, index) => ({
+  //   id: currentYear + index, // currentYear
+  //   label: `${currentYear + index}`,
+  // }));
 
   const handleChange = (newValue) => {
     let value = newValue?.label;

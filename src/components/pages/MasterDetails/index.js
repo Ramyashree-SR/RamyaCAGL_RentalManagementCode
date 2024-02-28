@@ -1125,6 +1125,11 @@ const MasterDetails = (props) => {
       joinaddress_Premesis: allNewContractDetails?.joinaddress_Premesis,
       priviousContractID: allNewContractDetails?.priviousContractID,
       remarks: allNewContractDetails?.remarks,
+
+      lessorElectricityBillPath: allNewContractDetails?.lessorElectricityBillPath,
+      lessorTaxNumberPath: allNewContractDetails?.lessorTaxNumberPath,
+      lessorBankPassBookPath: allNewContractDetails?.lessorBankPassBookPath,
+      panDocumentPath: allNewContractDetails?.panDocumentPath,
     };
     const { data, errRes } = await AddRentContractDetails(payload);
     if (data?.data) {
@@ -1413,6 +1418,11 @@ const MasterDetails = (props) => {
       joinaddress_Premesis: allNewContractDetails?.joinaddress_Premesis,
       priviousContractID: allNewContractDetails?.priviousContractID,
       remarks: allNewContractDetails?.remarks,
+
+      lessorElectricityBillPath: allNewContractDetails?.lessorElectricityBillPath,
+      lessorTaxNumberPath: allNewContractDetails?.lessorTaxNumberPath,
+      lessorBankPassBookPath: allNewContractDetails?.lessorBankPassBookPath,
+      panDocumentPath: allNewContractDetails?.panDocumentPath,
     };
     const { data, errRes } = await EditRentContractDetails(
       props.uniqueID,
@@ -1551,6 +1561,13 @@ const MasterDetails = (props) => {
         joinaddress_Premesis: props?.EditLessorData?.joinaddress_Premesis,
         priviousContractID: props?.EditLessorData?.priviousContractID,
         remarks: props?.EditLessorData?.remarks,
+
+        lessorElectricityBillPath:
+         props?.EditLessorData?.lessorElectricityBillPath,
+        lessorTaxNumberPath:props?.EditLessorData?.lessorTaxNumberPath,
+        lessorBankPassBookPath:
+         props?.EditLessorData?.lessorBankPassBookPath,
+        panDocumentPath:props?.EditLessorData?.panDocumentPath,
       });
     }
   }, [props.EditLessorData]);

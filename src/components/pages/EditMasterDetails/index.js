@@ -28,6 +28,7 @@ import { uploadFileApi } from "../../services/UploadDoucmentApi";
 import { Modal } from "react-bootstrap";
 import { EditRentContractDetails } from "../../services/EditContractApi";
 import { formatDateToBackEndReqirement } from "../../CommonFunction/CommonFunction";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -229,7 +230,7 @@ const EditMasterDetails = (props) => {
   //     setEditAllNewContractDetails(value);
   //   };
 
-  console.log(editAllNewContractDetails?.joinaddress_Premesis, "address");
+  // console.log(editAllNewContractDetails?.joinaddress_Premesis, "address");
 
   let BranchType = [
     { id: "GL-Office", label: "GL-Office" },
@@ -821,13 +822,20 @@ const EditMasterDetails = (props) => {
     });
   };
 
+  const [refreshCount, setRefreshCount] = useState(0);
+  console.log(refreshCount, "refreshCount");
+  const handleRefresh = () => {
+    // Increment the refreshCount to trigger a re-render
+    setRefreshCount((prevCount) => prevCount + 1);
+  };
+
   const ElectricityBillInput = useRef();
   const [electricityBillFile, setElectricityBillFile] = useState({
     file: {},
     filename: "",
   });
-  const [active, setactive] = useState(null);
-  // console.log(active, "active");
+  const [active, setactive] = useState("");
+  console.log(active, "active");
 
   const handleElectricityBillFileUpload = async () => {
     const payload = new FormData();
@@ -835,9 +843,13 @@ const EditMasterDetails = (props) => {
     payload.append("appid", "3");
     payload.append("doctype", "ElectricityBillFile");
     const { data, errRes } = await uploadFileApi(payload);
-    console.log(data, "data");
+    // console.log(data, "data");
     if (data) {
-      setactive(data);
+      setactive(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setEditAllNewContractDetails({
+        ...editAllNewContractDetails,
+        lessorElectricityBillPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+      });
       // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
@@ -858,10 +870,12 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "BankChequeFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive1(data);
-        // addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive1(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setEditAllNewContractDetails({
+        ...editAllNewContractDetails,
+        lessorBankPassBookPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -881,10 +895,12 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "TaxReciptFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive2(data);
-        // addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive2(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setEditAllNewContractDetails({
+        ...editAllNewContractDetails,
+        lessorTaxNumberPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -904,10 +920,12 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "PancardFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive3(data);
-        // addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive3(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setEditAllNewContractDetails({
+        ...editAllNewContractDetails,
+        panDocumentPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -1100,6 +1118,12 @@ const EditMasterDetails = (props) => {
       joinaddress_Premesis: editAllNewContractDetails?.joinaddress_Premesis,
       priviousContractID: editAllNewContractDetails?.priviousContractID,
       remarks: editAllNewContractDetails?.remarks,
+
+      lessorElectricityBillPath:
+        editAllNewContractDetails?.lessorElectricityBillPath,
+      lessorTaxNumberPath: editAllNewContractDetails?.lessorTaxNumberPath,
+      lessorBankPassBookPath: editAllNewContractDetails?.lessorBankPassBookPath,
+      panDocumentPath: editAllNewContractDetails?.panDocumentPath,
     };
     const { data, errRes } = await EditRentContractDetails(
       props.uniqueID,
@@ -1243,6 +1267,7 @@ const EditMasterDetails = (props) => {
     props.close();
   };
 
+  // console.log(editAllNewContractDetails, "edit");
   return (
     <>
       <Modal
@@ -2930,9 +2955,10 @@ const EditMasterDetails = (props) => {
                 <Grid item className="d-flex m-2" lg={12}>
                   <InputBoxComponent
                     label="Electricity Bill"
-                    // placeholder="Enter Electricity Bill"
+                    // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    value={electricityBillFile?.filename}
+                    name="lessorElectricityBillPath"
+                    value={editAllNewContractDetails?.lessorElectricityBillPath}
                   />
                   <form
                     action="/action_page.php"
@@ -2942,13 +2968,6 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Button
-                      variant="contained"
-                      onClick={() => ElectricityBillInput.current.click()}
-                    >
-                      File
-                    </Button>
-
                     <input
                       ref={ElectricityBillInput}
                       type="file"
@@ -2963,41 +2982,62 @@ const EditMasterDetails = (props) => {
                         });
                       }}
                     />
-                    <ColorIcon
+                    
+                  </form>
+                  <ColorIcon
                       sx={{
                         display: "flex",
                         flexDirection: "column",
+                        ml: -3,
                       }}
                     >
                       <UploadFileIcon
                         onClick={() => {
+                          ElectricityBillInput.current.click();
                           handleElectricityBillFileUpload();
-                          // handleRefresh();
                         }}
-                        fontSize="large"
-                        // sx={{ background: "#FFFFF", color: "green" }}
+                        fontSize="small"
+                        sx={{ mt: 0.5 }}
                       />
-                      <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
+                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
                         Upload
                       </Typography>
                     </ColorIcon>
-                  </form>
-                  {/* {active && ( */}
-                  {/* <Button
-                  variant="outlined"
-                  name="Download"
-                  onClick={handleAgreementFileDownload}
-                  className="m-2"
-                >
-                  Download
-                </Button> */}
-                  {/* )} */}
+                  {/* <span> */}
+                  <a
+                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      marginLeft: "-10px",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    <ColorIcon
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        ml: 0,
+                      }}
+                    >
+                      <FileDownloadDoneIcon
+                        fontSize="small"
+                        sx={{ marginTop: 1.5 }}
+                      />
+                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                        Download
+                      </Typography>
+                    </ColorIcon>
+                  </a>
+                  {/* </span> */}
 
                   <InputBoxComponent
                     label="Bank Pass Book/Cheque "
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    value={bankChequeFile?.filename}
+                    name="lessorBankPassBookPath"
+                    value={editAllNewContractDetails?.lessorBankPassBookPath}
                   />
                   <form
                     action="/action_page.php"
@@ -3007,13 +3047,6 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Button
-                      variant="contained"
-                      onClick={() => BankChequeFileInput.current.click()}
-                    >
-                      File
-                    </Button>
-
                     <input
                       ref={BankChequeFileInput}
                       type="file"
@@ -3036,6 +3069,7 @@ const EditMasterDetails = (props) => {
                     >
                       <UploadFileIcon
                         onClick={() => {
+                          BankChequeFileInput.current.click();
                           handleBankChequeFileUpload();
                         }}
                         fontSize="large"
@@ -3046,12 +3080,13 @@ const EditMasterDetails = (props) => {
                     </ColorIcon>
                   </form>
                 </Grid>
+
                 <Grid item className="d-flex m-2" lg={12}>
                   <InputBoxComponent
                     label="Tax Paid Recipt "
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    value={taxReciptFile?.filename}
+                    value={editAllNewContractDetails?.lessorTaxNumberPath}
                   />
                   <form
                     action="/action_page.php"
@@ -3061,12 +3096,12 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Button
+                    {/* <Button
                       variant="contained"
                       onClick={() => TaxReciptInput.current.click()}
                     >
                       File
-                    </Button>
+                    </Button> */}
 
                     <input
                       ref={TaxReciptInput}
@@ -3090,6 +3125,7 @@ const EditMasterDetails = (props) => {
                     >
                       <UploadFileIcon
                         onClick={() => {
+                          TaxReciptInput.current.click();
                           handleTaxReciptFileUpload();
                           // handleRefresh();
                         }}
@@ -3106,7 +3142,7 @@ const EditMasterDetails = (props) => {
                     label="Pan Card "
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    value={pancardFile?.filename}
+                    value={editAllNewContractDetails?.panDocumentPath}
                   />
                   <form
                     action="/action_page.php"
@@ -3116,12 +3152,12 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Button
+                    {/* <Button
                       variant="contained"
                       onClick={() => pancardInput.current.click()}
                     >
                       File
-                    </Button>
+                    </Button> */}
 
                     <input
                       ref={pancardInput}
@@ -3146,6 +3182,7 @@ const EditMasterDetails = (props) => {
                     >
                       <UploadFileIcon
                         onClick={() => {
+                          pancardInput.current.click();
                           handlePancardFileUpload();
                           // handleRefresh();
                         }}
@@ -3173,12 +3210,12 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Button
+                    {/* <Button
                       variant="contained"
                       onClick={() => AnyOtherFileInput.current.click()}
                     >
                       File
-                    </Button>
+                    </Button> */}
 
                     <input
                       ref={AnyOtherFileInput}
@@ -3207,6 +3244,7 @@ const EditMasterDetails = (props) => {
                     >
                       <UploadFileIcon
                         onClick={() => {
+                          AnyOtherFileInput.current.click();
                           handleAnyOtherFileUpload();
                           // handleRefresh();
                         }}
@@ -3217,16 +3255,6 @@ const EditMasterDetails = (props) => {
                         Upload
                       </Typography>
                     </ColorIcon>
-                    <a
-                      href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/231219124408128`}
-                      target="_blank"
-                      rel="noreferrer"
-                      // onClick={() =>
-                      //   handlePanCardFileView(mainDealerId, "PanCardDetails")
-                      // }
-                    >
-                      Download
-                    </a>
                   </form>
                 </Grid>
               </Grid>

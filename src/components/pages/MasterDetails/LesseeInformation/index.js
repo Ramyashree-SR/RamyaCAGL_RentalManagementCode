@@ -70,7 +70,7 @@ const LesseeInformation = ({
     setAllNewContractDetails(value);
   };
 
-  console.log(allNewContractDetails?.joinaddress_Premesis, "address");
+  // console.log(allNewContractDetails?.joinaddress_Premesis, "address");
 
   let BranchType = [
     { id: "GL-Office", label: "GL-Office" },

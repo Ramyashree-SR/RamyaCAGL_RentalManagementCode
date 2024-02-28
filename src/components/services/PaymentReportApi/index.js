@@ -20,7 +20,7 @@ const getDownloadPaymentReportDetails = (params1, params2) => {
   return serviceUtil
     .get(`DownloadPaymentReport?month=${params1}&year=${params2}`)
     .then((res) => {
-      console.log(res, "Paymentres");
+      // console.log(res, "Paymentres");
       const data = res.data;
       return { data };
     })

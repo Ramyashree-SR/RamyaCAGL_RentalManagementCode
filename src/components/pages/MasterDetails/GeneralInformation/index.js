@@ -89,9 +89,14 @@ const GeneralInformation = ({
     payload.append("appid", "3");
     payload.append("doctype", "ElectricityBillFile");
     const { data, errRes } = await uploadFileApi(payload);
-    console.log(data, "data");
+    // console.log(data, "data");
     if (data) {
-      setactive(data);
+      setactive(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setAllNewContractDetails({
+        ...allNewContractDetails,
+        lessorElectricityBillPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+
       // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
@@ -183,10 +188,10 @@ const GeneralInformation = ({
     if (data) {
       if (data.error == "FALSE") {
         setactive4(data);
-        // addToast("File Uploaded", { appearance: "success" });
+        addToast("File Uploaded", { appearance: "success" });
       }
     } else if (errRes) {
-      // addToast(errRes, { appearance: "error" });
+      addToast(errRes, { appearance: "error" });
     }
   };
 
@@ -202,10 +207,12 @@ const GeneralInformation = ({
       close();
     }
   };
- 
+
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  // console.log(allNewContractDetails, "all");
   return (
     <>
       <Box
@@ -315,7 +322,12 @@ const GeneralInformation = ({
                   label="Electricity Bill"
                   // placeholder="Enter Electricity Bill"
                   sx={{ width: 200 }}
-                  value={electricityBillFile?.filename}
+                  name="lessorElectricityBillPath"
+                  // value={electricityBillFile?.filename}
+                  value={
+                    allNewContractDetails?.lessorElectricityBillPath
+                      ?.electricityBillFile?.filename || null
+                  }
                 />
                 <form
                   action="/action_page.php"
@@ -737,16 +749,16 @@ const GeneralInformation = ({
                 >
                   <Button onClick={joinAddress}>Join Address</Button>
                   {/* {address && ( */}
-                    <InputBoxComponent
-                      label="Address"
-                      placeholder="Enter Address"
-                      multiline
-                      sx={{ width: 300 }}
-                      size="large"
-                      value={allNewContractDetails?.joinaddress_Vendor}
-                      // onChange={(e) => updateChange(e)}
-                      readOnly
-                    />
+                  <InputBoxComponent
+                    label="Address"
+                    placeholder="Enter Address"
+                    multiline
+                    sx={{ width: 300 }}
+                    size="large"
+                    value={allNewContractDetails?.joinaddress_Vendor}
+                    // onChange={(e) => updateChange(e)}
+                    readOnly
+                  />
                   {/* )} */}
 
                   <InputBoxComponent

@@ -32,7 +32,7 @@ const PaymentReport = (props) => {
   const [loading, setLoading] = useState(false);
   const [getBulkPaymentReportDetails, setGetBulkPaymentReportDetails] =
     useState([]);
-  // console.log(getBulkPaymentReportDetails, "getBulkPaymentReportDetails");
+  
 
   const months = [
     { id: 1, label: "January" },
@@ -158,7 +158,7 @@ const PaymentReport = (props) => {
       selectedMonth,
       selectedYear
     );
-    console.log(data, "getData");
+    // console.log(data, "getData");
     if (data) {
       if (data) {
         let getData = data;
