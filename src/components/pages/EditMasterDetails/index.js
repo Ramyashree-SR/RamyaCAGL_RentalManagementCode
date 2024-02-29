@@ -1,8 +1,11 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
   Grid,
+  IconButton,
+  Snackbar,
   TextField,
   Typography,
   styled,
@@ -14,7 +17,7 @@ import moment from "moment/moment";
 import DatePickerComponent from "../../atoms/DatePickerComponent";
 import { deepOrange, green } from "@mui/material/colors";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-
+import CloseIcon from "@mui/icons-material/Close";
 import { useToasts } from "react-toast-notifications";
 import InputBoxComponent from "../../atoms/InputBoxComponent";
 import DropDownComponent from "../../atoms/DropDownComponent";
@@ -51,6 +54,32 @@ const EditMasterDetails = (props) => {
     setRecipientCount,
   } = props;
   const { addToast } = useToasts();
+  const [state, setState] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+
+  const handleClick = (newState) => {
+    setState({ ...newState, open: true });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
   const [editAllNewContractDetails, setEditAllNewContractDetails] = useState({
     lessorName: "",
     lessorContactNumber: "",
@@ -162,6 +191,7 @@ const EditMasterDetails = (props) => {
     joinaddress_Premesis: "",
     priviousContractID: "",
     remarks: "",
+    schedulePrimesis: "",
   });
   const [branchDetails, setBranchDetails] = useState({
     branchID: "",
@@ -834,8 +864,7 @@ const EditMasterDetails = (props) => {
     file: {},
     filename: "",
   });
-  const [active, setactive] = useState("");
-  console.log(active, "active");
+  const [active, setactive] = useState(null);
 
   const handleElectricityBillFileUpload = async () => {
     const payload = new FormData();
@@ -845,7 +874,7 @@ const EditMasterDetails = (props) => {
     const { data, errRes } = await uploadFileApi(payload);
     // console.log(data, "data");
     if (data) {
-      setactive(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setactive(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
         lessorElectricityBillPath: data.fileName, // Assuming 'filePath' is the field containing the file path
@@ -870,7 +899,7 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "BankChequeFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      setactive1(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setactive1(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
         lessorBankPassBookPath: data.fileName, // Assuming 'filePath' is the field containing the file path
@@ -887,6 +916,7 @@ const EditMasterDetails = (props) => {
     filename: "",
   });
   const [active2, setactive2] = useState(null);
+  console.log(active2, "active");
 
   const handleTaxReciptFileUpload = async () => {
     const payload = new FormData();
@@ -895,10 +925,10 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "TaxReciptFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      setactive2(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setactive2(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
-        lessorTaxNumberPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
+        lessorTaxNumberPath: data.fileName, // Assuming 'filePath' is the field containing the file path
       });
       // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
@@ -920,7 +950,7 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "PancardFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      setactive3(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setactive3(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
         panDocumentPath: data.fileName, // Assuming 'filePath' is the field containing the file path
@@ -1095,7 +1125,7 @@ const EditMasterDetails = (props) => {
 
       rentAmount: editAllNewContractDetails?.rentAmount,
       escalation: editAllNewContractDetails?.escalation,
-      renewalTenure: editAllNewContractDetails?.renewalTenure,
+      schedulePrimesis: editAllNewContractDetails?.schedulePrimesis, ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
 
       lattitude: editAllNewContractDetails?.lattitude,
       longitude: editAllNewContractDetails?.longitude,
@@ -1251,6 +1281,7 @@ const EditMasterDetails = (props) => {
         joinaddress_Premesis: "",
         priviousContractID: "",
         remarks: "",
+        schedulePrimesis: "",
       });
       props.close();
       window.location.reload();
@@ -2957,7 +2988,7 @@ const EditMasterDetails = (props) => {
                     label="Electricity Bill"
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    name="lessorElectricityBillPath"
+                    // name="lessorElectricityBillPath"
                     value={editAllNewContractDetails?.lessorElectricityBillPath}
                   />
                   <form
@@ -2980,29 +3011,32 @@ const EditMasterDetails = (props) => {
                           file: e.target.files[0],
                           filename: e.target.files[0].name,
                         });
+                        handleElectricityBillFileUpload();
+                        handleClick({
+                          vertical: "top",
+                          horizontal: "center",
+                        });
                       }}
                     />
-                    
                   </form>
                   <ColorIcon
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        ml: -3,
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      ml: -2,
+                    }}
+                  >
+                    <UploadFileIcon
+                      onClick={() => {
+                        ElectricityBillInput.current.click();
                       }}
-                    >
-                      <UploadFileIcon
-                        onClick={() => {
-                          ElectricityBillInput.current.click();
-                          handleElectricityBillFileUpload();
-                        }}
-                        fontSize="small"
-                        sx={{ mt: 0.5 }}
-                      />
-                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
-                        Upload
-                      </Typography>
-                    </ColorIcon>
+                      fontSize="small"
+                      sx={{ mt: 0.5 }}
+                    />
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Upload
+                    </Typography>
+                  </ColorIcon>
                   {/* <span> */}
                   <a
                     href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
@@ -3036,7 +3070,7 @@ const EditMasterDetails = (props) => {
                     label="Bank Pass Book/Cheque "
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    name="lessorBankPassBookPath"
+                    // name="lessorBankPassBookPath"
                     value={editAllNewContractDetails?.lessorBankPassBookPath}
                   />
                   <form
@@ -3059,26 +3093,60 @@ const EditMasterDetails = (props) => {
                           file: e.target.files[0],
                           filename: e.target.files[0].name,
                         });
+                        handleBankChequeFileUpload();
+                        handleClick({
+                          vertical: "top",
+                          horizontal: "center",
+                        });
                       }}
                     />
+                  </form>
+                  <ColorIcon
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      ml: -2,
+                    }}
+                  >
+                    <UploadFileIcon
+                      onClick={() => {
+                        BankChequeFileInput.current.click();
+                      }}
+                      fontSize="small"
+                      sx={{ mt: 0.5 }}
+                    />
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Upload
+                    </Typography>
+                  </ColorIcon>
+                  {/* <span> */}
+                  <a
+                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active1}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      marginLeft: "-10px",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
                     <ColorIcon
                       sx={{
                         display: "flex",
                         flexDirection: "column",
+                        ml: 0,
                       }}
                     >
-                      <UploadFileIcon
-                        onClick={() => {
-                          BankChequeFileInput.current.click();
-                          handleBankChequeFileUpload();
-                        }}
-                        fontSize="large"
+                      <FileDownloadDoneIcon
+                        fontSize="small"
+                        sx={{ marginTop: 1.5 }}
                       />
-                      <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                        Upload
+                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                        Download
                       </Typography>
                     </ColorIcon>
-                  </form>
+                  </a>
+                  {/* </span> */}
                 </Grid>
 
                 <Grid item className="d-flex m-2" lg={12}>
@@ -3086,6 +3154,7 @@ const EditMasterDetails = (props) => {
                     label="Tax Paid Recipt "
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
+                    name="lessorTaxNumberPath"
                     value={editAllNewContractDetails?.lessorTaxNumberPath}
                   />
                   <form
@@ -3096,13 +3165,6 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    {/* <Button
-                      variant="contained"
-                      onClick={() => TaxReciptInput.current.click()}
-                    >
-                      File
-                    </Button> */}
-
                     <input
                       ref={TaxReciptInput}
                       type="file"
@@ -3115,33 +3177,66 @@ const EditMasterDetails = (props) => {
                           file: e.target.files[0],
                           filename: e.target.files[0].name,
                         });
+                        handleTaxReciptFileUpload();
+                        handleClick({
+                          vertical: "top",
+                          horizontal: "center",
+                        });
                       }}
                     />
+                  </form>
+
+                  <ColorIcon
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      ml: -2,
+                    }}
+                  >
+                    <UploadFileIcon
+                      onClick={() => {
+                        TaxReciptInput.current.click();
+                      }}
+                      fontSize="small"
+                      sx={{ mt: 0.5 }}
+                    />
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Upload
+                    </Typography>
+                  </ColorIcon>
+
+                  <a
+                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active2}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      marginLeft: "-10px",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
                     <ColorIcon
                       sx={{
                         display: "flex",
                         flexDirection: "column",
+                        ml: 0,
                       }}
                     >
-                      <UploadFileIcon
-                        onClick={() => {
-                          TaxReciptInput.current.click();
-                          handleTaxReciptFileUpload();
-                          // handleRefresh();
-                        }}
-                        fontSize="large"
-                        // sx={{ background: "#FFFFF", color: "green" }}
+                      <FileDownloadDoneIcon
+                        fontSize="small"
+                        sx={{ marginTop: 1.5 }}
                       />
-                      <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                        Upload
+                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                        Download
                       </Typography>
                     </ColorIcon>
-                  </form>
+                  </a>
 
                   <InputBoxComponent
                     label="Pan Card "
                     // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
+                    name="panDocumentPath"
                     value={editAllNewContractDetails?.panDocumentPath}
                   />
                   <form
@@ -3152,13 +3247,6 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    {/* <Button
-                      variant="contained"
-                      onClick={() => pancardInput.current.click()}
-                    >
-                      File
-                    </Button> */}
-
                     <input
                       ref={pancardInput}
                       type="file"
@@ -3171,28 +3259,61 @@ const EditMasterDetails = (props) => {
                           file: e.target.files[0],
                           filename: e.target.files[0].name,
                         });
+                        handlePancardFileUpload();
+                        handleClick({
+                          vertical: "top",
+                          horizontal: "center",
+                        });
                       }}
                     />
+                  </form>
+                  <ColorIcon
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      ml: -2,
+                    }}
+                  >
+                    <UploadFileIcon
+                      onClick={() => {
+                        pancardInput.current.click();
 
+                        // handleRefresh();
+                      }}
+                      fontSize="small"
+                      sx={{ mt: 0.5 }}
+                    />
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Upload
+                    </Typography>
+                  </ColorIcon>
+
+                  <a
+                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active3}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      marginLeft: "-10px",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
                     <ColorIcon
                       sx={{
                         display: "flex",
                         flexDirection: "column",
+                        ml: 0,
                       }}
                     >
-                      <UploadFileIcon
-                        onClick={() => {
-                          pancardInput.current.click();
-                          handlePancardFileUpload();
-                          // handleRefresh();
-                        }}
-                        fontSize="large"
+                      <FileDownloadDoneIcon
+                        fontSize="small"
+                        sx={{ marginTop: 1.5 }}
                       />
-                      <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                        Upload
+                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                        Download
                       </Typography>
                     </ColorIcon>
-                  </form>
+                  </a>
                 </Grid>
                 <Grid item className="d-flex m-2" lg={12}>
                   <InputBoxComponent
@@ -3210,13 +3331,6 @@ const EditMasterDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    {/* <Button
-                      variant="contained"
-                      onClick={() => AnyOtherFileInput.current.click()}
-                    >
-                      File
-                    </Button> */}
-
                     <input
                       ref={AnyOtherFileInput}
                       type="file"
@@ -3233,6 +3347,10 @@ const EditMasterDetails = (props) => {
                         setAnyOtherFile({
                           file: e.target.files[0],
                           filename: e.target.files[0].name,
+                        });
+                        handleClick({
+                          vertical: "top",
+                          horizontal: "center",
                         });
                       }}
                     />
@@ -3259,7 +3377,16 @@ const EditMasterDetails = (props) => {
                 </Grid>
               </Grid>
             </Box>
-
+            <Snackbar
+              open={open}
+              anchorOrigin={{ vertical, horizontal }}
+              autoHideDuration={1000}
+              onClose={handleClose}
+              action={action}
+              message="File Uploaded Sucessfully!"
+              key={vertical + horizontal}
+              variant="success"
+            />
             <Box>
               <Typography className="fs-20 fw-500 pt-4 px-3">
                 Address Details

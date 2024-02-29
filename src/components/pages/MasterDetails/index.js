@@ -158,6 +158,7 @@ let errObj = {
   joinaddress_Premesis: "",
   priviousContractID: "",
   remarks: "",
+  schedulePrimesis: "",
 };
 
 const MasterDetails = (props) => {
@@ -283,6 +284,7 @@ const MasterDetails = (props) => {
     joinaddress_Premesis: "",
     priviousContractID: "",
     remarks: "",
+    schedulePrimesis: "",
   });
 
   // console.log("allNewContractDetails", allNewContractDetails);
@@ -421,6 +423,7 @@ const MasterDetails = (props) => {
       joinaddress_Premesis: "",
       priviousContractID: "",
       remarks: "",
+      schedulePrimesis: "",
     };
     setAllNewContractDetailsErr(errObj);
   }, []);
@@ -526,7 +529,7 @@ const MasterDetails = (props) => {
       lastMonthvalue: "",
       // rentAmount: "",
       escalation: "",
-      // renewalTenure: "",
+      // schedulePrimesis: "",
       lattitude: "",
       longitude: "",
       gpsCoordinates: "",
@@ -1101,7 +1104,7 @@ const MasterDetails = (props) => {
 
       rentAmount: allNewContractDetails?.rentAmount,
       escalation: allNewContractDetails?.escalation,
-      renewalTenure: allNewContractDetails?.renewalTenure,
+      schedulePrimesis: allNewContractDetails?.schedulePrimesis,   ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
 
       tds: allNewContractDetails?.tds,
       gst: allNewContractDetails.gst,
@@ -1126,7 +1129,8 @@ const MasterDetails = (props) => {
       priviousContractID: allNewContractDetails?.priviousContractID,
       remarks: allNewContractDetails?.remarks,
 
-      lessorElectricityBillPath: allNewContractDetails?.lessorElectricityBillPath,
+      lessorElectricityBillPath:
+        allNewContractDetails?.lessorElectricityBillPath,
       lessorTaxNumberPath: allNewContractDetails?.lessorTaxNumberPath,
       lessorBankPassBookPath: allNewContractDetails?.lessorBankPassBookPath,
       panDocumentPath: allNewContractDetails?.panDocumentPath,
@@ -1244,6 +1248,7 @@ const MasterDetails = (props) => {
         joinaddress_Premesis: "",
         priviousContractID: "",
         remarks: "",
+        schedulePrimesis: "",
       });
       setBranchDetails((prev) => ({
         ...prev,
@@ -1395,7 +1400,7 @@ const MasterDetails = (props) => {
 
       rentAmount: allNewContractDetails?.rentAmount,
       escalation: allNewContractDetails?.escalation,
-      renewalTenure: allNewContractDetails?.renewalTenure,
+      schedulePrimesis: allNewContractDetails?.schedulePrimesis, ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
 
       lattitude: allNewContractDetails?.lattitude,
       longitude: allNewContractDetails?.longitude,
@@ -1419,7 +1424,8 @@ const MasterDetails = (props) => {
       priviousContractID: allNewContractDetails?.priviousContractID,
       remarks: allNewContractDetails?.remarks,
 
-      lessorElectricityBillPath: allNewContractDetails?.lessorElectricityBillPath,
+      lessorElectricityBillPath:
+        allNewContractDetails?.lessorElectricityBillPath,
       lessorTaxNumberPath: allNewContractDetails?.lessorTaxNumberPath,
       lessorBankPassBookPath: allNewContractDetails?.lessorBankPassBookPath,
       panDocumentPath: allNewContractDetails?.panDocumentPath,
@@ -1540,7 +1546,7 @@ const MasterDetails = (props) => {
         securityDepositExitTerm: props.EditLessorData?.securityDepositExitTerm,
         standardDeducition: props.EditLessorData?.standardDeducition,
         escalation: props.EditLessorData?.escalation,
-        renewalTenure: props.EditLessorData?.renewalTenure,
+        schedulePrimesis: props.EditLessorData?.schedulePrimesis,    ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
 
         lattitude: props.EditLessorData?.lattitude,
         longitude: props.EditLessorData?.longitude,
@@ -1563,11 +1569,10 @@ const MasterDetails = (props) => {
         remarks: props?.EditLessorData?.remarks,
 
         lessorElectricityBillPath:
-         props?.EditLessorData?.lessorElectricityBillPath,
-        lessorTaxNumberPath:props?.EditLessorData?.lessorTaxNumberPath,
-        lessorBankPassBookPath:
-         props?.EditLessorData?.lessorBankPassBookPath,
-        panDocumentPath:props?.EditLessorData?.panDocumentPath,
+          props?.EditLessorData?.lessorElectricityBillPath,
+        lessorTaxNumberPath: props?.EditLessorData?.lessorTaxNumberPath,
+        lessorBankPassBookPath: props?.EditLessorData?.lessorBankPassBookPath,
+        panDocumentPath: props?.EditLessorData?.panDocumentPath,
       });
     }
   }, [props.EditLessorData]);

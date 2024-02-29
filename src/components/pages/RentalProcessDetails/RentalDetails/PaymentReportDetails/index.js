@@ -517,18 +517,10 @@ const PaymentReportDetails = (props) => {
                     autoHideDuration={1000}
                     onClose={handleClose}
                     action={action}
+                    message="File Uploaded Sucessfully!"
                     key={vertical + horizontal}
                     variant="success"
-                  >
-                    <Alert
-                      onClose={handleClose}
-                      severity="success"
-                      variant="filled"
-                      sx={{ width: "30%" }}
-                    >
-                      Note :Change the Rent End Date to close the Agreement!
-                    </Alert>
-                  </Snackbar>
+                  />
                 </Grid>
               </Grid>
             )}

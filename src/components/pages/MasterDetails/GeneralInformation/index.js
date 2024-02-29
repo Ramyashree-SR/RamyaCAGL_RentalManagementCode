@@ -16,6 +16,7 @@ import { uploadFileApi } from "../../../services/UploadDoucmentApi";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { deepOrange, green } from "@mui/material/colors";
 import { useToasts } from "react-toast-notifications";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -80,7 +81,7 @@ const GeneralInformation = ({
     file: {},
     filename: "",
   });
-  const [active, setactive] = useState(null);
+  const [active, setactive] = useState("");
   // console.log(active, "active");
 
   const handleElectricityBillFileUpload = async () => {
@@ -91,10 +92,10 @@ const GeneralInformation = ({
     const { data, errRes } = await uploadFileApi(payload);
     // console.log(data, "data");
     if (data) {
-      setactive(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setactive(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setAllNewContractDetails({
         ...allNewContractDetails,
-        lessorElectricityBillPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+        lessorElectricityBillPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
       });
 
       // addToast("File Uploaded", { appearance: "success" });
@@ -108,7 +109,7 @@ const GeneralInformation = ({
     file: {},
     filename: "",
   });
-  const [active1, setactive1] = useState(null);
+  const [active1, setactive1] = useState("");
 
   const handleBankChequeFileUpload = async () => {
     const payload = new FormData();
@@ -117,10 +118,13 @@ const GeneralInformation = ({
     payload.append("doctype", "BankChequeFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive1(data);
-        // addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive1(data.uid); // Assuming 'responseId' is the field containing the response ID
+      setAllNewContractDetails({
+        ...allNewContractDetails,
+        lessorElectricityBillPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -131,7 +135,7 @@ const GeneralInformation = ({
     file: {},
     filename: "",
   });
-  const [active2, setactive2] = useState(null);
+  const [active2, setactive2] = useState("");
 
   const handleTaxReciptFileUpload = async () => {
     const payload = new FormData();
@@ -140,10 +144,13 @@ const GeneralInformation = ({
     payload.append("doctype", "TaxReciptFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive2(data);
-        // addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive2(data?.uid); // Assuming 'responseId' is the field containing the response ID
+      setAllNewContractDetails({
+        ...allNewContractDetails,
+        lessorElectricityBillPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -154,7 +161,7 @@ const GeneralInformation = ({
     file: {},
     filename: "",
   });
-  const [active3, setactive3] = useState(null);
+  const [active3, setactive3] = useState("");
 
   const handlePancardFileUpload = async () => {
     const payload = new FormData();
@@ -163,10 +170,13 @@ const GeneralInformation = ({
     payload.append("doctype", "PancardFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive3(data);
-        // addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive3(data?.uid); // Assuming 'responseId' is the field containing the response ID
+      setAllNewContractDetails({
+        ...allNewContractDetails,
+        lessorElectricityBillPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -177,7 +187,7 @@ const GeneralInformation = ({
     file: {},
     filename: "",
   });
-  const [active4, setactive4] = useState(null);
+  const [active4, setactive4] = useState("");
 
   const handleAnyOtherFileUpload = async () => {
     const payload = new FormData();
@@ -186,12 +196,15 @@ const GeneralInformation = ({
     payload.append("doctype", "AnyOtherFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      if (data.error == "FALSE") {
-        setactive4(data);
-        addToast("File Uploaded", { appearance: "success" });
-      }
+      setactive4(data?.uid); // Assuming 'responseId' is the field containing the response ID
+      setAllNewContractDetails({
+        ...allNewContractDetails,
+        lessorElectricityBillPath: data?.fileName, // Assuming 'filePath' is the field containing the file path
+      });
+
+      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
-      addToast(errRes, { appearance: "error" });
+      // addToast(errRes, { appearance: "error" });
     }
   };
 
@@ -320,14 +333,10 @@ const GeneralInformation = ({
               <Grid item className="d-flex m-2" lg={12}>
                 <InputBoxComponent
                   label="Electricity Bill"
-                  // placeholder="Enter Electricity Bill"
+                  // placeholder="Enter BankCheck"
                   sx={{ width: 200 }}
-                  name="lessorElectricityBillPath"
-                  // value={electricityBillFile?.filename}
-                  value={
-                    allNewContractDetails?.lessorElectricityBillPath
-                      ?.electricityBillFile?.filename || null
-                  }
+                  // name="lessorElectricityBillPath"
+                  value={allNewContractDetails?.lessorElectricityBillPath}
                 />
                 <form
                   action="/action_page.php"
@@ -337,13 +346,6 @@ const GeneralInformation = ({
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    onClick={() => ElectricityBillInput.current.click()}
-                  >
-                    File
-                  </Button>
-
                   <input
                     ref={ElectricityBillInput}
                     type="file"
@@ -356,43 +358,63 @@ const GeneralInformation = ({
                         file: e.target.files[0],
                         filename: e.target.files[0].name,
                       });
+                      handleElectricityBillFileUpload();
                     }}
                   />
+                </form>
+                <ColorIcon
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: -2,
+                  }}
+                >
+                  <UploadFileIcon
+                    onClick={() => {
+                      ElectricityBillInput.current.click();
+                    }}
+                    fontSize="small"
+                    sx={{ mt: 0.5 }}
+                  />
+                  <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                    Upload
+                  </Typography>
+                </ColorIcon>
+                {/* <span> */}
+                <a
+                  href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    marginLeft: "-10px",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
                   <ColorIcon
                     sx={{
                       display: "flex",
                       flexDirection: "column",
+                      ml: 0,
                     }}
                   >
-                    <UploadFileIcon
-                      onClick={() => {
-                        handleElectricityBillFileUpload();
-                        // handleRefresh();
-                      }}
-                      fontSize="large"
-                      // sx={{ background: "#FFFFF", color: "green" }}
+                    <FileDownloadDoneIcon
+                      fontSize="small"
+                      sx={{ marginTop: 1.5 }}
                     />
-                    <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                      Upload
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Download
                     </Typography>
                   </ColorIcon>
-                </form>
-                {/* {active && ( */}
-                {/* <Button
-                  variant="outlined"
-                  name="Download"
-                  onClick={handleAgreementFileDownload}
-                  className="m-2"
-                >
-                  Download
-                </Button> */}
-                {/* )} */}
+                </a>
+                {/* </span> */}
 
                 <InputBoxComponent
                   label="Bank Pass Book/Cheque "
                   // placeholder="Enter BankCheck"
                   sx={{ width: 200 }}
-                  value={bankChequeFile?.filename}
+                  // name="lessorBankPassBookPath"
+                  value={allNewContractDetails?.lessorBankPassBookPath}
                 />
                 <form
                   action="/action_page.php"
@@ -402,13 +424,6 @@ const GeneralInformation = ({
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    onClick={() => BankChequeFileInput.current.click()}
-                  >
-                    File
-                  </Button>
-
                   <input
                     ref={BankChequeFileInput}
                     type="file"
@@ -421,32 +436,65 @@ const GeneralInformation = ({
                         file: e.target.files[0],
                         filename: e.target.files[0].name,
                       });
+                      handleBankChequeFileUpload();
                     }}
                   />
+                </form>
+                <ColorIcon
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: -2,
+                  }}
+                >
+                  <UploadFileIcon
+                    onClick={() => {
+                      BankChequeFileInput.current.click();
+                    }}
+                    fontSize="small"
+                    sx={{ mt: 0.5 }}
+                  />
+                  <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                    Upload
+                  </Typography>
+                </ColorIcon>
+                {/* <span> */}
+                <a
+                  href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active1}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    marginLeft: "-10px",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
                   <ColorIcon
                     sx={{
                       display: "flex",
                       flexDirection: "column",
+                      ml: 0,
                     }}
                   >
-                    <UploadFileIcon
-                      onClick={() => {
-                        handleBankChequeFileUpload();
-                      }}
-                      fontSize="large"
+                    <FileDownloadDoneIcon
+                      fontSize="small"
+                      sx={{ marginTop: 1.5 }}
                     />
-                    <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                      Upload
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Download
                     </Typography>
                   </ColorIcon>
-                </form>
+                </a>
+                {/* </span> */}
               </Grid>
+
               <Grid item className="d-flex m-2" lg={12}>
                 <InputBoxComponent
                   label="Tax Paid Recipt "
                   // placeholder="Enter BankCheck"
                   sx={{ width: 200 }}
-                  value={taxReciptFile?.filename}
+                  name="lessorTaxNumberPath"
+                  value={allNewContractDetails?.lessorTaxNumberPath}
                 />
                 <form
                   action="/action_page.php"
@@ -456,13 +504,6 @@ const GeneralInformation = ({
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    onClick={() => TaxReciptInput.current.click()}
-                  >
-                    File
-                  </Button>
-
                   <input
                     ref={TaxReciptInput}
                     type="file"
@@ -475,33 +516,63 @@ const GeneralInformation = ({
                         file: e.target.files[0],
                         filename: e.target.files[0].name,
                       });
+                      handleTaxReciptFileUpload();
                     }}
                   />
+                </form>
+
+                <ColorIcon
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: -2,
+                  }}
+                >
+                  <UploadFileIcon
+                    onClick={() => {
+                      TaxReciptInput.current.click();
+                    }}
+                    fontSize="small"
+                    sx={{ mt: 0.5 }}
+                  />
+                  <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                    Upload
+                  </Typography>
+                </ColorIcon>
+
+                <a
+                  href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active2}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    marginLeft: "-10px",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
                   <ColorIcon
                     sx={{
                       display: "flex",
                       flexDirection: "column",
+                      ml: 0,
                     }}
                   >
-                    <UploadFileIcon
-                      onClick={() => {
-                        handleTaxReciptFileUpload();
-                        // handleRefresh();
-                      }}
-                      fontSize="large"
-                      // sx={{ background: "#FFFFF", color: "green" }}
+                    <FileDownloadDoneIcon
+                      fontSize="small"
+                      sx={{ marginTop: 1.5 }}
                     />
-                    <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                      Upload
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Download
                     </Typography>
                   </ColorIcon>
-                </form>
+                </a>
 
                 <InputBoxComponent
                   label="Pan Card "
                   // placeholder="Enter BankCheck"
                   sx={{ width: 200 }}
-                  value={pancardFile?.filename}
+                  name="panDocumentPath"
+                  value={allNewContractDetails?.panDocumentPath}
                 />
                 <form
                   action="/action_page.php"
@@ -511,12 +582,12 @@ const GeneralInformation = ({
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    onClick={() => pancardInput.current.click()}
-                  >
-                    File
-                  </Button>
+                  {/* <Button
+                      variant="contained"
+                      onClick={() => pancardInput.current.click()}
+                    >
+                      File
+                    </Button> */}
 
                   <input
                     ref={pancardInput}
@@ -530,27 +601,57 @@ const GeneralInformation = ({
                         file: e.target.files[0],
                         filename: e.target.files[0].name,
                       });
+                      handlePancardFileUpload();
                     }}
                   />
+                </form>
+                <ColorIcon
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    ml: -2,
+                  }}
+                >
+                  <UploadFileIcon
+                    onClick={() => {
+                      pancardInput.current.click();
 
+                      // handleRefresh();
+                    }}
+                    fontSize="small"
+                    sx={{ mt: 0.5 }}
+                  />
+                  <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                    Upload
+                  </Typography>
+                </ColorIcon>
+
+                <a
+                  href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active3}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    marginLeft: "-10px",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
                   <ColorIcon
                     sx={{
                       display: "flex",
                       flexDirection: "column",
+                      ml: 0,
                     }}
                   >
-                    <UploadFileIcon
-                      onClick={() => {
-                        handlePancardFileUpload();
-                        // handleRefresh();
-                      }}
-                      fontSize="large"
+                    <FileDownloadDoneIcon
+                      fontSize="small"
+                      sx={{ marginTop: 1.5 }}
                     />
-                    <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
-                      Upload
+                    <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                      Download
                     </Typography>
                   </ColorIcon>
-                </form>
+                </a>
               </Grid>
               <Grid item className="d-flex m-2" lg={12}>
                 <InputBoxComponent
@@ -568,13 +669,6 @@ const GeneralInformation = ({
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    onClick={() => AnyOtherFileInput.current.click()}
-                  >
-                    File
-                  </Button>
-
                   <input
                     ref={AnyOtherFileInput}
                     type="file"
@@ -602,6 +696,7 @@ const GeneralInformation = ({
                   >
                     <UploadFileIcon
                       onClick={() => {
+                        AnyOtherFileInput.current.click();
                         handleAnyOtherFileUpload();
                         // handleRefresh();
                       }}
@@ -612,16 +707,6 @@ const GeneralInformation = ({
                       Upload
                     </Typography>
                   </ColorIcon>
-                  <a
-                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/231219124408128`}
-                    target="_blank"
-                    rel="noreferrer"
-                    // onClick={() =>
-                    //   handlePanCardFileView(mainDealerId, "PanCardDetails")
-                    // }
-                  >
-                    Download
-                  </a>
                 </form>
               </Grid>
             </Grid>

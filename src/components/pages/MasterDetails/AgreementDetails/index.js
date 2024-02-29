@@ -19,6 +19,7 @@ import moment from "moment/moment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DemoContainer } from "@mui/x-date-pickers";
+import SimpleDropDown from "../../../atoms/SimpleDropDown";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -129,6 +130,11 @@ const AgreementDetails = ({
     { id: "4", label: "4" },
   ];
 
+  let EscMonths = [
+    { id: "1", label: "11" },
+    { id: "2", label: "12" },
+  ];
+
   const handleDropDownChange = (newValue) => {
     setRecipientCount(newValue);
     if (newValue.id === "1") {
@@ -182,6 +188,13 @@ const AgreementDetails = ({
         }));
       }
     }
+  };
+
+  const handleMonthDetails = (value) => {
+    setAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      schedulePrimesis: value ? value?.label : null,
+    }));
   };
 
   const handleChangeIFSCCode = (event, index) => {
@@ -1449,7 +1462,7 @@ const AgreementDetails = ({
               className="d-flex flex-column px-0 py-2 mt-1 "
             >
               <Grid item className="d-flex m-2" md={6}>
-                <InputBoxComponent
+                {/* <InputBoxComponent
                   label="Enter Renewal Tenure (in months)"
                   type="number"
                   name="agreementTenure"
@@ -1458,6 +1471,38 @@ const AgreementDetails = ({
                   sx={{ width: 300 }}
                   readOnly
                   required
+                /> */}
+                {/* <SimpleDropDown
+                  options={EscMonths}
+                  label="Escalation Months (in months)"
+                  onChange={handleMonthDetails}
+                  value={
+                    EscMonths?.find(
+                      (option) =>
+                        option?.label ===
+                        allNewContractDetails?.schedulePrimesis
+                    ) || null
+                  }
+                  // sx={{ width: 300 }}
+                  required={true}
+                /> */}
+                <DropDownComponent
+                  label="Escalation Months (in months)"
+                  placeholder="Enter Activation Status"
+                  sx={{ width: 300 }}
+                  size="small"
+                  options={EscMonths}
+                  getOptionLabel={(option) =>
+                    option?.label || allNewContractDetails?.schedulePrimesis
+                  }
+                  // name="agreementActivationStatus"
+                  value={
+                    type === "edit"
+                      ? allNewContractDetails?.schedulePrimesis
+                      : allNewContractDetails?.schedulePrimesis || null
+                  }
+                  onChange={handleMonthDetails}
+                  required={true}
                 />
 
                 <InputBoxComponent
