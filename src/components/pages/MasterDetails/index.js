@@ -529,7 +529,7 @@ const MasterDetails = (props) => {
       lastMonthvalue: "",
       // rentAmount: "",
       escalation: "",
-      // schedulePrimesis: "",
+      schedulePrimesis: "",
       lattitude: "",
       longitude: "",
       gpsCoordinates: "",

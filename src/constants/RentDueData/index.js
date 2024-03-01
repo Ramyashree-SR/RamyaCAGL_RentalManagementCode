@@ -6,6 +6,7 @@ const rentDueData = [
     minWidth: 100,
     align: "center",
   },
+  { id: "schedulePrimesis", label: "Esc.Month", minWidth: 70, align: "center" },
   { id: "escalation", label: "Esc (%)", minWidth: 70, align: "center" },
   { id: "year", label: "Year", minWidth: 70, align: "center" },
   { id: "status", label: "Status", minWidth: 70, align: "center" },

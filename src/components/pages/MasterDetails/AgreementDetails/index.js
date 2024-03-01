@@ -1488,7 +1488,7 @@ const AgreementDetails = ({
                 /> */}
                 <DropDownComponent
                   label="Escalation Months (in months)"
-                  placeholder="Enter Activation Status"
+                  placeholder="Enter Month"
                   sx={{ width: 300 }}
                   size="small"
                   options={EscMonths}

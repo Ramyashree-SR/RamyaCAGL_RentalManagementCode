@@ -27,6 +27,7 @@ const RentDueInActualModal = (props) => {
       <Modal
         show={props.show}
         close={props.close}
+        fullscreen
         aria-labelledby="contained-modal-title-vcenter"
         centered
         size="lg"

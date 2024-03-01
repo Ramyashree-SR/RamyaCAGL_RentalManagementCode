@@ -404,6 +404,18 @@ const EditMasterDetails = (props) => {
     { id: "Renewal", label: "Renewal" },
   ];
 
+  let EscMonths = [
+    { id: "1", label: "11" },
+    { id: "2", label: "12" },
+  ];
+
+  const handleMonthDetails = (value) => {
+    setEditAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      schedulePrimesis: value ? value?.label : null,
+    }));
+  };
+
   let activationStatus = [
     { id: "1", label: "Open" },
     { id: "2", label: "Closed" },
@@ -1281,7 +1293,7 @@ const EditMasterDetails = (props) => {
         schedulePrimesis: "",
       });
       props.close();
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -2796,7 +2808,7 @@ const EditMasterDetails = (props) => {
                 className="d-flex flex-column px-0 py-2 mt-1 "
               >
                 <Grid item className="d-flex m-2" md={6}>
-                  <InputBoxComponent
+                  {/* <InputBoxComponent
                     label="Enter Renewal Tenure (in months)"
                     type="number"
                     name="agreementTenure"
@@ -2805,6 +2817,22 @@ const EditMasterDetails = (props) => {
                     sx={{ width: 300 }}
                     readOnly
                     required
+                  /> */}
+
+                  <DropDownComponent
+                    label="Escalation Months (in months)"
+                    placeholder="Enter Month"
+                    sx={{ width: 300 }}
+                    size="small"
+                    options={EscMonths}
+                    getOptionLabel={(option) =>
+                      option?.label ||
+                      editAllNewContractDetails?.schedulePrimesis
+                    }
+                    // name="agreementActivationStatus"
+                    value={editAllNewContractDetails?.schedulePrimesis}
+                    onChange={handleMonthDetails}
+                    required={true}
                   />
 
                   <InputBoxComponent
