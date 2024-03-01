@@ -508,6 +508,7 @@ const RentalDetails = (props) => {
                 rentEndDate={rentEndDate}
                 setRefreshKey={setRefreshKey}
                 refreshKey={refreshKey}
+                activationStatusFilterDue={activationStatusFilterDue}
               />
               <RentDue
                 show={openRentDueDataModal}

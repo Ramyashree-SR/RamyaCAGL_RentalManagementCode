@@ -11,7 +11,15 @@ import {
 import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
-import { deepOrange, green, pink, purple, red } from "@mui/material/colors";
+import {
+  blue,
+  deepOrange,
+  deepPurple,
+  green,
+  pink,
+  purple,
+  red,
+} from "@mui/material/colors";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
 import PaymentTableComponent from "../../../../molecules/PaymentTableComponent";
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
@@ -28,6 +36,12 @@ import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 import SwitchComponent from "../../../../atoms/SwitchComponent";
+import ShowProvisionDetails from "../ShowProvisionDetails";
+import { getProvisionDetailsOfTheBranch } from "../../../../services/ProvisionsApi";
+import BranchReportTable from "../../../../molecules/BranchReportTable";
+import RentDueDetails from "../RentDueDetails";
+import RentDueInActualModal from "../RentDueInActualModal";
+import VarianceInActualModal from "../VarianceInActualModal";
 
 const RentActual = (props) => {
   const { setRefreshKey, refreshKey } = props;
@@ -41,6 +55,10 @@ const RentActual = (props) => {
   const [openActualDetailsModal, setOpenActualDetailsModal] = useState(false);
   const [settlementAmt, setSettlementAmt] = useState([]);
   const [checked, setChecked] = useState(false);
+  const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
+  const [openShowRentDueModal, setOpenShowRentDueModal] = useState(false);
+  const [openShowVarianceModal, setOpenShowVarianceModal] = useState(false);
+  const [getProvisionDetails, setGetProvisionDetails] = useState([]);
 
   const months = [
     { id: 1, label: "January" },
@@ -226,6 +244,22 @@ const RentActual = (props) => {
     }
   };
 
+  const getProvisionListOftheBranch = async () => {
+    try {
+      const { data } = await getProvisionDetailsOfTheBranch(RentActualIDs);
+      if (data) {
+        if (data) {
+          let getData = data?.data;
+          setGetProvisionDetails(getData);
+        } else {
+          setGetProvisionDetails([]);
+        }
+      }
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error fetching provision details:", error);
+    }
+  };
   const handleActualClick = () => {
     setOpenActualDetailsModal(true);
   };
@@ -305,7 +339,7 @@ const RentActual = (props) => {
                   <Button
                     variant="contained"
                     onClick={() => handleActualClick()}
-                    sx={{ backgroundColor: pink[900] }}
+                    sx={{ backgroundColor: red[900] }}
                   >
                     Rent Actual Details
                   </Button>
@@ -332,7 +366,7 @@ const RentActual = (props) => {
                         Contract ID :&nbsp;&nbsp;
                       </Typography>
                       <Typography
-                        sx={{ fontSize: 15, fontWeight: 700, color: pink[900] }}
+                        sx={{ fontSize: 15, fontWeight: 700, color: pink[700] }}
                       >
                         {rentActualData?.uniqueID}
                       </Typography>
@@ -346,7 +380,7 @@ const RentActual = (props) => {
                         Branch ID :&nbsp;&nbsp;
                       </Typography>
                       <Typography
-                        sx={{ fontSize: 15, fontWeight: 700, color: pink[900] }}
+                        sx={{ fontSize: 15, fontWeight: 700, color: pink[700] }}
                       >
                         {rentActualData.branchID}
                       </Typography>
@@ -360,7 +394,7 @@ const RentActual = (props) => {
                         Branch Name :&nbsp;&nbsp;
                       </Typography>
                       <Typography
-                        sx={{ fontSize: 15, fontWeight: 700, color: pink[900] }}
+                        sx={{ fontSize: 15, fontWeight: 700, color: pink[700] }}
                       >
                         {rentActualData?.lesseeBranchName}
                       </Typography>
@@ -387,7 +421,7 @@ const RentActual = (props) => {
                           sx={{
                             fontSize: 15,
                             fontWeight: 700,
-                            color: pink[900],
+                            color: pink[700],
                           }}
                         >
                           {rentActualData?.rentStartDate}
@@ -405,7 +439,7 @@ const RentActual = (props) => {
                           sx={{
                             fontSize: 15,
                             fontWeight: 700,
-                            color: pink[900],
+                            color: pink[700],
                           }}
                         >
                           {rentActualData?.rentEndDate}
@@ -423,10 +457,9 @@ const RentActual = (props) => {
                           sx={{
                             fontSize: 15,
                             fontWeight: 700,
-                            color: pink[900],
+                            color: pink[700],
                           }}
                         >
-                          {" "}
                           {rentActualData?.lessorName}
                         </Typography>
                       </Grid>
@@ -436,18 +469,86 @@ const RentActual = (props) => {
                 </Col>
                 {RentActualIDs && (
                   <Grid item className="d-flex flex-row">
-                    <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                      Payment Report of the Branch-&nbsp;&nbsp;
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 15,
-                        fontWeight: 700,
-                        color: red[900],
-                      }}
+                    <Grid
+                      className="d-flex align-items-start justify-content-start"
+                      sx={{ flexBasis: "50%" }}
                     >
-                      {rentActualData?.lesseeBranchName}
-                    </Typography>
+                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                        Payment Report of the Branch-&nbsp;&nbsp;
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: red[900],
+                        }}
+                      >
+                        {rentActualData?.lesseeBranchName}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      className="d-flex align-items-end justify-content-end"
+                      sx={{ flexBasis: "50%" }}
+                    >
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          setOpenShowRentDueModal(true);
+                        }}
+                        sx={{ backgroundColor: green[800] }}
+                      >
+                        Rent Due Details
+                      </Button>
+
+                      <Grid className="d-flex align-items-end justify-content-end">
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            setOpenShowProvisionModal(true);
+                            getProvisionListOftheBranch();
+                          }}
+                          sx={{ backgroundColor: blue[900], ml: 1 }}
+                        >
+                          Provisions Details
+                        </Button>
+
+                        <Grid className="d-flex align-items-end justify-content-end">
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              setOpenShowVarianceModal(true);
+                            }}
+                            sx={{ backgroundColor: pink[800], ml: 1 }}
+                          >
+                            Variance Details
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <ShowProvisionDetails
+                      show={openShowProvisionModal}
+                      close={() => setOpenShowProvisionModal(false)}
+                      uniqueID={RentActualIDs}
+                      selectedYear={selectedYear}
+                      selectedMonth={selectedMonth}
+                      getProvisionDetails={getProvisionDetails}
+                      getProvisionListOftheBranch={getProvisionListOftheBranch}
+                    />
+
+                    <RentDueInActualModal
+                      show={openShowRentDueModal}
+                      close={() => setOpenShowRentDueModal(false)}
+                      uniqueID={RentActualIDs}
+                      activationStatusFilterDue={
+                        props.activationStatusFilterDue
+                      }
+                    />
+
+                    <VarianceInActualModal
+                      show={openShowVarianceModal}
+                      close={() => setOpenShowVarianceModal(false)}
+                      RentContractID={RentActualIDs}
+                    />
                   </Grid>
                 )}
                 {RentActualIDs && (
@@ -492,7 +593,7 @@ const RentActual = (props) => {
                           sx={{
                             fontSize: 15,
                             fontWeight: 700,
-                            color: pink[900],
+                            color: pink[500],
                           }}
                         >
                           {getPaymentReport?.actualAmount}

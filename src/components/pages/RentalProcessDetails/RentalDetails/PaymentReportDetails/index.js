@@ -56,7 +56,7 @@ const PaymentReportDetails = (props) => {
   const [refreshKey, setRefreshKey] = useState(0);
   const { vertical, horizontal, open } = state;
 
-  const handleClick = (newState) => () => {
+  const handleClick = (newState) => {
     setState({ ...newState, open: true });
   };
 
@@ -106,6 +106,7 @@ const PaymentReportDetails = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
+    getAllPaymentReportDetailsOfMonth(value);
   };
 
   const startDateObject = new Date(rentStartDate);
@@ -517,10 +518,18 @@ const PaymentReportDetails = (props) => {
                     autoHideDuration={1000}
                     onClose={handleClose}
                     action={action}
-                    message="File Uploaded Sucessfully!"
                     key={vertical + horizontal}
-                    variant="success"
-                  />
+                    // variant="success"
+                  >
+                    <Alert
+                      onClose={handleClose}
+                      severity="success"
+                      variant="filled"
+                      sx={{ width: "30%" }}
+                    >
+                      Note :Change the Rent End Date to close the Agreement!
+                    </Alert>
+                  </Snackbar>
                 </Grid>
               </Grid>
             )}

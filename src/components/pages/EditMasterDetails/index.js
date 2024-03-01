@@ -852,18 +852,19 @@ const EditMasterDetails = (props) => {
     });
   };
 
-  const [refreshCount, setRefreshCount] = useState(0);
-  console.log(refreshCount, "refreshCount");
-  const handleRefresh = () => {
-    // Increment the refreshCount to trigger a re-render
-    setRefreshCount((prevCount) => prevCount + 1);
-  };
+  // const [refreshCount, setRefreshCount] = useState(0);
+
+  // const handleRefresh = () => {
+  //   // Increment the refreshCount to trigger a re-render
+  //   setRefreshCount((prevCount) => prevCount + 1);
+  // };
 
   const ElectricityBillInput = useRef();
   const [electricityBillFile, setElectricityBillFile] = useState({
     file: {},
     filename: "",
   });
+
   const [active, setactive] = useState(null);
 
   const handleElectricityBillFileUpload = async () => {
@@ -872,14 +873,13 @@ const EditMasterDetails = (props) => {
     payload.append("appid", "3");
     payload.append("doctype", "ElectricityBillFile");
     const { data, errRes } = await uploadFileApi(payload);
-    // console.log(data, "data");
     if (data) {
+      // console.log(typeof data?.fileName, "FileName");
       setactive(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
-        lessorElectricityBillPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+        lessorElectricityBillPath: data.fileName || "", // Assuming 'filePath' is the field containing the file path
       });
-      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
     }
@@ -902,7 +902,7 @@ const EditMasterDetails = (props) => {
       setactive1(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
-        lessorBankPassBookPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+        lessorBankPassBookPath: data?.fileName || "", // Assuming 'filePath' is the field containing the file path
       });
       // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
@@ -916,11 +916,10 @@ const EditMasterDetails = (props) => {
     filename: "",
   });
   const [active2, setactive2] = useState(null);
-  console.log(active2, "active");
 
   const handleTaxReciptFileUpload = async () => {
     const payload = new FormData();
-    payload.append("file", taxReciptFile.file);
+    payload.append("file", taxReciptFile?.file);
     payload.append("appid", "3");
     payload.append("doctype", "TaxReciptFile");
     const { data, errRes } = await uploadFileApi(payload);
@@ -928,7 +927,7 @@ const EditMasterDetails = (props) => {
       setactive2(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
-        lessorTaxNumberPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+        lessorTaxNumberPath: data?.fileName || "", // Assuming 'filePath' is the field containing the file path
       });
       // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
@@ -941,11 +940,11 @@ const EditMasterDetails = (props) => {
     file: {},
     filename: "",
   });
-  const [active3, setactive3] = useState(null);
+  const [active3, setactive3] = useState("");
 
   const handlePancardFileUpload = async () => {
     const payload = new FormData();
-    payload.append("file", pancardFile.file);
+    payload.append("file", pancardFile?.file);
     payload.append("appid", "3");
     payload.append("doctype", "PancardFile");
     const { data, errRes } = await uploadFileApi(payload);
@@ -953,11 +952,9 @@ const EditMasterDetails = (props) => {
       setactive3(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
-        panDocumentPath: data.fileName, // Assuming 'filePath' is the field containing the file path
+        panDocumentPath: data?.fileName || "", // Assuming 'filePath' is the field containing the file path
       });
-      // addToast("File Uploaded", { appearance: "success" });
     } else if (errRes) {
-      // addToast(errRes, { appearance: "error" });
     }
   };
 
@@ -1291,14 +1288,11 @@ const EditMasterDetails = (props) => {
   const handleSubmit = () => {
     setEditAllNewContractDetails(editAllNewContractDetails);
     editRentContractDetailsAllNew();
-    // }
   };
 
   const handleBack = () => {
     props.close();
   };
-
-  // console.log(editAllNewContractDetails, "edit");
   return (
     <>
       <Modal
@@ -2902,7 +2896,6 @@ const EditMasterDetails = (props) => {
                   name="lessorName"
                   value={editAllNewContractDetails?.lessorName}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.lessorName}
                   required
                 />
 
@@ -2913,7 +2906,6 @@ const EditMasterDetails = (props) => {
                   name="lessorContactNumber"
                   value={editAllNewContractDetails?.lessorContactNumber}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.lessorContactNumber}
                   required
                 />
                 <InputBoxComponent
@@ -3012,10 +3004,6 @@ const EditMasterDetails = (props) => {
                           filename: e.target.files[0].name,
                         });
                         handleElectricityBillFileUpload();
-                        handleClick({
-                          vertical: "top",
-                          horizontal: "center",
-                        });
                       }}
                     />
                   </form>
@@ -3037,40 +3025,38 @@ const EditMasterDetails = (props) => {
                       Upload
                     </Typography>
                   </ColorIcon>
-                  {/* <span> */}
-                  <a
-                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      marginLeft: "-10px",
-                      textDecoration: "none",
-                      color: "inherit",
-                    }}
-                  >
-                    <ColorIcon
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        ml: 0,
+                  {active && (
+                    <a
+                      href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        marginLeft: "-10px",
+                        textDecoration: "none",
+                        color: "inherit",
                       }}
                     >
-                      <FileDownloadDoneIcon
-                        fontSize="small"
-                        sx={{ marginTop: 1.5 }}
-                      />
-                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
-                        Download
-                      </Typography>
-                    </ColorIcon>
-                  </a>
-                  {/* </span> */}
+                      <ColorIcon
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          ml: 0,
+                        }}
+                      >
+                        <FileDownloadDoneIcon
+                          fontSize="small"
+                          sx={{ marginTop: 1.5 }}
+                        />
+                        <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                          Download
+                        </Typography>
+                      </ColorIcon>
+                    </a>
+                  )}
 
                   <InputBoxComponent
                     label="Bank Pass Book/Cheque "
-                    // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
-                    // name="lessorBankPassBookPath"
                     value={editAllNewContractDetails?.lessorBankPassBookPath}
                   />
                   <form
@@ -3094,10 +3080,6 @@ const EditMasterDetails = (props) => {
                           filename: e.target.files[0].name,
                         });
                         handleBankChequeFileUpload();
-                        handleClick({
-                          vertical: "top",
-                          horizontal: "center",
-                        });
                       }}
                     />
                   </form>
@@ -3178,10 +3160,6 @@ const EditMasterDetails = (props) => {
                           filename: e.target.files[0].name,
                         });
                         handleTaxReciptFileUpload();
-                        handleClick({
-                          vertical: "top",
-                          horizontal: "center",
-                        });
                       }}
                     />
                   </form>
@@ -3234,7 +3212,6 @@ const EditMasterDetails = (props) => {
 
                   <InputBoxComponent
                     label="Pan Card "
-                    // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
                     name="panDocumentPath"
                     value={editAllNewContractDetails?.panDocumentPath}
@@ -3260,10 +3237,6 @@ const EditMasterDetails = (props) => {
                           filename: e.target.files[0].name,
                         });
                         handlePancardFileUpload();
-                        handleClick({
-                          vertical: "top",
-                          horizontal: "center",
-                        });
                       }}
                     />
                   </form>
@@ -3277,8 +3250,6 @@ const EditMasterDetails = (props) => {
                     <UploadFileIcon
                       onClick={() => {
                         pancardInput.current.click();
-
-                        // handleRefresh();
                       }}
                       fontSize="small"
                       sx={{ mt: 0.5 }}
@@ -3318,7 +3289,6 @@ const EditMasterDetails = (props) => {
                 <Grid item className="d-flex m-2" lg={12}>
                   <InputBoxComponent
                     label="Any Other"
-                    // placeholder="Enter BankCheck"
                     sx={{ width: 200 }}
                     value={anyOtherFile?.filename}
                   />
@@ -3348,10 +3318,6 @@ const EditMasterDetails = (props) => {
                           file: e.target.files[0],
                           filename: e.target.files[0].name,
                         });
-                        handleClick({
-                          vertical: "top",
-                          horizontal: "center",
-                        });
                       }}
                     />
                     <ColorIcon
@@ -3364,10 +3330,8 @@ const EditMasterDetails = (props) => {
                         onClick={() => {
                           AnyOtherFileInput.current.click();
                           handleAnyOtherFileUpload();
-                          // handleRefresh();
                         }}
                         fontSize="large"
-                        // sx={{ background: "#FFFFF", color: "green" }}
                       />
                       <Typography sx={{ fontSize: 9, fontWeight: 800 }}>
                         Upload
@@ -3411,9 +3375,6 @@ const EditMasterDetails = (props) => {
                       name="lessorFloorNumber"
                       value={editAllNewContractDetails?.lessorFloorNumber}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={
-                      //     editAllNewContractDetailsErr?.lessorFloorNumber
-                      //   }
                       required
                     />
                     <InputBoxComponent
@@ -3423,7 +3384,6 @@ const EditMasterDetails = (props) => {
                       name="lessorLandMark"
                       value={editAllNewContractDetails?.lessorLandMark}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorLandMark}
                       required
                     />
                   </Grid>
@@ -3435,7 +3395,6 @@ const EditMasterDetails = (props) => {
                       name="lessorStreet"
                       value={editAllNewContractDetails?.lessorStreet}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorStreet}
                       required
                     />
                     <InputBoxComponent
@@ -3445,7 +3404,6 @@ const EditMasterDetails = (props) => {
                       name="lessorWardNo"
                       value={editAllNewContractDetails?.lessorWardNo}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorWardNo}
                       required
                     />
                     <InputBoxComponent
@@ -3455,7 +3413,6 @@ const EditMasterDetails = (props) => {
                       name="lessorCity"
                       value={editAllNewContractDetails?.lessorCity}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorCity}
                       required
                     />
                   </Grid>
@@ -3467,7 +3424,6 @@ const EditMasterDetails = (props) => {
                       name="lessorPinCode"
                       value={editAllNewContractDetails?.lessorPinCode}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorPinCode}
                       required
                     />
                     <InputBoxComponent
@@ -3477,7 +3433,6 @@ const EditMasterDetails = (props) => {
                       name="lessorTaluka"
                       value={editAllNewContractDetails?.lessorTaluka}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorTaluka}
                       required
                     />
                     <InputBoxComponent
@@ -3487,7 +3442,6 @@ const EditMasterDetails = (props) => {
                       name="lessorDistrict"
                       value={editAllNewContractDetails?.lessorDistrict}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorDistrict}
                       required
                     />
                   </Grid>
@@ -3499,7 +3453,6 @@ const EditMasterDetails = (props) => {
                       name="lessorState"
                       value={editAllNewContractDetails?.lessorState}
                       onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.lessorState}
                       required
                     />
                   </Grid>
@@ -3510,7 +3463,6 @@ const EditMasterDetails = (props) => {
                     md={12}
                   >
                     <Button onClick={joinAddress}>Join Address</Button>
-                    {/* {address && ( */}
                     <InputBoxComponent
                       label="Address"
                       placeholder="Enter Address"
@@ -3518,13 +3470,10 @@ const EditMasterDetails = (props) => {
                       sx={{ width: 300 }}
                       size="large"
                       value={editAllNewContractDetails?.joinaddress_Vendor}
-                      // onChange={(e) => updateChange(e)}
                       readOnly
                     />
-                    {/* )} */}
 
                     <InputBoxComponent
-                      // label="Remarks."
                       textLabel="Remarks"
                       placeholder="Type here...."
                       sx={{ width: 500 }}
@@ -3533,7 +3482,6 @@ const EditMasterDetails = (props) => {
                       name="remarks"
                       value={editAllNewContractDetails?.remarks}
                       onChange={(e) => updateChange(e)}
-                      // errorText={editAllNewContractDetailsErr?.lessorDoorNumber}
                       required
                     />
                   </Grid>
@@ -3543,12 +3491,10 @@ const EditMasterDetails = (props) => {
           </Box>
 
           <hr style={{ border: "2px solid", borderStyle: "dashed" }} />
-          {/* </Box> */}
         </Modal.Body>
         <Modal.Footer>
           <Box className="d-flex  justify-content-end w-100">
             <Button
-              //   disabled={activeStep && activeStep === 0}
               onClick={() => {
                 handleSubmit();
               }}
@@ -3557,12 +3503,7 @@ const EditMasterDetails = (props) => {
             >
               Edit Finish
             </Button>
-            <Button
-              //   disabled={activeStep && activeStep === 0}
-              onClick={props.close}
-              variant="contained"
-              sx={{ m: 1 }}
-            >
+            <Button onClick={props.close} variant="contained" sx={{ m: 1 }}>
               Close
             </Button>
           </Box>

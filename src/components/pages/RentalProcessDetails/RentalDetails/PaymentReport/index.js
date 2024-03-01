@@ -32,7 +32,6 @@ const PaymentReport = (props) => {
   const [loading, setLoading] = useState(false);
   const [getBulkPaymentReportDetails, setGetBulkPaymentReportDetails] =
     useState([]);
-  
 
   const months = [
     { id: 1, label: "January" },
@@ -63,7 +62,7 @@ const PaymentReport = (props) => {
 
   useEffect(() => {
     getAllPaymentReportDetailsOfMonth();
-  }, [selectedMonth]);
+  }, []);
 
   useEffect(() => {
     getAllPaymentReportDownloadDetails();
@@ -101,6 +100,7 @@ const PaymentReport = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
+    getAllPaymentReportDetailsOfMonth(value);
   };
 
   const endDateObject = new Date();
