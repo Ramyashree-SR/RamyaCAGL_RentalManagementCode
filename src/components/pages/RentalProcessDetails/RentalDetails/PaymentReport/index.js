@@ -62,7 +62,7 @@ const PaymentReport = (props) => {
 
   useEffect(() => {
     getAllPaymentReportDetailsOfMonth();
-  }, []);
+  }, [selectedMonth]);
 
   useEffect(() => {
     getAllPaymentReportDownloadDetails();
@@ -100,7 +100,7 @@ const PaymentReport = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
-    getAllPaymentReportDetailsOfMonth(value);
+    // getAllPaymentReportDetailsOfMonth(value);
   };
 
   const endDateObject = new Date();
@@ -225,8 +225,8 @@ const PaymentReport = (props) => {
   const handlePaymentReportExcel = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9888/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
-        // `https://caglcampaignleads.grameenkoota.in/RentManagement/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
+        // `http://localhost:9888/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
+        `https://caglcampaignleads.grameenkoota.in/RentManagement/DownloadPaymentReport?month=${selectedMonth}&year=${selectedYear}`
       );
 
       if (!response.ok) {

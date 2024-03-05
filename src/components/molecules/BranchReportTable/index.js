@@ -132,7 +132,8 @@ const BranchReportTable = ({
             month !== "contractID" &&
             month !== "year" &&
             month !== "escalation" &&
-            month !== "status"
+            month !== "status" &&
+            month !== "schedulePrimesis"
           ) {
             total[month] = (total[month] || 0) + entry[month];
           }
@@ -188,9 +189,18 @@ const BranchReportTable = ({
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
                         >
-                          {row[column.id] !== undefined &&
+                          {/* {row[column.id] !== undefined &&
                           row[column.id] !== null
                             ? row[column.id]
+                            : 0} */}
+                            {(row[column.id] !== undefined &&
+                            row[column.id] !== null) ||
+                          ((row.info?.[column.id] && row.info?.[column.id]) !==
+                            undefined &&
+                            (row.info?.[column.id] && row.info?.[column.id]) !==
+                              null)
+                            ? row[column.id] ||
+                              (row.info?.[column.id] && row.info?.[column.id])
                             : 0}
                         </StyledTableCell>
                       ))}
@@ -201,9 +211,13 @@ const BranchReportTable = ({
                 {columns &&
                   columns.map((column) => {
                     if (
-                      ["contractID", "escalation", "year", "status"].includes(
-                        column.id
-                      )
+                      [
+                        "contractID",
+                        "schedulePrimesis",
+                        "escalation",
+                        "year",
+                        "status",
+                      ].includes(column.id)
                     ) {
                       return (
                         <TableCell

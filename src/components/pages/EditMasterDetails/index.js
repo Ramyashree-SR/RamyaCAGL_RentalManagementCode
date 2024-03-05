@@ -412,7 +412,8 @@ const EditMasterDetails = (props) => {
   const handleMonthDetails = (value) => {
     setEditAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
-      schedulePrimesis: value ? value?.label : null,
+      // schedulePrimesis: value ? value?.label : null,
+      schedulePrimesis: value,
     }));
   };
 
@@ -1293,7 +1294,7 @@ const EditMasterDetails = (props) => {
         schedulePrimesis: "",
       });
       props.close();
-      // window.location.reload();
+      window.location.reload();
     }
   };
 
@@ -1368,152 +1369,151 @@ const EditMasterDetails = (props) => {
                 </Grid>
               </Grid>
 
-              {(selectedBranchType &&
-                selectedBranchType?.label !== "HO-Office" &&
-                selectedBranchType?.label !== "HO-Maintenance" &&
-                selectedBranchType?.label !== "DO / RO-Office" &&
-                selectedBranchType?.label !== "DO / RO-Maintenance" &&
-                selectedBranchType?.label !== "StoreRoom-Office" &&
-                selectedBranchType?.label !== "StoreRoom-Maintenance" &&
-                selectedBranchType?.label !== "Training Center" &&
-                selectedBranchType?.label !== "Training Center-Maintainence") ||
-              type === "edit" ? (
-                <Grid container spacing={2} className="px-2 py-2 mt-1">
-                  <Grid item className="d-flex m-2" lg={12}>
-                    {showInputComponent ? (
-                      <Box>
+              {/* {selectedBranchType &&
+              selectedBranchType?.label !== "HO-Office" &&
+              selectedBranchType?.label !== "HO-Maintenance" &&
+              selectedBranchType?.label !== "DO / RO-Office" &&
+              selectedBranchType?.label !== "DO / RO-Maintenance" &&
+              selectedBranchType?.label !== "StoreRoom-Office" &&
+              selectedBranchType?.label !== "StoreRoom-Maintenance" &&
+              selectedBranchType?.label !== "Training Center" &&
+              selectedBranchType?.label !== "Training Center-Maintainence" ? ( */}
+              <Grid container spacing={2} className="px-2 py-2 mt-1">
+                <Grid item className="d-flex m-2" lg={12}>
+                  {showInputComponent ? (
+                    <Box>
+                      <TextField
+                        id="outlined-basic"
+                        label="Branch ID"
+                        variant="outlined"
+                        size="small"
+                        sx={{ m: 1, width: 300 }}
+                        name="branchID"
+                        value={editAllNewContractDetails?.branchID}
+                        onChange={(e) => updateChange(e)}
+                        required={true}
+                      />
+                    </Box>
+                  ) : (
+                    <Autocomplete
+                      size="small"
+                      sx={{ width: 300, ml: 1, borderRadius: 10 }}
+                      options={branchData}
+                      getOptionLabel={(option) =>
+                        option?.label ? option?.label : option || ""
+                      }
+                      isOptionEqualToValue={(option, value) =>
+                        value === undefined ||
+                        value === "" ||
+                        option?.label === value?.label
+                      }
+                      value={editAllNewContractDetails?.branchID || ""}
+                      onChange={handleBranchID}
+                      renderInput={(params) => (
                         <TextField
-                          id="outlined-basic"
+                          {...params}
                           label="Branch ID"
                           variant="outlined"
-                          size="small"
-                          sx={{ m: 1, width: 300 }}
-                          name="branchID"
-                          value={editAllNewContractDetails?.branchID}
-                          onChange={(e) => updateChange(e)}
-                          required={true}
                         />
-                      </Box>
-                    ) : (
-                      <Autocomplete
-                        size="small"
-                        sx={{ width: 300, ml: 1, borderRadius: 10 }}
-                        options={branchData}
-                        getOptionLabel={(option) =>
-                          option?.label ? option?.label : option || ""
-                        }
-                        isOptionEqualToValue={(option, value) =>
-                          value === undefined ||
-                          value === "" ||
-                          option?.label === value?.label
-                        }
-                        value={editAllNewContractDetails?.branchID || ""}
-                        onChange={handleBranchID}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Branch ID"
-                            variant="outlined"
-                          />
-                        )}
-                        noOptionsText={
-                          showBranchID ? (
-                            <Box>
-                              <Box
-                                onClick={() => addButtonClick()}
-                                className="d-flex "
-                              >
-                                <AddIcon className="color-blue" />
-                                <Typography className="fs-14">
-                                  Add Branch
-                                </Typography>
-                              </Box>
+                      )}
+                      noOptionsText={
+                        showBranchID ? (
+                          <Box>
+                            <Box
+                              onClick={() => addButtonClick()}
+                              className="d-flex "
+                            >
+                              <AddIcon className="color-blue" />
+                              <Typography className="fs-14">
+                                Add Branch
+                              </Typography>
                             </Box>
-                          ) : (
-                            <Typography>No Options Available</Typography>
-                          )
-                        }
-                      />
-                    )}
-                  </Grid>
-
-                  <Grid item className="d-flex m-2" lg={12}>
-                    <InputBoxComponent
-                      label="Branch Name"
-                      placeholder="Enter Branch Name."
-                      sx={{ width: 300 }}
-                      name="branchName"
-                      value={
-                        editAllNewContractDetails?.lesseeBranchName ||
-                        editAllNewContractDetails?.branchName ||
-                        ""
+                          </Box>
+                        ) : (
+                          <Typography>No Options Available</Typography>
+                        )
                       }
-                      onChange={(e) => updateChange(e)}
-                      //   errorText={
-                      //     editAllNewContractDetailsErr?.lesseeBranchName || ""
-                      //   }
-                      // readOnly
                     />
-                    <InputBoxComponent
-                      label="Area Name"
-                      placeholder="Enter Area Name ."
-                      sx={{ width: 300 }}
-                      name="areaName"
-                      value={
-                        editAllNewContractDetails?.lesseeAreaName ||
-                        editAllNewContractDetails?.areaName ||
-                        ""
-                      }
-                      onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.areaName || ""}
-                    />
-                    <InputBoxComponent
-                      label="Division/Region"
-                      placeholder="Enter Div/Reg No."
-                      sx={{ width: 300 }}
-                      name="region"
-                      value={
-                        editAllNewContractDetails?.lesseeDivision ||
-                        editAllNewContractDetails?.region ||
-                        ""
-                      }
-                      onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.region || ""}
-                    />
-                  </Grid>
-                  <Grid item className="d-flex m-2" lg={12}>
-                    <InputBoxComponent
-                      label="Zone"
-                      placeholder="Enter Zone ."
-                      sx={{ width: 300 }}
-                      name="zone"
-                      value={
-                        editAllNewContractDetails?.lesseeZone ||
-                        editAllNewContractDetails?.zone ||
-                        ""
-                      }
-                      onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.zone || ""}
-                    />
-                    <InputBoxComponent
-                      label="State"
-                      placeholder="Enter State ."
-                      sx={{ width: 300 }}
-                      name="state"
-                      value={
-                        editAllNewContractDetails?.lesseeState ||
-                        editAllNewContractDetails?.state ||
-                        ""
-                      }
-                      onChange={(e) => updateChange(e)}
-                      //   errorText={editAllNewContractDetailsErr?.state}
-                    />
-                  </Grid>
+                  )}
                 </Grid>
-              ) : null}
+
+                <Grid item className="d-flex m-2" lg={12}>
+                  <InputBoxComponent
+                    label="Branch Name"
+                    placeholder="Enter Branch Name."
+                    sx={{ width: 300 }}
+                    name="branchName"
+                    value={
+                      editAllNewContractDetails?.lesseeBranchName ||
+                      editAllNewContractDetails?.branchName ||
+                      ""
+                    }
+                    onChange={(e) => updateChange(e)}
+                    //   errorText={
+                    //     editAllNewContractDetailsErr?.lesseeBranchName || ""
+                    //   }
+                    // readOnly
+                  />
+                  <InputBoxComponent
+                    label="Area Name"
+                    placeholder="Enter Area Name ."
+                    sx={{ width: 300 }}
+                    name="areaName"
+                    value={
+                      editAllNewContractDetails?.lesseeAreaName ||
+                      editAllNewContractDetails?.areaName ||
+                      ""
+                    }
+                    onChange={(e) => updateChange(e)}
+                    //   errorText={editAllNewContractDetailsErr?.areaName || ""}
+                  />
+                  <InputBoxComponent
+                    label="Division/Region"
+                    placeholder="Enter Div/Reg No."
+                    sx={{ width: 300 }}
+                    name="region"
+                    value={
+                      editAllNewContractDetails?.lesseeDivision ||
+                      editAllNewContractDetails?.region ||
+                      ""
+                    }
+                    onChange={(e) => updateChange(e)}
+                    //   errorText={editAllNewContractDetailsErr?.region || ""}
+                  />
+                </Grid>
+                <Grid item className="d-flex m-2" lg={12}>
+                  <InputBoxComponent
+                    label="Zone"
+                    placeholder="Enter Zone ."
+                    sx={{ width: 300 }}
+                    name="zone"
+                    value={
+                      editAllNewContractDetails?.lesseeZone ||
+                      editAllNewContractDetails?.zone ||
+                      ""
+                    }
+                    onChange={(e) => updateChange(e)}
+                    //   errorText={editAllNewContractDetailsErr?.zone || ""}
+                  />
+                  <InputBoxComponent
+                    label="State"
+                    placeholder="Enter State ."
+                    sx={{ width: 300 }}
+                    name="state"
+                    value={
+                      editAllNewContractDetails?.lesseeState ||
+                      editAllNewContractDetails?.state ||
+                      ""
+                    }
+                    onChange={(e) => updateChange(e)}
+                    //   errorText={editAllNewContractDetailsErr?.state}
+                  />
+                </Grid>
+              </Grid>
+              {/* ) : null} */}
             </Box>
 
-            {(selectedBranchType &&
+            {/* {(selectedBranchType &&
               selectedBranchType?.label === "HO-Office") ||
             selectedBranchType?.label === "HO-Maintenance" ||
             selectedBranchType?.label === "DO / RO-Office" ||
@@ -1521,8 +1521,8 @@ const EditMasterDetails = (props) => {
             selectedBranchType?.label === "StoreRoom-Office" ||
             selectedBranchType?.label === "StoreRoom-Maintenance" ||
             selectedBranchType?.label === "Training Center" ||
-            selectedBranchType?.label === "Training Center-Maintainence" ? (
-              <Grid container spacing={2} className="px-2 py-2 mt-1">
+            selectedBranchType?.label === "Training Center-Maintainence" ? ( */}
+            {/* <Grid container spacing={2} className="px-2 py-2 mt-1">
                 <Grid item className="d-flex m-2" lg={12}>
                   <DropDownComponent
                     label="Office Name"
@@ -1535,8 +1535,8 @@ const EditMasterDetails = (props) => {
                     }
                   />
                 </Grid>
-              </Grid>
-            ) : null}
+              </Grid> */}
+            {/* ) : null} */}
             <Box
               className="d-flex justify-content-center w-100"
               sx={{ height: "calc(100% - 55px)" }}
@@ -3053,34 +3053,34 @@ const EditMasterDetails = (props) => {
                       Upload
                     </Typography>
                   </ColorIcon>
-                  {active && (
-                    <a
-                      href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{
-                        marginLeft: "-10px",
-                        textDecoration: "none",
-                        color: "inherit",
+                  {/* {active && ( */}
+                  <a
+                    href={`http://dedupeuat.grameenkoota.in:8080/APIFile/downloadFile/${active}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      marginLeft: "-10px",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    <ColorIcon
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        ml: 0,
                       }}
                     >
-                      <ColorIcon
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          ml: 0,
-                        }}
-                      >
-                        <FileDownloadDoneIcon
-                          fontSize="small"
-                          sx={{ marginTop: 1.5 }}
-                        />
-                        <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
-                          Download
-                        </Typography>
-                      </ColorIcon>
-                    </a>
-                  )}
+                      <FileDownloadDoneIcon
+                        fontSize="small"
+                        sx={{ marginTop: 1.5 }}
+                      />
+                      <Typography sx={{ fontSize: 6, fontWeight: 800 }}>
+                        Download
+                      </Typography>
+                    </ColorIcon>
+                  </a>
+                  {/* )} */}
 
                   <InputBoxComponent
                     label="Bank Pass Book/Cheque "

@@ -256,8 +256,8 @@ const LesseeInformation = ({
           </Grid>
 
           {(selectedBranchType &&
-            selectedBranchType?.label !== "HO-Office" &&
-            selectedBranchType?.label !== "HO-Maintenance" &&
+            // selectedBranchType?.label !== "HO-Office" &&
+            // selectedBranchType?.label !== "HO-Maintenance" &&
             selectedBranchType?.label !== "DO / RO-Office" &&
             selectedBranchType?.label !== "DO / RO-Maintenance" &&
             selectedBranchType?.label !== "StoreRoom-Office" &&
@@ -463,7 +463,7 @@ const LesseeInformation = ({
           ) : null}
         </Box>
 
-        {(selectedBranchType && selectedBranchType?.label === "HO-Office") ||
+        {/* {(selectedBranchType && selectedBranchType?.label === "HO-Office") ||
         selectedBranchType?.label === "HO-Maintenance" ||
         selectedBranchType?.label === "DO / RO-Office" ||
         selectedBranchType?.label === "DO / RO-Maintenance" ||
@@ -485,7 +485,7 @@ const LesseeInformation = ({
               />
             </Grid>
           </Grid>
-        ) : null}
+        ) : null} */}
         <Box
           className="d-flex justify-content-center w-100"
           sx={{ height: "calc(100% - 55px)" }}

@@ -29,17 +29,25 @@ const VarianceInActualModal = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         size="lg"
-        // sx={{ width: "1024px" }}
+        className="shadow p-0 mb-5 rounded bg-opacity-10"
       >
-        <Modal.Header className="bg-dark">
+        <Modal.Header className="bg-secondary m-0 b-2">
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ color: "#FFFFFF" }}
+            style={{ color: "#000000" }}
           >
-            RentDue Information
+            Variance Information
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="100px"
+            height="40px"
+            margnTop="-2px"
+            className="bg-light b-5 m-0 p-1"
+          />
         </Modal.Header>
-        <Modal.Body className="bg-dark">
+        <Modal.Body className="bg-secondary ">
           <Container>
             <Row>
               <Col>
@@ -54,7 +62,7 @@ const VarianceInActualModal = (props) => {
           </Container>
         </Modal.Body>
 
-        <Modal.Footer className="bg-dark">
+        <Modal.Footer className="bg-secondary">
           <Button
             variant="contained"
             onClick={() => {

@@ -122,13 +122,21 @@ const ShowProvisionDetails = (props) => {
         centered
         size="lg"
       >
-        <Modal.Header className="bg-dark">
+        <Modal.Header className="bg-dark m-0 b-2">
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ color: "#FFFFFF" }}
           >
             Provisions Information
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="100px"
+            height="40px"
+            margnTop="-2px"
+            className="bg-light b-5 m-0 p-1"
+          />
         </Modal.Header>
         <Modal.Body className="bg-dark">
           <Container>
