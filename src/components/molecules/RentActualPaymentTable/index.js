@@ -103,6 +103,7 @@ const RentActualPaymentTable = ({
     if (refreshKey !== 0) {
       // Clear existing data
       setSelectedRows([]);
+      setSelectAll(true);
       handleEdit();
     }
   }, [refreshKey]);
@@ -195,11 +196,10 @@ const RentActualPaymentTable = ({
       : [...selectedRows, id];
 
     setSelectedRows(newSelectedRows);
-    setSelectAll(newSelectedRows.length === data.length);
+    setSelectAll(newSelectedRows.length === data?.length);
     localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
   };
 
-  console.log(filteredData, "filteredData");
   return (
     <Box sx={{ position: "relative" }} className="d-flex flex-column">
       <Box className="d-flex align-items-center justify-content-center">
@@ -218,6 +218,7 @@ const RentActualPaymentTable = ({
                       setSelectedRows(newSelectedRows);
                       setSelectAll(e.target.checked);
                     }}
+                    sx={{ color: selectAll ? green[900] : "" }}
                   />
                 </StyledTableCell>
                 <StyledTableCell>Contract ID</StyledTableCell>
@@ -271,6 +272,7 @@ const RentActualPaymentTable = ({
                           onChange={() =>
                             handleCheckboxChange(row?.info?.uniqueID)
                           }
+                          // disabled={row.paymentFlag ? true : false}
                         />
                       </StyledTableCell>
                       <StyledTableCell>{row?.info?.uniqueID}</StyledTableCell>
@@ -375,7 +377,7 @@ const RentActualPaymentTable = ({
                         key={row?.info?.uniqueID}
                         style={{
                           display: selectedRows?.includes?.(row?.info?.uniqueID)
-                            ? "table-row"
+                            ? "table-row" //"table-row"
                             : "none",
                         }}
                       >
@@ -394,7 +396,8 @@ const RentActualPaymentTable = ({
                         <StyledTableCell1>{row?.provision}</StyledTableCell1>
                         <StyledTableCell1>{row?.gross}</StyledTableCell1>
                         <StyledTableCell1>
-                          {editedData?.[row?.info?.uniqueID]?.tds || row?.tds}
+                          {editedData?.[row?.info?.uniqueID]?.reporttds ||
+                            row?.reporttds}
                         </StyledTableCell1>
                         <StyledTableCell1>{row?.net}</StyledTableCell1>
                         <StyledTableCell1>{row?.gstamt}</StyledTableCell1>

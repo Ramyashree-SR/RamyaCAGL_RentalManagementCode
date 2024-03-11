@@ -1,12 +1,11 @@
 import serviceUtil from "../ServiceUtil";
 
-const getRentPaymentReportDetails = (params1, params2, params3) => {
+const getRentPaymentReportDetails = (params1, params2, params3, params4) => {
   return serviceUtil
     .get(
-      `generatePaymentReport?contractID=${params1}&month=${params2}&year=${params3}`
+      `generatePaymentReport?contractID=${params1}&month=${params2}&year=${params3}&purpose=${params4}`
     )
     .then((res) => {
-      // console.log(res, "Paymentres");
       const data = res.data;
       return { data };
     })
@@ -20,7 +19,6 @@ const getDownloadPaymentReportDetails = (params1, params2) => {
   return serviceUtil
     .get(`DownloadPaymentReport?month=${params1}&year=${params2}`)
     .then((res) => {
-      // console.log(res, "Paymentres");
       const data = res.data;
       return { data };
     })

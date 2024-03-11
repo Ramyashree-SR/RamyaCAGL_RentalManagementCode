@@ -47,7 +47,7 @@ const VarianceInActualModal = (props) => {
             className="bg-light b-5 m-0 p-1"
           />
         </Modal.Header>
-        <Modal.Body className="bg-secondary ">
+        <Modal.Body className="bg-secondary">
           <Container>
             <Row>
               <Col>

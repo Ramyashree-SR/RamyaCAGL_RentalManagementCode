@@ -55,6 +55,7 @@ const PaymentReportDetails = (props) => {
   const [checked, setChecked] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const { vertical, horizontal, open } = state;
+  const [closeButtonClicked, setCloseButtonClicked] = useState(false);
 
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
@@ -80,23 +81,23 @@ const PaymentReportDetails = (props) => {
   }, [selectedMonth]);
 
   useEffect(() => {
-    getAllPaymentReportDetailsOfMonth();
     // This useEffect will run whenever refreshKey changes
     if (refreshKey !== 0) {
-      // Clear selected month and year
-      setSelectedMonth(null);
-      setSelectedYear(null);
+      if (closeButtonClicked) {
+        // Clear selected month and year
+        setSelectedMonth(null);
+        setSelectedYear(null);
 
-      // Clear existing payment report data
-      setGetPaymentReport([]);
-
+        // Clear existing payment report data
+        setGetPaymentReport([]);
+      }
       // Open modal to select month and year again if needed
       // ... (Open your modal logic here)
-
-      // Fetch new data based on the new month and year
-      getAllPaymentReportDetailsOfMonth();
+      setCloseButtonClicked(false);
     }
-  }, [refreshKey]);
+    // Fetch new data based on the new month and year
+    // getAllPaymentReportDetailsOfMonth();
+  }, [refreshKey, closeButtonClicked]);
 
   const handleMonthChange = (newValue) => {
     const value = newValue?.label;
@@ -106,7 +107,6 @@ const PaymentReportDetails = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
-    getAllPaymentReportDetailsOfMonth(value);
   };
 
   const startDateObject = new Date(rentStartDate);
@@ -156,7 +156,8 @@ const PaymentReportDetails = (props) => {
     const { data } = await getRentPaymentReportDetails(
       uniqueID,
       selectedMonth,
-      selectedYear
+      selectedYear,
+      "view"
     );
     if (data) {
       if (data) {
@@ -541,6 +542,7 @@ const PaymentReportDetails = (props) => {
               props.close();
               // setReload(true);
               setRefreshKey((prevKey) => prevKey + 1);
+              setCloseButtonClicked(true); // Set closeButtonClicked to true when the button is clicked
             }}
             variant="contained"
           >

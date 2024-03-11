@@ -214,15 +214,13 @@ const EditMasterDetails = (props) => {
     editAllNewContractDetails?.lessorRentAmount
   );
   const [tdsRate, setTdsRate] = useState(null);
-  // const [escalationRate, setEscalationRate] = useState(null);
-  // console.log(tdsRate, "tdsRate");
 
   const [originalData, setOriginalData] = useState([
     editAllNewContractDetails?.recipiants?.lessorAccountNumber,
   ]);
-  // console.log(originalData, "originalData");
+
   const [reEnteredData, setReEnteredData] = useState([]);
-  // console.log(reEnteredData, "reEnteredData");
+
   const [dataMatch, setDataMatch] = useState(true);
 
   const AgreementfileInput = useRef();
@@ -239,6 +237,7 @@ const EditMasterDetails = (props) => {
   //       [e.target.name]: e.target.value,
   //     }));
   //   };
+
   let EntityDetails = [
     { id: "Commercial", label: "Commercial" },
     { id: "Residential", label: "Residential" },
@@ -254,13 +253,6 @@ const EditMasterDetails = (props) => {
       lesseeEntityDetails: value ? value?.label : null,
     }));
   };
-
-  //   const updateAddressChange = (value) => {
-  //     console.log(value);
-  //     setEditAllNewContractDetails(value);
-  //   };
-
-  // console.log(editAllNewContractDetails?.joinaddress_Premesis, "address");
 
   let BranchType = [
     { id: "GL-Office", label: "GL-Office" },
@@ -392,7 +384,6 @@ const EditMasterDetails = (props) => {
     if (data) {
       if (data.error == "FALSE") {
         setactive(data);
-        // addToast("File Uploaded", { appearance: "success" });
       }
     } else if (errRes) {
       // addToast(errRes, { appearance: "error" });
@@ -412,8 +403,7 @@ const EditMasterDetails = (props) => {
   const handleMonthDetails = (value) => {
     setEditAllNewContractDetails((prevDetails) => ({
       ...prevDetails,
-      // schedulePrimesis: value ? value?.label : null,
-      schedulePrimesis: value,
+      schedulePrimesis: value ? value?.label : null,
     }));
   };
 
@@ -865,13 +855,6 @@ const EditMasterDetails = (props) => {
     });
   };
 
-  // const [refreshCount, setRefreshCount] = useState(0);
-
-  // const handleRefresh = () => {
-  //   // Increment the refreshCount to trigger a re-render
-  //   setRefreshCount((prevCount) => prevCount + 1);
-  // };
-
   const ElectricityBillInput = useRef();
   const [electricityBillFile, setElectricityBillFile] = useState({
     file: {},
@@ -887,7 +870,6 @@ const EditMasterDetails = (props) => {
     payload.append("doctype", "ElectricityBillFile");
     const { data, errRes } = await uploadFileApi(payload);
     if (data) {
-      // console.log(typeof data?.fileName, "FileName");
       setactive(data?.uid); // Assuming 'responseId' is the field containing the response ID
       setEditAllNewContractDetails({
         ...editAllNewContractDetails,
@@ -1681,9 +1663,6 @@ const EditMasterDetails = (props) => {
                         name="premesisFloorNumber"
                         value={editAllNewContractDetails?.premesisFloorNumber}
                         onChange={(e) => updateChange(e)}
-                        // errorText={
-                        //   editAllNewContractDetailsErr?.premesisFloorNumber
-                        // }
                         required={true}
                       />
                       <InputBoxComponent
@@ -1693,9 +1672,6 @@ const EditMasterDetails = (props) => {
                         name="premesisLandMark"
                         value={editAllNewContractDetails?.premesisLandMark}
                         onChange={(e) => updateChange(e)}
-                        // errorText={
-                        //   editAllNewContractDetailsErr?.premesisLandMark
-                        // }
                         required={true}
                       />
                     </Grid>
@@ -1707,7 +1683,6 @@ const EditMasterDetails = (props) => {
                         name="premesisStreet"
                         value={editAllNewContractDetails?.premesisStreet}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.premesisStreet}
                         required={true}
                       />
                       <InputBoxComponent
@@ -1717,7 +1692,6 @@ const EditMasterDetails = (props) => {
                         name="premesisWardNo"
                         value={editAllNewContractDetails?.premesisWardNo}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.premesisWardNo}
                         required={true}
                       />
                       <InputBoxComponent
@@ -1727,7 +1701,6 @@ const EditMasterDetails = (props) => {
                         name="premesisCity"
                         value={editAllNewContractDetails?.premesisCity}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.premesisCity}
                         required={true}
                       />
                     </Grid>
@@ -1739,9 +1712,6 @@ const EditMasterDetails = (props) => {
                         name="premesisPinCode"
                         value={editAllNewContractDetails?.premesisPinCode}
                         onChange={(e) => updateChange(e)}
-                        // errorText={
-                        //   editAllNewContractDetailsErr?.premesisPinCode
-                        // }
                         required={true}
                       />
                       <InputBoxComponent
@@ -1751,7 +1721,6 @@ const EditMasterDetails = (props) => {
                         name="premesisTaluka"
                         value={editAllNewContractDetails?.premesisTaluka}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.premesisTaluka}
                         required={true}
                       />
 
@@ -1762,9 +1731,6 @@ const EditMasterDetails = (props) => {
                         name="premesisDistrict"
                         value={editAllNewContractDetails?.premesisDistrict}
                         onChange={(e) => updateChange(e)}
-                        // errorText={
-                        //   editAllNewContractDetailsErr?.premesisDistrict
-                        // }
                         required={true}
                       />
                     </Grid>
@@ -1776,7 +1742,6 @@ const EditMasterDetails = (props) => {
                         name="lessorState"
                         value={editAllNewContractDetails?.lessorState}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.lessorState}
                         required={true}
                       />
                     </Grid>
@@ -1789,7 +1754,6 @@ const EditMasterDetails = (props) => {
                         name="plotNumber"
                         value={editAllNewContractDetails?.plotNumber}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.plotNumber}
                         required={true}
                       />
                       <InputBoxComponent
@@ -1799,7 +1763,6 @@ const EditMasterDetails = (props) => {
                         name="builtupArea"
                         value={editAllNewContractDetails?.builtupArea}
                         onChange={(e) => updateChange(e)}
-                        // errorText={editAllNewContractDetailsErr?.builtupArea}
                         required={true}
                       />
                     </Grid>
@@ -1810,7 +1773,7 @@ const EditMasterDetails = (props) => {
                       md={12}
                     >
                       <Button onClick={joinAddress}>Join Address</Button>
-                      {/* {address ? ( */}
+
                       <InputBoxComponent
                         label="Address"
                         placeholder="Enter Address"
@@ -1818,11 +1781,9 @@ const EditMasterDetails = (props) => {
                         sx={{ width: 300 }}
                         size="large"
                         value={editAllNewContractDetails?.joinaddress_Premesis}
-                        // onChange={() => updateAddressChange()}
                         readOnly
                         required={true}
                       />
-                      {/* ) : null} */}
                     </Grid>
 
                     <Box>
@@ -1845,9 +1806,6 @@ const EditMasterDetails = (props) => {
                               name="northPremesis"
                               value={editAllNewContractDetails?.northPremesis}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.northPremesis
-                              //   }
                               multiline
                               required={true}
                             />
@@ -1862,9 +1820,6 @@ const EditMasterDetails = (props) => {
                               name="southPremesis"
                               value={editAllNewContractDetails?.southPremesis}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.southPremesis
-                              //   }
                               multiline
                               required={true}
                             />
@@ -1881,9 +1836,6 @@ const EditMasterDetails = (props) => {
                               name="eastPremesis"
                               value={editAllNewContractDetails?.eastPremesis}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.eastPremesis
-                              //   }
                               multiline
                               required={true}
                             />
@@ -1898,14 +1850,10 @@ const EditMasterDetails = (props) => {
                               name="westPremesis"
                               value={editAllNewContractDetails?.westPremesis}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.westPremesis
-                              //   }
                               multiline
                               required={true}
                             />
                           </Grid>
-                          {/* <ReusableTable columns={columns}required={true}/> */}
                         </Grid>
                       </Grid>
                     </Box>
@@ -1927,9 +1875,6 @@ const EditMasterDetails = (props) => {
                               name="lattitude"
                               value={editAllNewContractDetails?.lattitude}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.lattitude
-                              //   }
                               required={true}
                             />
                             <InputBoxComponent
@@ -1939,9 +1884,6 @@ const EditMasterDetails = (props) => {
                               name="longitude"
                               value={editAllNewContractDetails?.longitude}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.longitude
-                              //   }
                               required={true}
                             />
 
@@ -1952,9 +1894,6 @@ const EditMasterDetails = (props) => {
                               name="gpsCoordinates"
                               value={editAllNewContractDetails?.gpsCoordinates}
                               onChange={(e) => updateChange(e)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.gpsCoordinates
-                              //   }
                               required={true}
                             />
                           </Grid>
@@ -2034,7 +1973,6 @@ const EditMasterDetails = (props) => {
                     name="glName"
                     value={editAllNewContractDetails?.glName}
                     onChange={(e) => updateChange(e)}
-                    // errorText={editAllNewContractDetailsErr?.glName}
                     required
                   />
                   <DatePickerComponent
@@ -2054,7 +1992,6 @@ const EditMasterDetails = (props) => {
                     name="glEmpId"
                     value={editAllNewContractDetails?.glEmpId}
                     onChange={(e) => updateChange(e)}
-                    // errorText={editAllNewContractDetailsErr?.glEmpId}
                     required
                   />
                 </Grid>
@@ -2074,7 +2011,6 @@ const EditMasterDetails = (props) => {
                   name="agreementStartDate"
                   value={editAllNewContractDetails?.agreementStartDate}
                   onChange={(val) => {
-                    // console.log(val, "val");
                     setEditAllNewContractDetails({
                       ...editAllNewContractDetails,
                       agreementStartDate: val,
@@ -2130,8 +2066,6 @@ const EditMasterDetails = (props) => {
                   sx={{ width: 300, mt: -4.5, ml: 1 }}
                   name="agreementTenure"
                   value={editAllNewContractDetails?.agreementTenure}
-                  // onChange={handleCalculateTenure}
-                  //   errorText={editAllNewContractDetailsErr?.agreementTenure}
                   required
                 />
               </Grid>
@@ -2151,7 +2085,6 @@ const EditMasterDetails = (props) => {
                   name="maintaineneCharge"
                   value={editAllNewContractDetails?.maintaineneCharge}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.maintaineneCharge}
                 />
                 <InputBoxComponent
                   label="Water Charges"
@@ -2160,7 +2093,6 @@ const EditMasterDetails = (props) => {
                   name="waterCharge"
                   value={editAllNewContractDetails?.waterCharge}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.waterCharge}
                 />
               </Grid>
               <Grid item className="d-flex py-1" md={12}>
@@ -2171,7 +2103,6 @@ const EditMasterDetails = (props) => {
                   name="electricity"
                   value={editAllNewContractDetails?.electricity}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.electricity}
                 />
 
                 <DropDownComponent
@@ -2250,9 +2181,6 @@ const EditMasterDetails = (props) => {
                   name="securityDepositAmount"
                   value={editAllNewContractDetails?.securityDepositAmount}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={
-                  //     editAllNewContractDetailsErr?.securityDepositAmount
-                  //   }
                   required
                 />
 
@@ -2272,7 +2200,6 @@ const EditMasterDetails = (props) => {
                   name="securityDepositUtr"
                   value={editAllNewContractDetails?.securityDepositUtr}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.securityDepositUtr}
                   required
                 />
               </Grid>
@@ -2288,7 +2215,6 @@ const EditMasterDetails = (props) => {
                       : editAllNewContractDetails?.lessorRentAmount
                   }
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.lessorRentAmount}
                   required
                 />
                 <DatePickerComponent
@@ -2307,7 +2233,6 @@ const EditMasterDetails = (props) => {
                   name="standardDeducition"
                   value={editAllNewContractDetails?.standardDeducition}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.standardDeducition}
                   required
                 />
               </Grid>
@@ -2456,9 +2381,6 @@ const EditMasterDetails = (props) => {
                                   e.target.value
                                 )
                               }
-                              // errorText={
-                              //   editAllNewContractDetailsErr?.recipiantsID
-                              // }
                               required
                             />
                             {/* ) : null} */}
@@ -2487,9 +2409,6 @@ const EditMasterDetails = (props) => {
                                   e.target.value
                                 )
                               }
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.lessorRentAmount
-                              //   }
                               required
                             />
                           </Grid>
@@ -2517,9 +2436,6 @@ const EditMasterDetails = (props) => {
                                   e.target.value
                                 )
                               }
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.lessorRecipiantsName
-                              // //   }
                               required
                             />
 
@@ -2533,9 +2449,6 @@ const EditMasterDetails = (props) => {
                                   ?.lessorIfscNumber || ifscCodes?.[index]
                               }
                               onChange={(e) => handleChangeIFSCCode(e, index)}
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.lessorIfscNumber
-                              //   }
                               required
                             />
                           </Grid>
@@ -2559,7 +2472,6 @@ const EditMasterDetails = (props) => {
                                     e.target.value
                                   )
                                 }
-                                // errorText={editAllNewContractDetailsErr?.bank}
                                 required
                               />
 
@@ -2581,9 +2493,6 @@ const EditMasterDetails = (props) => {
                                     e.target.value
                                   )
                                 }
-                                // errorText={
-                                //   editAllNewContractDetailsErr?.lessorBranchName
-                                // }
                                 required
                               />
                             </Grid>
@@ -2611,9 +2520,6 @@ const EditMasterDetails = (props) => {
                                   e.target.value
                                 )
                               }
-                              //   errorText={
-                              //     editAllNewContractDetailsErr?.lessorAccountNumber
-                              //   }
                               required
                             />
                             <Grid className="d-flex flex-column">
@@ -2674,7 +2580,6 @@ const EditMasterDetails = (props) => {
                                   e.target.value
                                 )
                               }
-                              //   errorText={editAllNewContractDetailsErr?.panNo}
                               required
                             />
                             <InputBoxComponent
@@ -2698,7 +2603,6 @@ const EditMasterDetails = (props) => {
                                   e.target.value
                                 )
                               }
-                              //   errorText={editAllNewContractDetailsErr?.gstNo}
                               required
                             />
                           </Grid>
@@ -2943,7 +2847,6 @@ const EditMasterDetails = (props) => {
                   name="lessorEmailAddress"
                   value={editAllNewContractDetails?.lessorEmailAddress}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.lessorEmailAddress}
                   required
                 />
               </Grid>
@@ -2955,7 +2858,6 @@ const EditMasterDetails = (props) => {
                   name="lessorPanNumber"
                   value={editAllNewContractDetails?.lessorPanNumber}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.lessorPanNumber}
                   required
                 />
                 <InputBoxComponent
@@ -2965,7 +2867,6 @@ const EditMasterDetails = (props) => {
                   name="lessorGstNumber"
                   value={editAllNewContractDetails?.lessorGstNumber}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.lessorGstNumber}
                   required
                 />
 
@@ -2976,7 +2877,6 @@ const EditMasterDetails = (props) => {
                   name="nationality"
                   value={editAllNewContractDetails?.nationality}
                   onChange={(e) => updateChange(e)}
-                  //   errorText={editAllNewContractDetailsErr?.nationality}
                   required
                 />
               </Grid>
@@ -2993,7 +2893,6 @@ const EditMasterDetails = (props) => {
                   value={editAllNewContractDetails?.paymentMode}
                   onChange={handlePaymentChange}
                   required
-                  //   errorText={editAllNewContractDetailsErr?.paymentMode}
                 />
               </Grid>
             </Grid>
@@ -3339,12 +3238,15 @@ const EditMasterDetails = (props) => {
                       }}
                       onChange={(e) => {
                         const files = e.target.files;
-                        for (const file of files) {
+                        const fileArray = Array.from(files);
+
+                        for (const file of fileArray) {
                           console.log(file.name);
                         }
+
                         setAnyOtherFile({
-                          file: e.target.files[0],
-                          filename: e.target.files[0].name,
+                          files: fileArray,
+                          filenames: fileArray?.map((file) => file.name),
                         });
                       }}
                     />

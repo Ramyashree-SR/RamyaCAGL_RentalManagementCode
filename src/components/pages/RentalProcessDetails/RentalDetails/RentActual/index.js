@@ -171,9 +171,10 @@ const RentActual = (props) => {
 
   const getAllPaymentReportDetailsOfMonth = async () => {
     const { data } = await getRentPaymentReportDetails(
-      rentActualData.uniqueID,
+      rentActualData?.uniqueID,
       selectedMonth,
-      selectedYear
+      selectedYear,
+      "view"
     );
     // console.log(data, "ReportData");
     if (data) {

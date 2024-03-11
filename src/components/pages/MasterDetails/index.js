@@ -167,7 +167,6 @@ const MasterDetails = (props) => {
   const [serialNumber, setSerialNumber] = useState(1);
 
   const [stepData1, setStepData1] = useState("");
-  // console.log(stepData1, "stepData1");
   const [stepData2, setStepData2] = useState("");
   const [stepData3, setStepData3] = useState("");
   const [stepData4, setStepData4] = useState("");
@@ -287,12 +286,10 @@ const MasterDetails = (props) => {
     schedulePrimesis: "",
   });
 
-  // console.log("allNewContractDetails", allNewContractDetails);
   const [allNewContractDetailsErr, setAllNewContractDetailsErr] =
     useState(errObj);
   const [recipientCount, setRecipientCount] = useState(1);
   const [ifscCodes, setIFSCCodes] = useState(Array(recipientCount).fill(""));
-  // console.log(ifscCodes, "ifscCodes");
   const [bankAndBranch, setBankAndBranch] = useState(
     Array(recipientCount).fill({
       bank: "",

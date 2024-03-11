@@ -7,6 +7,7 @@ import {
   DialogContent,
   Grid,
   InputAdornment,
+  Popover,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,7 +16,10 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
 import { useToasts } from "react-toast-notifications";
-import { AddRentActualDetails } from "../../../../services/RentActualApi";
+import {
+  AddRentActualDetails,
+  getRawRentPaymentReportDetails,
+} from "../../../../services/RentActualApi";
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import RentActualPaymentTable from "../../../../molecules/RentActualPaymentTable";
 import ExcelExport from "../../../../../ExcelExport";
@@ -73,10 +77,10 @@ const RentActualDetails = (props) => {
       setGetAcualPaymentReport([]);
       setSearchText("");
       setSelectedRows([]);
-
+      setLoading(false)
       // Fetch new data based on the new month and year
-
       getAllActualPaymentReportDetailsOfMonth();
+      getSelectedRowDetails();
     }
   }, [refreshKey]);
 
@@ -145,10 +149,11 @@ const RentActualDetails = (props) => {
   };
 
   const getAllActualPaymentReportDetailsOfMonth = async () => {
-    const { data } = await getRentPaymentReportDetails(
+    const { data } = await getRawRentPaymentReportDetails(
       "all",
       selectedMonth,
-      selectedYear
+      selectedYear,
+      "view"
     );
     // console.log(data?.data, "allData");
     if (data) {
@@ -203,13 +208,13 @@ const RentActualDetails = (props) => {
     return getActualPaymentReport;
   };
 
-  // Function to get the details of the selected rows
   // const getSelectedRowDetails = () => {
   //   return selectedRows?.map((rowId) =>
   //     getActualPaymentReport?.find((row) => row?.info?.uniqueID === rowId)
   //   );
   // };
 
+  // Function to get the details of the selected rows
   const getSelectedRowDetails = () => {
     return filteredData?.filter((row) =>
       selectedRows.includes(row?.info?.uniqueID)
@@ -225,6 +230,7 @@ const RentActualDetails = (props) => {
     setconfirmSubmit(true);
     AddRentActualFortheMonth();
     setOpen(false);
+    
     // // Clear selectedRows after payment
     // localStorage.removeItem("selectedRows");
     // setSelectedRows([]);
@@ -389,7 +395,7 @@ const RentActualDetails = (props) => {
                     >
                       <ExcelExport
                         excelData={filteredData}
-                        fileName={"ProvisionsList"}
+                        fileName={"Rent Actual List"}
                         sx={{
                           mr: 1,
                           backgroundColor: deepOrange[600],

@@ -130,7 +130,7 @@ const PaymentReportTable = ({ data, columns, sx }) => {
                           sx={{ sx }}
                           classes={{ root: classes.tableHeader }}
                         >
-                          {(row[column.id] !== undefined &&
+                          {/* {(row[column.id] !== undefined &&
                             row[column.id] !== null) ||
                           ((row.info?.[column.id] && row.info?.[column.id]) !==
                             undefined &&
@@ -138,7 +138,16 @@ const PaymentReportTable = ({ data, columns, sx }) => {
                               null)
                             ? row[column.id] ||
                               (row.info?.[column.id] && row.info?.[column.id])
-                            : 0}
+                            : 0} */}
+
+                          {(row[column.id] !== undefined &&
+                            row[column.id] !== null &&
+                            row[column.id] !== "") ||
+                          (row.info?.[column.id] !== undefined &&
+                            row.info?.[column.id] !== null &&
+                            row.info?.[column.id] !== "")
+                            ? row[column.id] || row.info?.[column.id] || 0.0
+                            : 0.0}
                         </StyledTableCell>
                       ))}
                   </StyledTableRow>

@@ -141,7 +141,8 @@ const PaymentReport = (props) => {
     const { data } = await getRentPaymentReportDetails(
       "all",
       selectedMonth,
-      selectedYear
+      selectedYear,
+      "view"
     );
     if (data) {
       if (data) {

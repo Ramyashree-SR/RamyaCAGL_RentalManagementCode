@@ -16,6 +16,22 @@ const getAllRentContractDetailsByContractID = (params) => {
     });
 };
 
+const getRawRentPaymentReportDetails = (params1, params2, params3) => {
+  return serviceUtil
+    .get(
+      `generateRawPaymentReport?contractID=${params1}&month=${params2}&year=${params3}`
+    )
+    .then((res) => {
+      // console.log(res, "Paymentres");
+      const data = res.data;
+      return { data };
+    })
+    .catch((err) => {
+      const errRes = err;
+      return { errRes };
+    });
+};
+
 const AddRentActualDetails = (payload) => {
   return serviceUtil
     .post(`makeactual`, payload)
@@ -48,8 +64,11 @@ const addSDSettlementDetails = (payload) => {
     });
 };
 
+
+
 export {
   getAllRentContractDetailsByContractID,
   AddRentActualDetails,
   addSDSettlementDetails,
+  getRawRentPaymentReportDetails
 };

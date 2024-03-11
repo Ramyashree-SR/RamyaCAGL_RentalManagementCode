@@ -131,7 +131,7 @@ export default function MenuComponent({
       branchID: branchIDData,
       year: addProvisions?.year?.label,
       month: addProvisions?.month?.label,
-      provisionAmount: monthlyRent,
+      provisionAmount: addProvisions?.provisionAmount,
       remark: addProvisions?.remark,
       dateTime: addProvisions.dateTime,
     };
