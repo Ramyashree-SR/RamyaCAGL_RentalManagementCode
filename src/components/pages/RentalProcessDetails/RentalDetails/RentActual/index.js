@@ -113,9 +113,10 @@ const RentActual = (props) => {
       setSelectedYear(null);
       setSelectedMonth(null);
       setGetPaymentReport([]);
+      setRentActualData([]);
       // Fetch new data based on the new month and year
       getAllPaymentReportDetailsOfMonth();
-      getAllRentActualDetailsByUniqueID();
+      // getAllRentActualDetailsByUniqueID();
     }
   }, [refreshKey]);
 
@@ -126,11 +127,13 @@ const RentActual = (props) => {
     if (value) {
       // Access value.month here
       setSelectedMonth(value);
+      getAllPaymentReportDetailsOfMonth(value);
     } else {
       console.error("value or value.month is undefined");
     }
   };
   const updateChange = (e) => {
+    // console.log(e, "e");
     setRentActualIDs(e.target.value);
     // getAllRentActualDetailsByUniqueID(e.target.value);
   };
@@ -319,6 +322,7 @@ const RentActual = (props) => {
                   >
                     <InputBoxComponent
                       label="Contract ID"
+                      type="number"
                       placeholder="Enter Contact ID"
                       sx={{ width: 200, mr: 2, mt: 1 }}
                       name="RentActualIDs"
@@ -369,7 +373,8 @@ const RentActual = (props) => {
                       <Typography
                         sx={{ fontSize: 15, fontWeight: 700, color: pink[700] }}
                       >
-                        {rentActualData?.uniqueID}
+                        {/* {rentActualData?.uniqueID} */}
+                        {RentActualIDs}
                       </Typography>
                     </Grid>
                     <Grid
@@ -673,7 +678,7 @@ const RentActual = (props) => {
                         )}
                         <InputBoxComponent
                           label="Amount"
-                          type="number"
+                          type="text"
                           placeholder="Enter Amount"
                           sx={{ width: 200 }}
                           name="amount"

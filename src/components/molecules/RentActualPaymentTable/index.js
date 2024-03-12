@@ -83,10 +83,13 @@ const RentActualPaymentTable = ({
   searchText,
   filteredData,
   refreshKey,
+  setRefreshKey,
 }) => {
   // Track the edited data for saving
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page2, setPage2] = useState(0);
+  const [rowsPerPage2, setRowsPerPage2] = useState(5);
   const [selectAll, setSelectAll] = useState(false);
 
   const handleChangePage = (event, newPage) => {
@@ -103,7 +106,7 @@ const RentActualPaymentTable = ({
     if (refreshKey !== 0) {
       // Clear existing data
       setSelectedRows([]);
-      setSelectAll(true);
+      setSelectAll(false);
       handleEdit();
     }
   }, [refreshKey]);
@@ -217,6 +220,7 @@ const RentActualPaymentTable = ({
                         : [];
                       setSelectedRows(newSelectedRows);
                       setSelectAll(e.target.checked);
+                      // setRefreshKey((prevKey) => prevKey + 1);
                     }}
                     sx={{ color: selectAll ? green[900] : "" }}
                   />
@@ -369,15 +373,15 @@ const RentActualPaymentTable = ({
                 <TableBody>
                   {getSelectedRowDetails()
                     ?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
+                      page2 * rowsPerPage2,
+                      page2 * rowsPerPage2 + rowsPerPage2
                     )
                     .map((row) => (
                       <TableRow
                         key={row?.info?.uniqueID}
                         style={{
                           display: selectedRows?.includes?.(row?.info?.uniqueID)
-                            ? "table-row" //"table-row"
+                            ? "table-row"
                             : "none",
                         }}
                       >
@@ -415,16 +419,18 @@ const RentActualPaymentTable = ({
                 rowsPerPageOptions={[5, 10, 100]}
                 component="div"
                 count={getSelectedRowDetails()?.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPage={rowsPerPage2}
+                page={page2}
+                onPageChange={(e, newPage) => setPage2(newPage)}
+                onRowsPerPageChange={(e) => {
+                  setRowsPerPage2(+e.target.value);
+                  setPage2(0);
+                }}
                 className="d-flex align-items-end justify-content-end"
               />
             )}
           </div>
         )}
-
         {/* <Button
           onClick={handleSaveSelectedRows}
           variant="contained"

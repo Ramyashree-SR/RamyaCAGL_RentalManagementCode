@@ -77,12 +77,17 @@ const RentActualDetails = (props) => {
       setGetAcualPaymentReport([]);
       setSearchText("");
       setSelectedRows([]);
-      setLoading(false)
+      setLoading(false);
+
       // Fetch new data based on the new month and year
-      getAllActualPaymentReportDetailsOfMonth();
+      // getAllActualPaymentReportDetailsOfMonth();
       getSelectedRowDetails();
     }
   }, [refreshKey]);
+
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [props.close]);
 
   useEffect(() => {
     getAllActualPaymentReportDetailsOfMonth();
@@ -230,7 +235,7 @@ const RentActualDetails = (props) => {
     setconfirmSubmit(true);
     AddRentActualFortheMonth();
     setOpen(false);
-    
+
     // // Clear selectedRows after payment
     // localStorage.removeItem("selectedRows");
     // setSelectedRows([]);
@@ -493,6 +498,7 @@ const RentActualDetails = (props) => {
           <Button
             onClick={() => {
               props.close();
+              setSelectedRows([]);
               setRefreshKey((prevKey) => prevKey + 1);
             }}
             variant="contained"
