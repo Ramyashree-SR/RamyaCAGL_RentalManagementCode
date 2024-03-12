@@ -2268,7 +2268,7 @@ const EditMasterDetails = (props) => {
                         editAllNewContractDetails?.securityDepositLockinPeriod
                     ) || null
                   }
-                  sx={{ width: 300 }}
+                  sx={{ width: 300, mt: 2 }}
                   required={true}
                 />
 
@@ -2302,7 +2302,7 @@ const EditMasterDetails = (props) => {
                         editAllNewContractDetails?.securityDepositnoticePeriod
                     ) || null
                   }
-                  sx={{ width: 300 }}
+                  sx={{ width: 300, mt: 2 }}
                   required={true}
                 />
 
@@ -2726,7 +2726,7 @@ const EditMasterDetails = (props) => {
                   <DropDownComponent
                     label="Escalation Months (in months)"
                     placeholder="Enter Month"
-                    sx={{ width: 300 }}
+                    sx={{ width: 300, mt: 4.5 }}
                     size="small"
                     options={EscMonths}
                     getOptionLabel={(option) =>
@@ -2745,7 +2745,7 @@ const EditMasterDetails = (props) => {
                     name="lessorRentAmount"
                     value={editAllNewContractDetails?.lessorRentAmount}
                     onChange={(e) => updateChange(e)}
-                    sx={{ width: 300 }}
+                    sx={{ width: 300, ml: 2 }}
                     required
                   />
 
