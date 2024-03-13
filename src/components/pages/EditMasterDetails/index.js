@@ -1302,9 +1302,17 @@ const EditMasterDetails = (props) => {
           <Modal.Title
             id="contained-modal-title-vcenter"
             className="d-flex  align-items-end justify-content-end "
+            style={{ fontSize: 25, fontWeight: 600 }}
           >
             Edit Rent Contract Information
           </Modal.Title>
+          <img
+            src="./assets/cagllogo1.png"
+            alt="logo"
+            width="90px"
+            height="43px"
+            margnTop="-2px"
+          />
         </Modal.Header>
         <Modal.Body>
           {/* sx={{ height: "calc(100% - 55px)", overflowY: "scroll" }}  */}

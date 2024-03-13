@@ -1101,7 +1101,7 @@ const MasterDetails = (props) => {
 
       rentAmount: allNewContractDetails?.rentAmount,
       escalation: allNewContractDetails?.escalation,
-      schedulePrimesis: allNewContractDetails?.schedulePrimesis,   ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
+      schedulePrimesis: allNewContractDetails?.schedulePrimesis, ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
 
       tds: allNewContractDetails?.tds,
       gst: allNewContractDetails.gst,
@@ -1543,7 +1543,7 @@ const MasterDetails = (props) => {
         securityDepositExitTerm: props.EditLessorData?.securityDepositExitTerm,
         standardDeducition: props.EditLessorData?.standardDeducition,
         escalation: props.EditLessorData?.escalation,
-        schedulePrimesis: props.EditLessorData?.schedulePrimesis,    ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
+        schedulePrimesis: props.EditLessorData?.schedulePrimesis, ///used this field for the Escalation (5%)application for every esc.months 11months or 12 months
 
         lattitude: props.EditLessorData?.lattitude,
         longitude: props.EditLessorData?.longitude,
@@ -1594,7 +1594,10 @@ const MasterDetails = (props) => {
   const steps = [
     {
       label: (
-        <Button onClick={handleClick} sx={{ fontSize: 12 }}>
+        <Button
+          onClick={handleClick}
+          sx={{ fontSize: 12, color: "#2F7A99    ", fontWeight: 700 }}
+        >
           Branch Information
         </Button>
       ),
@@ -1618,7 +1621,10 @@ const MasterDetails = (props) => {
     },
     {
       label: (
-        <Button onClick={handleClick} sx={{ fontSize: 12 }}>
+        <Button
+          onClick={handleClick}
+          sx={{ fontSize: 12, color: "#2F7A99  ", fontWeight: 700 }}
+        >
           Agreement Information
         </Button>
       ),
@@ -1648,7 +1654,10 @@ const MasterDetails = (props) => {
     },
     {
       label: (
-        <Button onClick={handleClick} sx={{ fontSize: 12 }}>
+        <Button
+          onClick={handleClick}
+          sx={{ fontSize: 12, color: "#2F7A99  ", fontWeight: 700 }}
+        >
           Vendor/Owner Information
         </Button>
       ),
@@ -1680,7 +1689,6 @@ const MasterDetails = (props) => {
     // // Add more steps as needed
   ];
 
-  // console.log(allNewContractDetails?.contractStatus?.label, "contractStatus");
   return (
     <>
       <Modal
@@ -1691,14 +1699,20 @@ const MasterDetails = (props) => {
         centered
         className="w-100"
       >
-        <Modal.Header>
+        <Modal.Header className="d-flex">
+          {/* style={{ background: "#E8EDEE  " }} */}
           <Modal.Title
             id="contained-modal-title-vcenter"
-            className="d-flex  align-items-end justify-content-end "
+            className="d-flex align-items-start justify-content-start"
+            style={{ fontSize: 25, fontWeight: 600 }}
           >
-            {props.type === "edit" ||
+            {/* Add New Rent Contract Information */}
+            {/* {props.type === "edit" ||
             allNewContractDetails?.contractStatus?.label === "Renewal"
               ? "Edit Rent Contract Information"
+              : "Add New Rent Contract Information"} */}
+            {allNewContractDetails?.contractStatus === "Renewal"
+              ? "Add Renewed Contract Information"
               : "Add New Rent Contract Information"}
           </Modal.Title>
 
@@ -1802,7 +1816,7 @@ const MasterDetails = (props) => {
             ) : null}
           </Box>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="d-flex">
           <Button onClick={props.close} variant="contained">
             Close
           </Button>

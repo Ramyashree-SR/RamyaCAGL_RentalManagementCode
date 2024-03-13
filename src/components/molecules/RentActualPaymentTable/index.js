@@ -193,15 +193,146 @@ const RentActualPaymentTable = ({
   //   setSelectedRows(newSelectedRows);
   // };
 
+  // const handleCheckboxChange = (id) => {
+  //   const newSelectedRows = selectedRows.includes(id)
+  //     ? selectedRows.filter((rowId) => rowId !== id)
+  //     : [...selectedRows, id];
+
+  //   setSelectedRows(newSelectedRows);
+  //   setSelectAll(newSelectedRows.length === data?.length);
+  //   localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
+  // };
+
+  // const handleCheckboxChange = (id) => {
+  //   const newSelectedRows = selectedRows.includes(id)
+  //     ? selectedRows.filter((rowId) => rowId !== id)
+  //     : [...selectedRows, id];
+
+  //   setSelectedRows(newSelectedRows);
+
+  //   // Update editedData state with the gross value if actualAmount is not edited
+  //   if (!editedData?.[id]?.actualAmount) {
+  //     setEditedData((prevEditedData) => ({
+  //       ...prevEditedData,
+  //       [id]: {
+  //         ...prevEditedData[id],
+  //         actualAmount:
+  //           tableData?.find((row) => row.info.uniqueID === id)?.gross || 0,
+  //       },
+  //     }));
+  //   }
+
+  //   // Save selected rows to localStorage
+  //   localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
+  // };
+
+  // const handleCheckboxChange = (id) => {
+  //   const newSelectedRows = selectedRows.includes(id)
+  //     ? selectedRows.filter((rowId) => rowId !== id)
+  //     : [...selectedRows, id];
+
+  //   setSelectedRows(newSelectedRows);
+
+  //   if (id === "selectAll") {
+  //     newSelectedRows.forEach((rowId) => {
+  //       const row = data.find((row) => row.info.uniqueID === rowId);
+  //       if (
+  //         !editedData?.[row?.info?.uniqueID]?.actualAmount ||
+  //         editedData?.[row?.info?.uniqueID]?.actualAmount === "--"
+  //       ) {
+  //         handleEdit(row?.info?.uniqueID, "actualAmount", row?.gross);
+  //       }
+  //     });
+  //     setSelectAll(!selectAll);
+  //   } else {
+  //     if (!editedData?.[id]?.actualAmount) {
+  //       const row = data.find((row) => row.info.uniqueID === id);
+  //       setEditedData((prevEditedData) => ({
+  //         ...prevEditedData,
+  //         [id]: {
+  //           ...prevEditedData[id],
+  //           actualAmount: row?.gross,
+  //         },
+  //       }));
+  //     }
+  //   }
+
+  //   localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
+  // };
+
   const handleCheckboxChange = (id) => {
-    const newSelectedRows = selectedRows.includes(id)
-      ? selectedRows.filter((rowId) => rowId !== id)
-      : [...selectedRows, id];
+    let newSelectedRows = [];
+    let newEditedData = {};
+
+    if (id === "selectAll") {
+      newSelectedRows = selectAll
+        ? []
+        : data?.map((row) => {
+            // Set actual amount to gross for all selected rows if actualAmount is not already set
+            if (
+              !selectedRows.includes(row?.info?.uniqueID) &&
+              (!editedData?.[row?.info?.uniqueID]?.actualAmount ||
+                editedData?.[row?.info?.uniqueID]?.actualAmount === "--")
+            ) {
+              newEditedData[row?.info?.uniqueID] = {
+                ...editedData?.[row?.info?.uniqueID],
+                actualAmount: row?.gross,
+              };
+            }
+            return row?.info?.uniqueID;
+          });
+
+      setSelectAll(!selectAll);
+    } else {
+      newSelectedRows = selectedRows.includes(id)
+        ? selectedRows.filter((rowId) => rowId !== id)
+        : [...selectedRows, id];
+
+      // Toggle individual row selection
+      if (newSelectedRows.includes(id)) {
+        if (
+          !editedData?.[id]?.actualAmount ||
+          editedData?.[id]?.actualAmount === "--"
+        ) {
+          newEditedData[id] = {
+            ...editedData?.[id],
+            actualAmount: data.find((row) => row?.info?.uniqueID === id)?.gross,
+          };
+        }
+      } else {
+        delete newEditedData[id]; // Unset actual amount when unchecking individual row
+      }
+    }
 
     setSelectedRows(newSelectedRows);
-    setSelectAll(newSelectedRows.length === data?.length);
+    setEditedData({ ...editedData, ...newEditedData });
     localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
   };
+
+  // const handleCheckboxChange = (id) => {
+  //   let newSelectedRows = [];
+
+  //   if (id === "selectAll") {
+  //     newSelectedRows = selectAll
+  //       ? []
+  //       : data?.map((row) => {
+  //           if (!editedData[row?.info?.uniqueID]?.actualAmount) {
+  //             // Set actual amount to gross for all selected rows
+  //             handleEdit(row?.info?.uniqueID, "actualAmount", row?.gross);
+  //           }
+  //           return row?.info?.uniqueID;
+  //         });
+  //     setSelectAll(!selectAll);
+  //   } else {
+  //     newSelectedRows = selectedRows.includes(id)
+  //       ? selectedRows.filter((rowId) => rowId !== id)
+  //       : [...selectedRows, id];
+  //     handleEdit(id, "actualAmount", newSelectedRows.includes(id) ? data.find((row) => row?.info?.uniqueID === id)?.gross : "");
+  //   }
+
+  //   setSelectedRows(newSelectedRows);
+  //   localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
+  // };
 
   return (
     <Box sx={{ position: "relative" }} className="d-flex flex-column">
@@ -212,7 +343,7 @@ const RentActualPaymentTable = ({
             <TableHead>
               <StyledTableRow>
                 <StyledTableCell>
-                  <Checkbox
+                  {/* <Checkbox
                     checked={selectAll}
                     onChange={(e) => {
                       const newSelectedRows = e.target.checked
@@ -221,6 +352,73 @@ const RentActualPaymentTable = ({
                       setSelectedRows(newSelectedRows);
                       setSelectAll(e.target.checked);
                       // setRefreshKey((prevKey) => prevKey + 1);
+                    }}
+                    // onChange={handleCheckboxChange}
+                    sx={{ color: selectAll ? green[900] : "" }}
+                  /> */}
+                  {/* <Checkbox
+                    checked={selectAll}
+                    onChange={(e) => {
+                      const newSelectedRows = e.target.checked
+                        ? data?.map((row) => {
+                            if (!selectedRows.includes(row?.info?.uniqueID)) {
+                              handleEdit(
+                                row?.info?.uniqueID,
+                                "actualAmount",
+                                row?.gross
+                              );
+                            }
+                            return row?.info?.uniqueID;
+                          })
+                        : [];
+
+                      setSelectedRows(newSelectedRows);
+                      setSelectAll(e.target.checked);
+                    }}
+                    sx={{ color: selectAll ? green[900] : "" }}
+                  /> */}
+                  <Checkbox
+                    checked={selectAll}
+                    onChange={(e) => {
+                      const newSelectedRows = e.target.checked
+                        ? data?.map((row) => {
+                            // Set actual amount to gross for all selected rows if actualAmount is not already set
+                            if (
+                              !selectedRows.includes(row?.info?.uniqueID) &&
+                              (!editedData?.[row?.info?.uniqueID]
+                                ?.actualAmount ||
+                                editedData?.[row?.info?.uniqueID]
+                                  ?.actualAmount === "--")
+                            ) {
+                              handleEdit(
+                                row?.info?.uniqueID,
+                                "actualAmount",
+                                row?.gross
+                              );
+                            }
+                            return row?.info?.uniqueID;
+                          })
+                        : selectedRows.filter((id) => {
+                            // Retain the actual amount if it exists and is different from gross
+                            if (
+                              editedData[id]?.actualAmount !==
+                              data.find((row) => row?.info?.uniqueID === id)
+                                ?.gross
+                            ) {
+                              // handleEdit(id, "actualAmount", newSelectedRows.includes(id) ? data.find((row) => row?.info?.uniqueID === id)?.gross : "");
+                              handleEdit(
+                                id,
+                                "actualAmount",
+                                editedData[id]?.actualAmount
+                              );
+                            }else{
+                              return "";
+                            }
+                            // return false;
+                          });
+
+                      setSelectedRows(newSelectedRows);
+                      setSelectAll(e.target.checked);
                     }}
                     sx={{ color: selectAll ? green[900] : "" }}
                   />
