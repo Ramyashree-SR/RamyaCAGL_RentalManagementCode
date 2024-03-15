@@ -6,6 +6,7 @@ import {
   IconButton,
   Snackbar,
   Typography,
+  styled,
 } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
@@ -42,6 +43,17 @@ import BranchReportTable from "../../../../molecules/BranchReportTable";
 import RentDueDetails from "../RentDueDetails";
 import RentDueInActualModal from "../RentDueInActualModal";
 import VarianceInActualModal from "../VarianceInActualModal";
+import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
+
+const ColorIcon = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[300]),
+  color: pink[900],
+  // color:yellow[900],
+  // color: theme.palette.common.white,
+  "&:hover": {
+    color: deepOrange[700],
+  },
+}));
 
 const RentActual = (props) => {
   const { setRefreshKey, refreshKey } = props;
@@ -59,6 +71,7 @@ const RentActual = (props) => {
   const [openShowRentDueModal, setOpenShowRentDueModal] = useState(false);
   const [openShowVarianceModal, setOpenShowVarianceModal] = useState(false);
   const [getProvisionDetails, setGetProvisionDetails] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const months = [
     { id: 1, label: "January" },
@@ -267,6 +280,16 @@ const RentActual = (props) => {
   const handleActualClick = () => {
     setOpenActualDetailsModal(true);
   };
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await getAllPaymentReportDetailsOfMonth();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Modal
@@ -279,6 +302,22 @@ const RentActual = (props) => {
         className="w-100"
       >
         <Modal.Header>
+          <ColorIcon>
+            <Grid className="d-flex flex-column align-items-center justify-content-center">
+              <LoopRoundedIcon
+                onClick={handleRefresh}
+                sx={{ color: green[700] }}
+              />
+              <Grid className="d-flex flex-column align-items-start justify-content-start">
+                <Typography
+                  onClick={handleRefresh}
+                  sx={{ fontSize: 12, color: green[700] }}
+                >
+                  Refresh
+                </Typography>
+              </Grid>
+            </Grid>
+          </ColorIcon>
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 600, fontFamily: "sans-serif" }}
@@ -339,6 +378,10 @@ const RentActual = (props) => {
                     fontWeight: 700,
                     flexBasis: "20%",
                     mt: 1.5,
+                    position: "fixed",
+                    ml: 100,
+                    // top: 3,
+                    // left: 10,
                   }}
                 >
                   <Button
@@ -356,11 +399,19 @@ const RentActual = (props) => {
                   refreshKey={refreshKey}
                   setRefreshKey={setRefreshKey}
                 />
+
                 {RentActualIDs && (
                   <Grid
                     container
-                    className="d-flex flex-row py-1"
-                    sx={{ fontSize: 15, fontWeight: 700, mt: 3 }}
+                    className="d-flex flex-row"
+                    sx={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      mt: 10,
+                      position: "fixed",
+                      // top: 3,
+                      marginLeft: -5,
+                    }}
                   >
                     <Grid
                       item
@@ -407,77 +458,104 @@ const RentActual = (props) => {
                     </Grid>
                   </Grid>
                 )}
-                {/* <hr/> */}
-                <Col xs={12}>
-                  {RentActualIDs && (
-                    <Grid
-                      container
-                      className="d-flex flex-row"
-                      sx={{ fontSize: 15, fontWeight: 700 }}
-                    >
-                      <Grid
-                        item
-                        className="d-flex flex-row"
-                        sx={{ flexBasis: "35%" }}
-                      >
-                        <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                          Rent Start Date :&nbsp;&nbsp;
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: 15,
-                            fontWeight: 700,
-                            color: pink[700],
-                          }}
-                        >
-                          {rentActualData?.rentStartDate}
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        className="d-flex flex-row"
-                        sx={{ flexBasis: "35%" }}
-                      >
-                        <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                          Rent End Date :&nbsp;&nbsp;
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: 15,
-                            fontWeight: 700,
-                            color: pink[700],
-                          }}
-                        >
-                          {rentActualData?.rentEndDate}
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        className="d-flex flex-row"
-                        sx={{ flexBasis: "30%" }}
-                      >
-                        <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                          Lessor Name :&nbsp;&nbsp;
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: 15,
-                            fontWeight: 700,
-                            color: pink[700],
-                          }}
-                        >
-                          {rentActualData?.lessorName}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  )}
-                  {RentActualIDs && <hr />}
-                </Col>
+
                 {RentActualIDs && (
-                  <Grid item className="d-flex flex-row">
+                  <Grid
+                    container
+                    className="d-flex flex-row "
+                    sx={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      mt: 13,
+                      position: "fixed",
+                      marginLeft: -5,
+                    }}
+                  >
+                    <Grid
+                      item
+                      className="d-flex flex-row"
+                      sx={{ flexBasis: "35%" }}
+                    >
+                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                        Rent Start Date :&nbsp;&nbsp;
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: pink[700],
+                        }}
+                      >
+                        {rentActualData?.rentStartDate}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      className="d-flex flex-row"
+                      sx={{ flexBasis: "35%" }}
+                    >
+                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                        Rent End Date :&nbsp;&nbsp;
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: pink[700],
+                        }}
+                      >
+                        {rentActualData?.rentEndDate}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      className="d-flex flex-row"
+                      sx={{ flexBasis: "30%" }}
+                    >
+                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                        Lessor Name :&nbsp;&nbsp;
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: pink[700],
+                        }}
+                      >
+                        {rentActualData?.lessorName}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                )}
+                {RentActualIDs && (
+                  <hr
+                    style={{
+                      marginTop: 140,
+                      marginLeft: -50,
+                      // position: "fixed",
+                    }}
+                  />
+                )}
+
+                {/* <Grid
+                container
+                  className="d-flex flex-column "
+                  sx={{
+                    position: "relative",
+                    top: 4,
+                    left: 0,
+                   
+                  }}
+                > */}
+                {RentActualIDs && (
+                  <Grid item className="d-flex flex-row" sx={{ mt: 0 }}>
                     <Grid
                       className="d-flex align-items-start justify-content-start"
-                      sx={{ flexBasis: "50%" }}
+                      sx={{
+                        flexBasis: "30%",
+                        ml: -4,
+                        position: "fixed",
+                      }}
                     >
                       <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
                         Payment Report of the Branch-&nbsp;&nbsp;
@@ -494,7 +572,7 @@ const RentActual = (props) => {
                     </Grid>
                     <Grid
                       className="d-flex align-items-end justify-content-end"
-                      sx={{ flexBasis: "50%" }}
+                      sx={{ flexBasis: "70%", position: "fixed", ml: 70 }} //position: "relative", ml: 40
                     >
                       <Button
                         variant="contained"
@@ -506,30 +584,26 @@ const RentActual = (props) => {
                         Rent Due Details
                       </Button>
 
-                      <Grid className="d-flex align-items-end justify-content-end">
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setOpenShowProvisionModal(true);
-                            getProvisionListOftheBranch();
-                          }}
-                          sx={{ backgroundColor: blue[900], ml: 1 }}
-                        >
-                          Provisions Details
-                        </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          setOpenShowProvisionModal(true);
+                          getProvisionListOftheBranch();
+                        }}
+                        sx={{ backgroundColor: blue[900], ml: 1 }}
+                      >
+                        Provisions Details
+                      </Button>
 
-                        <Grid className="d-flex align-items-end justify-content-end">
-                          <Button
-                            variant="contained"
-                            onClick={() => {
-                              setOpenShowVarianceModal(true);
-                            }}
-                            sx={{ backgroundColor: pink[800], ml: 1 }}
-                          >
-                            Variance Details
-                          </Button>
-                        </Grid>
-                      </Grid>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          setOpenShowVarianceModal(true);
+                        }}
+                        sx={{ backgroundColor: pink[800], ml: 1 }}
+                      >
+                        Variance Details
+                      </Button>
                     </Grid>
                     <ShowProvisionDetails
                       show={openShowProvisionModal}
@@ -557,11 +631,16 @@ const RentActual = (props) => {
                     />
                   </Grid>
                 )}
+
                 {RentActualIDs && (
-                  <Grid container className="d-flex flex-row " sx={{ mt: 2 }}>
+                  <Grid
+                    container
+                    className="d-flex"
+                    sx={{ flexBasis: "100%", mt: 7 }}
+                  >
                     <Grid
                       item
-                      className="d-flex ml-2"
+                      className="d-flex flex-row"
                       sx={{ flexBasis: "50%" }}
                     >
                       <DropDownComponent
@@ -585,104 +664,97 @@ const RentActual = (props) => {
                         onChange={handleMonthChange}
                       />
                     </Grid>
-                    <Grid
-                      item
-                      className="d-flex  align-items-end justify-content-end"
-                      sx={{ flexBasis: "50%" }}
-                    >
-                      <Grid className="d-flex flex-column  ">
-                        <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                          Actual Amount:
-                        </Typography>
 
+                    <Grid
+                      className="d-flex flex-row"
+                      sx={{ ml: 80, position: "fixed" }}
+                    >
+                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                        Actual Amount:
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          color: pink[500],
+                        }}
+                      >
+                        {getPaymentReport?.actualAmount}
+                      </Typography>
+
+                      <Grid className="d-flex" sx={{ ml: 10 }}>
+                        <Typography
+                          sx={{ fontSize: 15, fontWeight: 700, ml: 10 }}
+                        >
+                          SD Amount :
+                        </Typography>
                         <Typography
                           sx={{
                             fontSize: 15,
                             fontWeight: 700,
-                            color: pink[500],
+                            color: pink[900],
                           }}
                         >
-                          {getPaymentReport?.actualAmount}
+                          {getPaymentReport?.sdAmount}
                         </Typography>
-
-                        {/* <Grid className="d-flex">
-                          <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                            SD Amount :
-                          </Typography>
-                          <Typography
-                            sx={{
-                              fontSize: 15,
-                              fontWeight: 700,
-                              color: pink[900],
-                            }}
-                          >
-                            {getPaymentReport?.sdAmount}
-                          </Typography>
-                        </Grid> */}
                       </Grid>
                     </Grid>
                   </Grid>
                 )}
+                <Grid
+                  className="d-flex"
+                  sx={{ position: "fixed", width: "90%", ml: -4 }}
+                >
+                  {loading ? (
+                    <div className="d-flex align-items-center justify-content-center flex-column">
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                        style={{ width: "1rem", height: "1rem" }}
+                      ></div>
+                      <span className="visible text-primary">Loading...</span>
+                    </div>
+                  ) : (
+                    selectedMonth && (
+                      <PaymentReportTable
+                        data={[getPaymentReport]}
+                        columns={paymentColumn}
+                        sx={{
+                          mt: 3,
+                          // width: "100%",
+                        }}
+                      />
+                    )
+                  )}
+                </Grid>
 
-                {selectedMonth && (
-                  <PaymentReportTable
-                    data={[getPaymentReport]}
-                    columns={paymentColumn}
-                    sx={{
-                      overFlowX: "scroll",
-                      overFlowY: "scroll",
-                      mt: 3,
-                    }}
-                  />
-                )}
-              </Col>
-
-              <Col>
                 <Grid
                   container
-                  className="d-flex flex-column "
-                  sx={{ flexBasis: "100%", mt: -4 }}
+                  className="d-flex flex-column"
+                  sx={{ flexBasis: "100%" }}
                 >
                   {selectedMonth && (
                     <Grid
                       item
-                      className="d-flex flex-column "
-                      sx={{ flexBasis: "100%" }}
+                      className="d-flex flex-column"
+                      sx={{ flexBasis: "50%", mt: 13 }}
                     >
                       <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                        Actual Amount :&nbsp;&nbsp;
+                        SD Amount Adjustment :&nbsp;&nbsp;
                       </Typography>
                       <Grid
                         item
                         className="d-flex flex-row"
                         sx={{ flexBasis: "100%" }}
                       >
-                        <Typography>TDS Applicable?</Typography>
-                        <SwitchComponent
-                          // checked={parseInt(allNewContractDetails?.lessorRentAmount) > 20000}
-                          checked={checked}
-                          onChange={(isChecked) =>
-                            handleSwitchTDSChange(isChecked)
-                          }
-                        />
-
-                        {checked && (
-                          <InputBoxComponent
-                            label="TDS Amount (10%)  "
-                            type="number"
-                            placeholder="Enter Amount"
-                            name="tdsData"
-                            value={checked ? tdsData : 0}
-                            onChange={(e) => updatedChange(e)}
-                          />
-                        )}
                         <InputBoxComponent
-                          label="Amount"
-                          type="text"
+                          label="SD Amount"
+                          type="number"
                           placeholder="Enter Amount"
                           sx={{ width: 200 }}
-                          name="amount"
-                          value={settlementAmt?.amount}
+                          name="sdAmount"
+                          value={settlementAmt?.sdAmount}
                           onChange={(e) => {
                             updatedChange(e);
                           }}
@@ -690,7 +762,7 @@ const RentActual = (props) => {
                           // required={true}
                         />
 
-                        {settlementAmt?.amount ? (
+                        {settlementAmt?.sdAmount ? (
                           <Button
                             className="d-flex"
                             variant="contained"
@@ -710,33 +782,106 @@ const RentActual = (props) => {
                               backgroundColor: green[900],
                             }}
                           >
-                            Make Settlement
+                            Make SD Amount
                           </Button>
                         ) : null}
+                      </Grid>
+                    </Grid>
+                  )}
+                  {selectedMonth && (
+                    <Grid
+                      item
+                      className="d-flex flex-column align-items-end justify-content-end w-90"
+                      sx={{ mt: 13, position: "fixed", ml: 80 }}
+                    >
+                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                        Actual Amount :&nbsp;&nbsp;
+                      </Typography>
+                      <Grid
+                        className="d-flex flex-row"
+                        sx={{ flexBasis: "50%" }}
+                      >
+                        <Typography>TDS Applicable?</Typography>
+                        <SwitchComponent
+                          // checked={parseInt(allNewContractDetails?.lessorRentAmount) > 20000}
+                          checked={checked}
+                          onChange={(isChecked) =>
+                            handleSwitchTDSChange(isChecked)
+                          }
+                        />
 
-                        <Snackbar
-                          open={open}
-                          anchorOrigin={{ vertical, horizontal }}
-                          autoHideDuration={1000}
-                          onClose={handleClose}
-                          action={action}
-                          key={vertical + horizontal}
-                          variant="success"
-                        >
-                          <Alert
-                            onClose={handleClose}
-                            severity="success"
-                            variant="filled"
-                            sx={{ width: "30%" }}
+                        {checked && (
+                          <InputBoxComponent
+                            label="TDS Amount (10%)  "
+                            type="number"
+                            placeholder="Enter Amount"
+                            sx={{ width: 150 }}
+                            name="tdsData"
+                            value={checked ? tdsData : 0}
+                            onChange={(e) => updatedChange(e)}
+                            disabled
+                          />
+                        )}
+                        <InputBoxComponent
+                          label="Amount"
+                          type="text"
+                          placeholder="Enter Amount"
+                          sx={{ width: 150 }}
+                          name="amount"
+                          value={settlementAmt?.amount}
+                          onChange={(e) => {
+                            updatedChange(e);
+                          }}
+                          disabled
+                          // errorText={settlementAmt.sdAmount}
+                          // required={true}
+                        />
+
+                        {/* {settlementAmt?.amount ? (
+                          <Button
+                            className="d-flex"
+                            variant="contained"
+                            size="small"
+                            onClick={() => {
+                              addRentActualSettelement();
+                              handleClick({
+                                vertical: "bottom",
+                                horizontal: "center",
+                              });
+                            }}
+                            sx={{
+                              width: 150,
+                              fontSize: 10,
+                              height: 30,
+                              mt: 2,
+                              backgroundColor: green[900],
+                            }}
                           >
-                            Note :Change the Rent End Date to close the
-                            Agreement!
-                          </Alert>
-                        </Snackbar>
+                            Make Actual Settlement
+                          </Button>
+                        ) : null} */}
                       </Grid>
                     </Grid>
                   )}
                 </Grid>
+                <Snackbar
+                  open={open}
+                  anchorOrigin={{ vertical, horizontal }}
+                  autoHideDuration={1000}
+                  onClose={handleClose}
+                  action={action}
+                  key={vertical + horizontal}
+                  variant="success"
+                >
+                  <Alert
+                    onClose={handleClose}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: "30%" }}
+                  >
+                    Note :Change the Rent End Date to close the Agreement!
+                  </Alert>
+                </Snackbar>
               </Col>
             </Row>
           </Container>

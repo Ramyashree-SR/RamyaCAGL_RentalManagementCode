@@ -4,6 +4,7 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  styled,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
@@ -13,14 +14,31 @@ import {
   getRentPaymentReportDetails,
 } from "../../../../services/PaymentReportApi";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
-import { deepOrange, green, orange, red } from "@mui/material/colors";
+import {
+  blue,
+  deepOrange,
+  green,
+  orange,
+  pink,
+  red,
+} from "@mui/material/colors";
 import PaymentTableComponent from "./../../../../molecules/PaymentTableComponent/index";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import ExcelExport from "../../../../../ExcelExport";
 import { AllPaymentColumns } from "../../../../../constants/AllPaymentReport";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
 
+const ColorIcon = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[300]),
+  color: pink[900],
+  // color:yellow[900],
+  // color: theme.palette.common.white,
+  "&:hover": {
+    color: deepOrange[700],
+  },
+}));
 const PaymentReport = (props) => {
   const { refreshKey, setRefreshKey } = props;
   const [getPaymentReport, setGetPaymentReport] = useState([]);
@@ -254,6 +272,18 @@ const PaymentReport = (props) => {
     }
   };
 
+  // const handleRefresh = () => {
+  //   getAllPaymentReportDetailsOfMonth();
+  // };
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await getAllPaymentReportDetailsOfMonth();
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <Modal
@@ -267,12 +297,29 @@ const PaymentReport = (props) => {
         className="w-100"
       >
         <Modal.Header>
+          <ColorIcon>
+            <Grid className="d-flex flex-column align-items-center justify-content-center">
+              <LoopRoundedIcon
+                onClick={handleRefresh}
+                sx={{ color: green[700] }}
+              />
+              <Grid className="d-flex flex-column align-items-start justify-content-start">
+                <Typography
+                  onClick={handleRefresh}
+                  sx={{ fontSize: 12, color: green[700] }}
+                >
+                  Refresh
+                </Typography>
+              </Grid>
+            </Grid>
+          </ColorIcon>
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 600, fontFamily: "sans-serif" }}
           >
             Payment Report
           </Modal.Title>
+
           <img
             src="./assets/cagllogo1.png"
             alt="logo"

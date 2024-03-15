@@ -461,11 +461,11 @@ const ProvisionsDetails = (props) => {
                 onClose={handleClose}
                 action={action}
                 key={vertical + horizontal}
-                variant="error"
+                variant="success"
               >
                 <Alert
                   onClose={handleClose}
-                  severity="error"
+                  severity="success"
                   variant="filled"
                   sx={{ width: "30%" }}
                 >

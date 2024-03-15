@@ -155,7 +155,7 @@ const PaymentReportTable = ({ data, columns, sx }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
+      {/* <TablePagination
         rowsPerPageOptions={[10, 15, 100]}
         component="div"
         count={data?.length}
@@ -163,7 +163,7 @@ const PaymentReportTable = ({ data, columns, sx }) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      /> */}
     </>
   );
 };
