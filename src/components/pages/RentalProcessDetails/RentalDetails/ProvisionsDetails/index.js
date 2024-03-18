@@ -1,8 +1,10 @@
 import {
   Alert,
+  Box,
   Button,
   Grid,
   IconButton,
+  Radio,
   Snackbar,
   Typography,
 } from "@mui/material";
@@ -50,6 +52,9 @@ const ProvisionsDetails = (props) => {
   const [selectedYear, setSelectedYear] = useState(null);
   const { vertical, horizontal, open } = state;
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(
+    "Reversed in Between the month"
+  );
 
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
@@ -128,7 +133,7 @@ const ProvisionsDetails = (props) => {
 
   const typeProvision = [
     { id: 1, label: "Make" },
-    { id: 2, label: "Reverse" },
+    { id: 2, label: "Reversed" },
   ];
 
   const handleTypeChange = (value) => {
@@ -185,6 +190,9 @@ const ProvisionsDetails = (props) => {
     }
   };
 
+  const handleRadioChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
   return (
     <>
       <Modal
@@ -288,7 +296,10 @@ const ProvisionsDetails = (props) => {
               </Col>
               <hr />
               <Col xs={12}>
-                <Grid className="d-flex flex-row" sx={{ flexBasis: "35%" }}>
+                <Grid
+                  className="d-flex flex-row align-items-end justify-content-end"
+                  sx={{ flexBasis: "35%" }}
+                >
                   <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
                     Month Rent :&nbsp;&nbsp;
                   </Typography>
@@ -303,7 +314,10 @@ const ProvisionsDetails = (props) => {
                   </Typography>
                 </Grid>
                 <br />
-                <Grid className="d-flex align-items-between justify-content-between">
+                <Grid
+                  className="d-flex align-items-between justify-content-between"
+                  sx={{ mt: -3 }}
+                >
                   <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
                     Provision for the month :
                   </Typography>
@@ -346,10 +360,34 @@ const ProvisionsDetails = (props) => {
                     required={true}
                   />
                 </Grid>
+                {typeProvisionsData === "Reversed" ? (
+                  <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+                    <Radio
+                      checked={
+                        selectedValue === "Reversed in Between the month"
+                      }
+                      onChange={handleRadioChange}
+                      value="Reversed in Between the month"
+                      name="radio-buttons"
+                      slotProps={{ input: { "aria-label": "A" } }}
+                    />
+                    <Typography sx={{ mt: 1 }}>
+                      Reversed in Between the month
+                    </Typography>
+                    <Radio
+                      checked={selectedValue === "Not Reversed"}
+                      onChange={handleRadioChange}
+                      value="Not Reversed"
+                      name="radio-buttons"
+                      slotProps={{ input: { "aria-label": "B" } }}
+                    />
+                    <Typography sx={{ mt: 1 }}> Not Reversed</Typography>
+                  </Box>
+                ) : null}
 
                 {typeProvisionsData === "Make" ||
-                typeProvisionsData === "Reverse" ? (
-                  <Grid className="d-flex  py-4 ">
+                typeProvisionsData === "Reversed" ? (
+                  <Grid className="d-flex  py-3 ">
                     <DropDownComponent
                       label="Year"
                       placeholder="Select "
@@ -365,6 +403,7 @@ const ProvisionsDetails = (props) => {
                       }
                       required={true}
                     />
+
                     <DropDownComponent
                       label="Month"
                       placeholder="Select "
@@ -394,12 +433,12 @@ const ProvisionsDetails = (props) => {
                   </Grid>
                 ) : null}
                 {typeProvisionsData === "Make" ||
-                typeProvisionsData === "Reverse" ? (
+                typeProvisionsData === "Reversed" ? (
                   <Grid className="d-flex flex-row ">
                     <InputBoxComponent
                       label="&nbsp;&nbsp;&nbsp;Remarks :"
                       placeholder="Type here..."
-                      sx={{ width: 400, ml: 2, mt: -3 }}
+                      sx={{ width: 400, ml: 2, mt: -2 }}
                       rows={2}
                       name="remark"
                       value={addProvisions?.remark}
@@ -426,7 +465,7 @@ const ProvisionsDetails = (props) => {
                       </Button>
                     </Grid>
                   ) : null}
-                  {typeProvisionsData === "Reverse" ? (
+                  {typeProvisionsData === "Reversed" ? (
                     <Grid className="d-flex " sx={{ ml: 2 }}>
                       <Button
                         onClick={() => {
@@ -446,8 +485,8 @@ const ProvisionsDetails = (props) => {
                         }}
                       >
                         {selectedMonth === `${currentMonth}`
-                          ? "Reverse Provision(same Month)"
-                          : "Reverse Provision"}
+                          ? "Reversed Provision(same Month)"
+                          : "Reversed Provision"}
                       </Button>
                     </Grid>
                   ) : null}

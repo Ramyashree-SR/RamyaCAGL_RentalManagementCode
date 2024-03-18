@@ -5,11 +5,11 @@ import {
   IconButton,
   Snackbar,
   Typography,
+  styled,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-
 import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import { paymentColumn } from "../../../../../constants/PaymentReport";
 import {
@@ -19,19 +19,18 @@ import {
   orange,
   pink,
   red,
+  yellow,
 } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import ExcelExport from "../../../../../ExcelExport";
 import PaymentReportTable from "../../../../molecules/PaymentReportTable";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
-import { AddRentActualDetails } from "../../../../services/RentActualApi";
 import { useToasts } from "react-toast-notifications";
-import SwitchComponent from "../../../../atoms/SwitchComponent";
+import { AddSDAjustmentAndClosingContract } from "../../../../services/SdAdjustApi";
 import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
-import { styled } from "@mui/styles";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
-  color: theme.palette?.getContrastText(pink[300]),
+  color: theme.palette.getContrastText(pink[300]),
   color: pink[900],
   // color:yellow[900],
   // color: theme.palette.common.white,
@@ -40,7 +39,7 @@ const ColorIcon = styled(Button)(({ theme }) => ({
   },
 }));
 
-const PaymentReportDetails = (props) => {
+const SdAdjustmentModal = (props) => {
   const {
     uniqueID,
     branchIDData,
@@ -52,21 +51,23 @@ const PaymentReportDetails = (props) => {
     // reload,
   } = props;
   const { addToast } = useToasts();
-  const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
+  // const [openShowProvisionModal, setOpenShowProvisionModal] = useState(false);
   const [getPaymentReport, setGetPaymentReport] = useState([]);
+  const [getPaymentReportClick, setGetPaymentReportClick] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [settlementAmt, setSettlementAmt] = useState([]);
+  const [settlementAmt, setSettlementAmt] = useState({});
   const [state, setState] = useState({
     open: false,
     vertical: "bottom",
     horizontal: "center",
   });
-  const [loading, setLoading] = useState(false);
+  // const [reload, setReload] = useState(false);
   const [checked, setChecked] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const { vertical, horizontal, open } = state;
   const [closeButtonClicked, setCloseButtonClicked] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
@@ -107,7 +108,7 @@ const PaymentReportDetails = (props) => {
       setCloseButtonClicked(false);
     }
     // Fetch new data based on the new month and year
-    getAllPaymentReportDetailsOfMonth();
+    // getAllPaymentReportDetailsOfMonth();
   }, [refreshKey, closeButtonClicked]);
 
   const handleMonthChange = (newValue) => {
@@ -118,6 +119,7 @@ const PaymentReportDetails = (props) => {
     } else {
       console.error("value or value.month is undefined");
     }
+    setGetPaymentReportClick(true);
   };
 
   const startDateObject = new Date(rentStartDate);
@@ -161,6 +163,7 @@ const PaymentReportDetails = (props) => {
   const handleChange = (newValue) => {
     let value = newValue?.label;
     setSelectedYear(value);
+    setGetPaymentReportClick(true);
   };
 
   const getAllPaymentReportDetailsOfMonth = async () => {
@@ -203,59 +206,33 @@ const PaymentReportDetails = (props) => {
     </React.Fragment>
   );
 
-  const addRentActualSettelement = async () => {
-    let payload = [
-      {
-        contractID: getPaymentReport?.info?.uniqueID,
-        branchID: getPaymentReport?.info?.branchID,
-        year: selectedYear,
-        month: selectedMonth,
-        amount: settlementAmt?.amount,
-        tdsAmount: checked ? tdsData : 0,
-        startDate: getPaymentReport?.info?.rentStartDate,
-        endDate: getPaymentReport?.info?.rentEndDate,
-        monthRent: getPaymentReport?.monthRent,
-      },
-    ];
-    const { data, errRes } = await AddRentActualDetails(payload);
-    // console.log(data, "data");
+  const addSdAdjustmentAndCloseContract = async () => {
+    let payload = {
+      contractID: getPaymentReport?.info?.uniqueID,
+      branchID: getPaymentReport?.info?.branchID,
+      year: selectedYear,
+      month: selectedMonth,
+      sdAmount: settlementAmt?.sdAmount,
+      remark: settlementAmt?.remark,
+      monthRent: getPaymentReport?.monthRent,
+    };
+    const { data, errRes } = await AddSDAjustmentAndClosingContract(payload);
     if (data) {
       setSettlementAmt(data);
-      getAllPaymentReportDetailsOfMonth();
-      addToast("Amount Settled", { appearance: "success" });
-      props.close();
+      //   addToast("Amount Settled", { appearance: "success" });
       setRefreshKey((prevKey) => prevKey + 1);
-      // window.location.reload();
     } else if (!data?.error) {
       // addToast(errRes?.msg, { appearance: "error" });
       addToast(<pre>{JSON.stringify(errRes, null, 4)}</pre>, {
         appearance: "error",
         autoClose: 9000,
       });
-      props.close();
+      //   props.close();
     }
   };
 
-  // const calculateTDS = () => {
-  //   return getPaymentReport?.gross > 20000
-  //     ? (getPaymentReport?.gross * (10 / 100)).toFixed(0)
-  //     : 0;
-  // };
-  const calculateTDS = () => {
-    return (getPaymentReport?.gross * (10 / 100)).toFixed(0);
-  };
-
-  const tdsData = calculateTDS(getPaymentReport?.gross);
-
-  const handleSwitchTDSChange = () => {
-    setChecked(!checked);
-    // If the switch is turned off, reset the TDS value to null
-    if (!checked) {
-      setSettlementAmt((prevDetails) => ({
-        ...prevDetails,
-        tdsAmount: null,
-      }));
-    }
+  const handleReportClick = () => {
+    setGetPaymentReportClick(true);
   };
 
   const getPaymentReportData = Object.values([getPaymentReport])?.map(
@@ -287,12 +264,13 @@ const PaymentReportDetails = (props) => {
   const handleRefresh = async () => {
     setLoading(true);
     try {
+      await setSelectedMonth(null);
+      await setSelectedYear(null);
       await getAllPaymentReportDetailsOfMonth();
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <>
       <Modal
@@ -308,27 +286,11 @@ const PaymentReportDetails = (props) => {
         className="w-100"
       >
         <Modal.Header>
-          <ColorIcon>
-            <Grid className="d-flex flex-column align-items-center justify-content-center">
-              <LoopRoundedIcon
-                onClick={handleRefresh}
-                sx={{ color: green[700] }}
-              />
-              <Grid className="d-flex flex-column align-items-start justify-content-start">
-                <Typography
-                  onClick={handleRefresh}
-                  sx={{ fontSize: 12, color: green[700] }}
-                >
-                  Refresh
-                </Typography>
-              </Grid>
-            </Grid>
-          </ColorIcon>
           <Modal.Title
             id="contained-modal-title-vcenter"
             style={{ fontWeight: 600, fontFamily: "sans-serif" }}
           >
-            Payment Report
+            SD Adjustment Report
           </Modal.Title>
           <img
             src="./assets/cagllogo1.png"
@@ -349,7 +311,7 @@ const PaymentReportDetails = (props) => {
                 Contract ID :&nbsp;&nbsp;
               </Typography>
               <Typography
-                sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
+                sx={{ fontSize: 15, fontWeight: 700, color: yellow[900] }}
               >
                 {uniqueID}
               </Typography>
@@ -359,7 +321,7 @@ const PaymentReportDetails = (props) => {
                 Branch ID :&nbsp;&nbsp;
               </Typography>
               <Typography
-                sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
+                sx={{ fontSize: 15, fontWeight: 700, color: yellow[900] }}
               >
                 {branchIDData}
               </Typography>
@@ -369,7 +331,7 @@ const PaymentReportDetails = (props) => {
                 Branch Name :&nbsp;&nbsp;
               </Typography>
               <Typography
-                sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
+                sx={{ fontSize: 15, fontWeight: 700, color: yellow[900] }}
               >
                 {lesseeBranchName}
               </Typography>
@@ -385,7 +347,7 @@ const PaymentReportDetails = (props) => {
                 Rent Start Date :&nbsp;&nbsp;
               </Typography>
               <Typography
-                sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
+                sx={{ fontSize: 15, fontWeight: 700, color: yellow[900] }}
               >
                 {rentStartDate}
               </Typography>
@@ -395,7 +357,7 @@ const PaymentReportDetails = (props) => {
                 Rent End Date :&nbsp;&nbsp;
               </Typography>
               <Typography
-                sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
+                sx={{ fontSize: 15, fontWeight: 700, color: yellow[900] }}
               >
                 {rentEndDate}
               </Typography>
@@ -405,7 +367,7 @@ const PaymentReportDetails = (props) => {
                 Lessor Name :&nbsp;&nbsp;
               </Typography>
               <Typography
-                sx={{ fontSize: 15, fontWeight: 700, color: orange[900] }}
+                sx={{ fontSize: 15, fontWeight: 700, color: yellow[900] }}
               >
                 {" "}
                 {lessorName}
@@ -423,45 +385,76 @@ const PaymentReportDetails = (props) => {
             </Typography>
           </Grid>
           <hr />
-          <Grid container className="d-flex flex-row px-0 py-1">
-            <Grid item className="d-flex" sx={{ flexBasis: "50%" }}>
-              <DropDownComponent
-                label="Year"
-                placeholder="Select "
-                sx={{ width: 200 }}
-                size="small"
-                getOptionLabel={(option) => option?.label || option}
-                options={yearOptions}
-                value={selectedYear}
-                onChange={handleChange}
-              />
-              <DropDownComponent
-                label="Month"
-                placeholder="Select "
-                sx={{ width: 200 }}
-                size="small"
-                getOptionLabel={(option) => option?.label || option}
-                options={months}
-                value={selectedMonth}
-                onChange={handleMonthChange}
-              />
-            </Grid>
 
-            <Grid
-              item
-              className="d-flex align-items-end justify-content-end"
-              sx={{
-                width: 120,
-                height: 40,
-                flexBasis: "30%",
-              }}
-            >
-              <ExcelExport
-                excelData={getPaymentReportData}
-                fileName={"Payment Report"}
-                sx={{ color: "#ffffff", backgroundColor: deepOrange[900] }}
+          <Button
+            onClick={() => {
+              handleReportClick();
+            }}
+            variant="contained"
+            sx={{ backgroundColor: green[900] }}
+          >
+            Payment Report
+          </Button>
+          <ColorIcon>
+            <Grid className="d-flex flex-column align-items-center justify-content-center">
+              <LoopRoundedIcon
+                onClick={handleRefresh}
+                sx={{ color: blue[700], fontSize: 15 }}
               />
+              <Grid className="d-flex flex-column align-items-start justify-content-start">
+                <Typography
+                  onClick={handleRefresh}
+                  sx={{ fontSize: 8, color: blue[700] }}
+                >
+                  Refresh
+                </Typography>
+              </Grid>
             </Grid>
+          </ColorIcon>
+
+          <Grid container className="d-flex flex-row px-0 py-1">
+            {getPaymentReportClick ? (
+              <Grid item className="d-flex" sx={{ flexBasis: "50%" }}>
+                <DropDownComponent
+                  label="Year"
+                  placeholder="Select "
+                  sx={{ width: 200 }}
+                  size="small"
+                  getOptionLabel={(option) => option?.label || option}
+                  options={yearOptions}
+                  value={selectedYear}
+                  onChange={handleChange}
+                />
+                <DropDownComponent
+                  label="Month"
+                  placeholder="Select "
+                  sx={{ width: 200 }}
+                  size="small"
+                  getOptionLabel={(option) => option?.label || option}
+                  options={months}
+                  value={selectedMonth}
+                  onChange={handleMonthChange}
+                />
+              </Grid>
+            ) : null}
+
+            {getPaymentReportClick ? (
+              <Grid
+                item
+                className="d-flex align-items-end justify-content-end"
+                sx={{
+                  width: 120,
+                  height: 40,
+                  flexBasis: "30%",
+                }}
+              >
+                <ExcelExport
+                  excelData={getPaymentReportData}
+                  fileName={"Payment Report"}
+                  sx={{ color: "#ffffff", backgroundColor: deepOrange[900] }}
+                />
+              </Grid>
+            ) : null}
           </Grid>
 
           {loading ? (
@@ -491,97 +484,89 @@ const PaymentReportDetails = (props) => {
           <Grid
             container
             className="d-flex flex-column "
-            sx={{ flexBasis: "100%", mt: 4 }}
+            sx={{ flexBasis: "100%", mt: -4 }}
           >
-            {selectedMonth && (
-              <Grid
-                item
-                className="d-flex flex-column "
-                sx={{ flexBasis: "100%" }}
-              >
-                <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                  Actual Amount :&nbsp;&nbsp;
-                </Typography>
-                <Grid
-                  item
-                  className="d-flex flex-row"
-                  sx={{ flexBasis: "100%" }}
-                >
-                  <Typography>TDS Applicable?</Typography>
-                  <SwitchComponent
-                    // checked={parseInt(allNewContractDetails?.lessorRentAmount) > 20000}
-                    checked={checked}
-                    onChange={(isChecked) => handleSwitchTDSChange(isChecked)}
-                  />
+            {/* {selectedMonth && ( */}
+            <Grid
+              item
+              className="d-flex flex-column "
+              sx={{ flexBasis: "100%", mt: 6 }}
+            >
+              <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                SD Amount :&nbsp;&nbsp;
+              </Typography>
 
-                  {checked && (
-                    <InputBoxComponent
-                      label="TDS Amount (10%)  "
-                      type="number"
-                      placeholder="Enter Amount"
-                      name="tdsData"
-                      value={checked ? tdsData : 0}
-                      onChange={(e) => updatedChange(e)}
-                    />
-                  )}
-                  <InputBoxComponent
-                    label="Amount"
-                    type="number"
-                    placeholder="Enter Amount"
-                    sx={{ width: 200 }}
-                    name="amount"
-                    value={settlementAmt?.amount}
-                    onChange={(e) => {
-                      updatedChange(e);
+              <Grid item className="d-flex flex-row" sx={{ flexBasis: "100%" }}>
+                <InputBoxComponent
+                  label="SD Amount"
+                  type="number"
+                  placeholder="Enter Amount"
+                  sx={{ width: 200 }}
+                  name="sdAmount"
+                  value={settlementAmt?.sdAmount}
+                  onChange={(e) => {
+                    updatedChange(e);
+                  }}
+                />
+
+                <InputBoxComponent
+                  label="Remarks"
+                  type="text"
+                  multiline
+                  rows={2}
+                  placeholder="Enter Amount"
+                  sx={{ width: 300 }}
+                  name="remark"
+                  value={settlementAmt?.remark}
+                  onChange={(e) => {
+                    updatedChange(e);
+                  }}
+                />
+                {settlementAmt?.sdAmount ? (
+                  <Button
+                    className="d-flex"
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                      addSdAdjustmentAndCloseContract();
+                      handleClick({
+                        vertical: "bottom",
+                        horizontal: "center",
+                      });
                     }}
-                    disabled
-                  />
-
-                  {settlementAmt?.amount ? (
-                    <Button
-                      className="d-flex"
-                      variant="contained"
-                      size="small"
-                      onClick={() => {
-                        addRentActualSettelement();
-                        handleClick({
-                          vertical: "bottom",
-                          horizontal: "center",
-                        });
-                      }}
-                      sx={{
-                        width: 150,
-                        fontSize: 10,
-                        height: 30,
-                        mt: 2,
-                        backgroundColor: green[900],
-                      }}
-                    >
-                      Make Payment
-                    </Button>
-                  ) : null}
-
-                  <Snackbar
-                    open={open}
-                    anchorOrigin={{ vertical, horizontal }}
-                    autoHideDuration={1000}
-                    onClose={handleClose}
-                    action={action}
-                    key={vertical + horizontal}
-                    // variant="success"
+                    sx={{
+                      width: 150,
+                      fontSize: 10,
+                      height: 30,
+                      mt: 2,
+                      backgroundColor: green[900],
+                    }}
                   >
-                    <Alert
-                      onClose={handleClose}
-                      severity="success"
-                      variant="filled"
-                      sx={{ width: "30%" }}
-                    >
-                      Note :Change the Rent End Date to close the Agreement!
-                    </Alert>
-                  </Snackbar>
-                </Grid>
+                    Make SD Payment
+                  </Button>
+                ) : null}
+
+                <Snackbar
+                  open={open}
+                  anchorOrigin={{ vertical, horizontal }}
+                  autoHideDuration={9000}
+                  onClose={handleClose}
+                  action={action}
+                  key={vertical + horizontal}
+                  // variant="success"
+                >
+                  <Alert
+                    onClose={handleClose}
+                    severity="warning"
+                    variant="filled"
+                    sx={{ width: "100%" }}
+                  >
+                    Note :Change the Rent End Date and close the Agreement !
+                  </Alert>
+                </Snackbar>
               </Grid>
-            )}
+            </Grid>
+            {/* )} */}
           </Grid>
         </Modal.Body>
         <Modal.Footer>
@@ -602,4 +587,4 @@ const PaymentReportDetails = (props) => {
   );
 };
 
-export default PaymentReportDetails;
+export default SdAdjustmentModal;

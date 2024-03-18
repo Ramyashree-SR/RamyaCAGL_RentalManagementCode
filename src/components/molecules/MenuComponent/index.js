@@ -23,19 +23,22 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { getRentDueDetails } from "../../services/RentDueApi";
 import RentDueDetails from "../../pages/RentalProcessDetails/RentalDetails/RentDueDetails";
-import Provisions from "../../pages/RentalProcessDetails/RentalDetails/Provisions";
+
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import LockClockIcon from "@mui/icons-material/LockClock";
 import LockIcon from "@mui/icons-material/Lock";
 import { AddRentProvisionDetails } from "../../services/ProvisionsApi";
 import PaymentReportDetails from "../../pages/RentalProcessDetails/RentalDetails/PaymentReportDetails";
-import PaymentReport from "./../../pages/RentalProcessDetails/RentalDetails/PaymentReport/index";
+
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import { getRentPaymentReportDetails } from "../../services/PaymentReportApi";
+
 import ProvisionsDetails from "../../pages/RentalProcessDetails/RentalDetails/ProvisionsDetails";
 import { useToasts } from "react-toast-notifications";
 import CloseIcon from "@mui/icons-material/Close";
 import EditMasterDetails from "../../pages/EditMasterDetails";
+
+import AdjustIcon from "@mui/icons-material/Adjust";
+import SdAdjustmentModal from "../../pages/RentalProcessDetails/RentalDetails/SdAdjustmentModal";
 
 const ColorIcon = styled(Icon)(({ theme }) => ({
   //   color: theme.palette?.getContrastText(pink[900]),
@@ -49,6 +52,7 @@ export default function MenuComponent({
   handleEditProvisions = () => {},
   handleRentDue = () => {},
   handleEditReport = () => {},
+  handleSDReport = () => {},
   openRentDueModal,
   setOpenRentDueModal,
   uniqueID,
@@ -70,6 +74,8 @@ export default function MenuComponent({
   editAllNewContractData,
   openEditLessorModal,
   setOpenEditLessorModal,
+  setOpenSdReportModal,
+  openSdReportModal,
 }) {
   const { addToast } = useToasts();
   const [fullscreen, setFullscreen] = useState(true);
@@ -287,6 +293,18 @@ export default function MenuComponent({
             &nbsp; Payment Report
           </MenuItem>
         ) : null}
+
+        {activationStatusFilter === "Open" ? (
+          <MenuItem
+            onClick={() => {
+              handleSDReport();
+            }}
+            sx={{ fontSize: 13, fontWeight: 600, color: blue[900] }}
+          >
+            <AdjustIcon fontSize="small" sx={{ color: blue[900] }} />
+            &nbsp; SD Ajustment
+          </MenuItem>
+        ) : null}
       </Menu>
       <RentDueDetails
         show={openRentDueModal}
@@ -351,6 +369,21 @@ export default function MenuComponent({
         uniqueID={uniqueID}
         editAllNewContractData={editAllNewContractData}
       />
+      {activationStatusFilter === "Open" && (
+        <SdAdjustmentModal
+          show={openSdReportModal}
+          close={() => setOpenSdReportModal(false)}
+          openSdReportModal={openSdReportModal}
+          fullscreen={fullscreen}
+          uniqueID={uniqueID}
+          branchIDData={branchIDData}
+          rentEndDate={rentEndDate}
+          rentStartDate={rentStartDate}
+          lessorName={lessorName}
+          lesseeBranchName={lesseeBranchName}
+          monthlyRent={monthlyRent}
+        />
+      )}
     </React.Fragment>
   );
 }

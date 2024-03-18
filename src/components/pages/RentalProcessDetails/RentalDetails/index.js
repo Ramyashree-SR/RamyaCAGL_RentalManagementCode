@@ -99,6 +99,7 @@ const RentalDetails = (props) => {
   const [searchText, setSearchText] = useState("");
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [openPaymentReportData, setOpenPaymentReportData] = useState(false);
+  const [openSdReportModal, setOpenSdReportModal] = useState(false);
   const [openRentActualModal, setOpenRentActualModal] = useState(false);
   const [openVarianceModal, setOpenVarianceModal] = useState(false);
   const [openProvisionsModal, setOpenProvisionsModal] = useState(false);
@@ -835,7 +836,6 @@ const RentalDetails = (props) => {
           refreshKey && (
             <TableComponent
               data={rentContractDetails}
-              // data={branchFilter || rentContractDetails}
               columns={columns}
               getContractDetails={getContractDetails}
               setEditLessorData={setEditLessorData}
@@ -875,6 +875,8 @@ const RentalDetails = (props) => {
               openPaymentReportData={openPaymentReportData}
               setOpenPaymentReportData={setOpenPaymentReportData}
               activationStatusFilterDue={activationStatusFilterDue}
+              openSdReportModal={openSdReportModal}
+              setOpenSdReportModal={setOpenSdReportModal}
             />
           )
         )}

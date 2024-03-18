@@ -272,9 +272,7 @@ const PaymentReport = (props) => {
     }
   };
 
-  // const handleRefresh = () => {
-  //   getAllPaymentReportDetailsOfMonth();
-  // };
+  
 
   const handleRefresh = async () => {
     setLoading(true);

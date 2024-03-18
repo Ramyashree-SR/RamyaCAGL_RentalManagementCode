@@ -10,8 +10,9 @@ import {
   Popover,
   TextField,
   Typography,
+  styled,
 } from "@mui/material";
-import { deepOrange, green } from "@mui/material/colors";
+import { deepOrange, green, pink } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
@@ -20,11 +21,21 @@ import {
   AddRentActualDetails,
   getRawRentPaymentReportDetails,
 } from "../../../../services/RentActualApi";
-import { getRentPaymentReportDetails } from "../../../../services/PaymentReportApi";
 import RentActualPaymentTable from "../../../../molecules/RentActualPaymentTable";
 import ExcelExport from "../../../../../ExcelExport";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
+
+const ColorIcon = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[300]),
+  color: pink[900],
+  // color:yellow[900],
+  // color: theme.palette.common.white,
+  "&:hover": {
+    color: deepOrange[700],
+  },
+}));
 
 const RentActualDetails = (props) => {
   const { addToast } = useToasts();
@@ -263,7 +274,7 @@ const RentActualDetails = (props) => {
       endDate: selectRow?.info?.rentEndDate,
       monthRent: selectRow?.monthRent,
     }));
-    const { data, errRes } = await AddRentActualDetails(payload);
+    const { data, errRes } = await AddRentActualDetails("Confirm", payload);
     if (data?.error === "false") {
       let getData = data?.data;
       setAddRentActual(getData);
@@ -275,6 +286,15 @@ const RentActualDetails = (props) => {
     } else if (errRes) {
       addToast(errRes, { appearance: "error" });
       props.close();
+    }
+  };
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await getAllActualPaymentReportDetailsOfMonth();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -335,6 +355,23 @@ const RentActualDetails = (props) => {
                       value={selectedMonth}
                       onChange={handleMonthChange}
                     />
+
+                    <ColorIcon>
+                      <Grid className="d-flex flex-column align-items-center justify-content-center">
+                        <LoopRoundedIcon
+                          onClick={handleRefresh}
+                          sx={{ color: green[700], fontSize: 15 }}
+                        />
+                        <Grid className="d-flex flex-column align-items-start justify-content-start">
+                          <Typography
+                            onClick={handleRefresh}
+                            sx={{ fontSize: 8, color: green[700] }}
+                          >
+                            Refresh
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </ColorIcon>
                     <Grid className="d-flex flex-row align-items-center justify-content-around">
                       <TextField
                         id="outlined-size-small"

@@ -194,38 +194,38 @@ const RentActualPaymentTable = ({
   //   setSelectedRows(newSelectedRows);
   // };
 
-  // const handleCheckboxChange = (id) => {
-  //   const newSelectedRows = selectedRows.includes(id)
-  //     ? selectedRows.filter((rowId) => rowId !== id)
-  //     : [...selectedRows, id];
-
-  //   setSelectedRows(newSelectedRows);
-  //   setSelectAll(newSelectedRows.length === data?.length);
-  //   localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
-  // };
-
   const handleCheckboxChange = (id) => {
     const newSelectedRows = selectedRows.includes(id)
       ? selectedRows.filter((rowId) => rowId !== id)
       : [...selectedRows, id];
 
     setSelectedRows(newSelectedRows);
-
-    // Update editedData state with the gross value if actualAmount is not edited
-    if (!editedData?.[id]?.actualAmount) {
-      setEditedData((prevEditedData) => ({
-        ...prevEditedData,
-        [id]: {
-          ...prevEditedData[id],
-          actualAmount:
-            tableData?.find((row) => row.info.uniqueID === id)?.gross || 0,
-        },
-      }));
-    }
-
-    // Save selected rows to localStorage
+    setSelectAll(newSelectedRows.length === data?.length);
     localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
   };
+
+  // const handleCheckboxChange = (id) => {
+  //   const newSelectedRows = selectedRows.includes(id)
+  //     ? selectedRows.filter((rowId) => rowId !== id)
+  //     : [...selectedRows, id];
+
+  //   setSelectedRows(newSelectedRows);
+
+  //   // Update editedData state with the gross value if actualAmount is not edited
+  //   if (!editedData?.[id]?.actualAmount) {
+  //     setEditedData((prevEditedData) => ({
+  //       ...prevEditedData,
+  //       [id]: {
+  //         ...prevEditedData[id],
+  //         actualAmount:
+  //           tableData?.find((row) => row.info.uniqueID === id)?.gross || 0,
+  //       },
+  //     }));
+  //   }
+
+  //   // Save selected rows to localStorage
+  //   localStorage.setItem("selectedRows", JSON.stringify(newSelectedRows));
+  // };
 
   return (
     <Box sx={{ position: "relative" }} className="d-flex flex-column">

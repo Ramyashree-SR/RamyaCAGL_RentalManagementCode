@@ -109,17 +109,10 @@ const useStyles = makeStyles({
 const TableComponent = ({
   data,
   columns,
-  setOpenLessorModal,
-  setEditLessorData,
-  getContractDetails,
-  modalType,
-  setModalType,
   setUniqueID,
   searchText,
-  filterDatas,
   activationStatusFilter,
   handleActivationStatusFilterChange,
-  handleEdit,
   openProvisionsListModal,
   setOpenProvisionsListModal,
   setOpenRentDueModal,
@@ -139,10 +132,11 @@ const TableComponent = ({
   setLessorName,
   setLesseeBranchName,
   lesseeBranchName,
-  setEditLessorRenewData,
   setOpenPaymentReportData,
   openPaymentReportData,
   activationStatusFilterDue,
+  setOpenSdReportModal,
+  openSdReportModal,
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -211,6 +205,10 @@ const TableComponent = ({
 
   const handlePaymentReport = () => {
     setOpenPaymentReportData(true);
+  };
+
+  const handleSd = () => {
+    setOpenSdReportModal(true);
   };
   // Apply the filter
   const filteredData =
@@ -385,6 +383,15 @@ const TableComponent = ({
                                       setLessorName(row.lessorName);
                                       setLesseeBranchName(row.lesseeBranchName);
                                     }}
+                                    handleSDReport={() => {
+                                      handleSd();
+                                      setUniqueID(row.uniqueID);
+                                      setRentStartDate(row.rentStartDate);
+                                      setRentEndDate(row.rentEndDate);
+                                      setMonthlyRent(row.monthlyRent);
+                                      setLessorName(row.lessorName);
+                                      setLesseeBranchName(row.lesseeBranchName);
+                                    }}
                                     openRentDueModal={openRentDueModal}
                                     setOpenRentDueModal={setOpenRentDueModal}
                                     selectedItem={selectedItem}
@@ -423,6 +430,8 @@ const TableComponent = ({
                                     setOpenEditLessorModal={
                                       setOpenEditLessorModal
                                     }
+                                    openSdReportModal={openSdReportModal}
+                                    setOpenSdReportModal={setOpenSdReportModal}
                                   />
                                 )}
 

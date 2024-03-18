@@ -1,24 +1,36 @@
-import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  styled,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import ReusableTable from "../../../../molecules/ReusableTable";
 import { rentDueData } from "../../../../../constants/RentDueData";
-import {
-  getAllRentDueDetails,
-  getRentDueDetails,
-  getRentDueExcelDetails,
-} from "../../../../services/RentDueApi";
+import { getAllRentDueDetails } from "../../../../services/RentDueApi";
 import { Typography } from "antd";
-import DropDownComponent from "../../../../atoms/DropDownComponent";
+
 import { getBranchID } from "../../../../services/RentContractsApi";
-import { deepOrange, green } from "@mui/material/colors";
-import InputBoxComponent from "../../../../atoms/InputBoxComponent";
+import { deepOrange, green, pink } from "@mui/material/colors";
+
 import ExcelExport from "../../../../../ExcelExport";
-import axios from "axios";
-import { ExportToCSV } from "../../../../ExportToCSV";
-import PaymentReportTable from "../../../../molecules/PaymentReportTable";
+
 import BranchReportTable from "../../../../molecules/BranchReportTable";
 
+import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
+
+const ColorIcon = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[300]),
+  color: pink[900],
+  // color:yellow[900],
+  // color: theme.palette.common.white,
+  "&:hover": {
+    color: deepOrange[700],
+  },
+}));
 const RentDue = (props) => {
   const {
     rentDueDataByBranchId,
@@ -31,6 +43,7 @@ const RentDue = (props) => {
   const [branchFilter, setBranchFilter] = useState("");
   const [branchIDforDue, setbranchIDforDue] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getBranchId();
@@ -42,7 +55,7 @@ const RentDue = (props) => {
       // Clear existing data
       setFilterBranch([]);
       setBranchFilter([]);
-      setbranchIDforDue([]);
+      setbranchIDforDue("");
       setRentDueDataByBranchId([]);
       // Fetch new data based on the new month and year
       getAllRentDueDetailsByBranchID();
@@ -98,7 +111,6 @@ const RentDue = (props) => {
     { id: 12, label: "December" },
   ];
 
-  const fileName = "Rent Due Excel"; // here enter filename for your excel file
   const getAllRentDueDetailsByBranchID = async (branchID) => {
     const { data } = await getAllRentDueDetails(branchID);
     if (data)
@@ -150,6 +162,15 @@ const RentDue = (props) => {
     December: item.december,
   }));
 
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await getAllRentDueDetailsByBranchID();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Modal
@@ -157,19 +178,11 @@ const RentDue = (props) => {
         close={props.close}
         fullscreen={props.fullscreen}
         centered
-        className="w-100"
       >
         <Modal.Header>
-          {/* <img
-            src="./assets/cagllogo1.png"
-            alt="logo"
-            width="80px"
-            height="40px"
-            margnTop="-2px"
-          /> */}
           <Modal.Title
             id="contained-modal-title-vcenter"
-            style={{ fontWeight: 600, fontFamily: "sans-serif" }}
+            style={{ fontWeight: 600, fontFamily: "sans-serif", mt: -4 }}
           >
             Branch-wise Rent Due Information
           </Modal.Title>
@@ -177,7 +190,7 @@ const RentDue = (props) => {
             src="./assets/cagllogo1.png"
             alt="logo"
             width="90px"
-            height="43px"
+            height="45px"
             margnTop="-2px"
           />
         </Modal.Header>
@@ -233,6 +246,15 @@ const RentDue = (props) => {
                     />
                   )}
                 />
+
+                <ColorIcon>
+                  <Grid className="d-flex flex-column align-items-center justify-content-center">
+                    <LoopRoundedIcon
+                      onClick={handleRefresh}
+                      sx={{ color: green[700] }}
+                    />
+                  </Grid>
+                </ColorIcon>
               </Grid>
               <Grid
                 item
@@ -262,17 +284,28 @@ const RentDue = (props) => {
                 mt: 0,
               }}
             >
-              {branchIDforDue && (
-                <BranchReportTable
-                  data={rentDueDataByBranchId}
-                  columns={rentDueData}
-                  showTotal={true}
-                  sx={{ height: 350 }}
-                  activationStatusFilterDue={activationStatusFilterDue}
-                  handleActivationStatusFilterChangeDue={
-                    handleActivationStatusFilterChangeDue
-                  }
-                />
+              {loading ? (
+                <div className="d-flex align-items-center justify-content-center flex-column">
+                  <div
+                    className="spinner-border text-primary"
+                    role="status"
+                    style={{ width: "2rem", height: "2rem" }}
+                  ></div>
+                  <span className="visible text-primary">Loading...</span>{" "}
+                </div>
+              ) : (
+                branchIDforDue && (
+                  <BranchReportTable
+                    data={rentDueDataByBranchId}
+                    columns={rentDueData}
+                    showTotal={true}
+                    sx={{ height: 350 }}
+                    activationStatusFilterDue={activationStatusFilterDue}
+                    handleActivationStatusFilterChangeDue={
+                      handleActivationStatusFilterChangeDue
+                    }
+                  />
+                )
               )}
             </Box>
           </Box>

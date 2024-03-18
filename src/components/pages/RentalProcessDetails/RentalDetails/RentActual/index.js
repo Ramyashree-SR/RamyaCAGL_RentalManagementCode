@@ -227,8 +227,8 @@ const RentActual = (props) => {
         monthRent: getPaymentReport?.monthRent,
       },
     ];
-    const { data, errRes } = await AddRentActualDetails(payload);
-    // console.log(data, "data");
+
+    const { data, errRes } = await AddRentActualDetails("NotConfirm", payload);
     if (data) {
       setSettlementAmt(data);
       getAllPaymentReportDetailsOfMonth();
@@ -832,35 +832,32 @@ const RentActual = (props) => {
                           onChange={(e) => {
                             updatedChange(e);
                           }}
-                          disabled
-                          // errorText={settlementAmt.sdAmount}
-                          // required={true}
+                          // disabled
                         />
-
-                        {/* {settlementAmt?.amount ? (
-                          <Button
-                            className="d-flex"
-                            variant="contained"
-                            size="small"
-                            onClick={() => {
-                              addRentActualSettelement();
-                              handleClick({
-                                vertical: "bottom",
-                                horizontal: "center",
-                              });
-                            }}
-                            sx={{
-                              width: 150,
-                              fontSize: 10,
-                              height: 30,
-                              mt: 2,
-                              backgroundColor: green[900],
-                            }}
-                          >
-                            Make Actual Settlement
-                          </Button>
-                        ) : null} */}
                       </Grid>
+                      {settlementAmt?.amount ? (
+                        <Button
+                          className="d-flex"
+                          variant="contained"
+                          size="small"
+                          onClick={() => {
+                            addRentActualSettelement();
+                            handleClick({
+                              vertical: "bottom",
+                              horizontal: "center",
+                            });
+                          }}
+                          sx={{
+                            width: 150,
+                            fontSize: 10,
+                            height: 30,
+                            mt: 2,
+                            backgroundColor: green[900],
+                          }}
+                        >
+                          Actua Amount
+                        </Button>
+                      ) : null}
                     </Grid>
                   )}
                 </Grid>

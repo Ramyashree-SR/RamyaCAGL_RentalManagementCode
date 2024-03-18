@@ -272,16 +272,7 @@ const ReusableTable = ({
     <>
       <Grid className="d-flex align-items-end justify-content-end w-100 py-1">
         {withCheckbox ? (
-          // <Button
-          //   onClick={() => {
-          //     setOpen(true);
-          //     // saveSelectedRows();
-          //   }}
-          //   variant="contained"
-          //   sx={{ backgroundColor: blue[900] }}
-          // >
-          //   Delete Details
-          // </Button>
+       
           <Tooltip>
             <IconButton
               onClick={() => {

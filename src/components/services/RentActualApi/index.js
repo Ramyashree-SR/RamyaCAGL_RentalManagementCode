@@ -32,9 +32,9 @@ const getRawRentPaymentReportDetails = (params1, params2, params3) => {
     });
 };
 
-const AddRentActualDetails = (payload) => {
+const AddRentActualDetails = (params, payload) => {
   return serviceUtil
-    .post(`makeactual`, payload)
+    .post(`makeactual?Status=${params}`, payload)
     .then((res) => {
       console.log(res, "res");
       const data = res && res.data;
@@ -64,11 +64,9 @@ const addSDSettlementDetails = (payload) => {
     });
 };
 
-
-
 export {
   getAllRentContractDetailsByContractID,
   AddRentActualDetails,
   addSDSettlementDetails,
-  getRawRentPaymentReportDetails
+  getRawRentPaymentReportDetails,
 };

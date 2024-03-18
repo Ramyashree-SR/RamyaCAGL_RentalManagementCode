@@ -9,12 +9,13 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  styled,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Modal, Row } from "react-bootstrap";
 import InputBoxComponent from "../../../../atoms/InputBoxComponent";
 import DropDownComponent from "../../../../atoms/DropDownComponent";
-import { blue, deepOrange, green, red } from "@mui/material/colors";
+import { blue, deepOrange, green, pink, red } from "@mui/material/colors";
 import {
   DeleteAllSelectedProvisions,
   getBranchWiseProvisionsList,
@@ -24,7 +25,17 @@ import { ProvisionsColumns } from "../../../../../constants/ProvisionList";
 import ExcelExport from "./../../../../../ExcelExport/index";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useToasts } from "react-toast-notifications";
+import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
+
+const ColorIcon = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[300]),
+  color: pink[900],
+  // color:yellow[900],
+  // color: theme.palette.common.white,
+  "&:hover": {
+    color: deepOrange[700],
+  },
+}));
 
 const Provisions = (props) => {
   const [inputValue, setInputValue] = useState("");
@@ -181,6 +192,15 @@ const Provisions = (props) => {
 
   const withCheckbox = selectedYear === `${currentYear}`;
   const currentYearAndMonth = selectedYear === `${currentYear}`;
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await getProvisionListDetails();
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <Modal
@@ -282,6 +302,22 @@ const Provisions = (props) => {
                     },
                   }}
                 />
+                <ColorIcon>
+                  <Grid className="d-flex flex-column align-items-center justify-content-center">
+                    <LoopRoundedIcon
+                      onClick={handleRefresh}
+                      sx={{ color: green[700], fontSize: 15 }}
+                    />
+                    <Grid className="d-flex flex-column align-items-start justify-content-start">
+                      <Typography
+                        onClick={handleRefresh}
+                        sx={{ fontSize: 8, color: green[700] }}
+                      >
+                        Refresh
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </ColorIcon>
               </Grid>
               <Grid
                 item
