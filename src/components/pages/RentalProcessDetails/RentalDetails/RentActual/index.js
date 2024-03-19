@@ -731,76 +731,19 @@ const RentActual = (props) => {
 
                 <Grid
                   container
-                  className="d-flex flex-column"
+                  className="d-flex align-items-start justify-content-start"
                   sx={{ flexBasis: "100%" }}
                 >
                   {selectedMonth && (
                     <Grid
                       item
-                      className="d-flex flex-column"
-                      sx={{ flexBasis: "50%", mt: 13 }}
-                    >
-                      <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
-                        SD Amount Adjustment :&nbsp;&nbsp;
-                      </Typography>
-                      <Grid
-                        item
-                        className="d-flex flex-row"
-                        sx={{ flexBasis: "100%" }}
-                      >
-                        <InputBoxComponent
-                          label="SD Amount"
-                          type="number"
-                          placeholder="Enter Amount"
-                          sx={{ width: 200 }}
-                          name="sdAmount"
-                          value={settlementAmt?.sdAmount}
-                          onChange={(e) => {
-                            updatedChange(e);
-                          }}
-                          // errorText={settlementAmt.sdAmount}
-                          // required={true}
-                        />
-
-                        {settlementAmt?.sdAmount ? (
-                          <Button
-                            className="d-flex"
-                            variant="contained"
-                            size="small"
-                            onClick={() => {
-                              addRentActualSettelement();
-                              handleClick({
-                                vertical: "bottom",
-                                horizontal: "center",
-                              });
-                            }}
-                            sx={{
-                              width: 150,
-                              fontSize: 10,
-                              height: 30,
-                              mt: 2,
-                              backgroundColor: green[900],
-                            }}
-                          >
-                            Make SD Amount
-                          </Button>
-                        ) : null}
-                      </Grid>
-                    </Grid>
-                  )}
-                  {selectedMonth && (
-                    <Grid
-                      item
-                      className="d-flex flex-column align-items-end justify-content-end w-90"
-                      sx={{ mt: 13, position: "fixed", ml: 80 }}
+                      className="d-flex flex-column align-items-center justify-content-center w-90"
+                      sx={{ mt: 13, position: "fixed" }}
                     >
                       <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
                         Actual Amount :&nbsp;&nbsp;
                       </Typography>
-                      <Grid
-                        className="d-flex flex-row"
-                        sx={{ flexBasis: "50%" }}
-                      >
+                      <Grid className="d-flex ">
                         <Typography>TDS Applicable?</Typography>
                         <SwitchComponent
                           // checked={parseInt(allNewContractDetails?.lessorRentAmount) > 20000}
@@ -834,30 +777,31 @@ const RentActual = (props) => {
                           }}
                           // disabled
                         />
+
+                        {settlementAmt?.amount ? (
+                          <Button
+                            className="d-flex "
+                            variant="contained"
+                            size="small"
+                            onClick={() => {
+                              addRentActualSettelement();
+                              handleClick({
+                                vertical: "bottom",
+                                horizontal: "center",
+                              });
+                            }}
+                            sx={{
+                              width: 150,
+                              fontSize: 10,
+                              height: 30,
+                              mt: 2,
+                              backgroundColor: green[900],
+                            }}
+                          >
+                            Actual Amount
+                          </Button>
+                        ) : null}
                       </Grid>
-                      {settlementAmt?.amount ? (
-                        <Button
-                          className="d-flex"
-                          variant="contained"
-                          size="small"
-                          onClick={() => {
-                            addRentActualSettelement();
-                            handleClick({
-                              vertical: "bottom",
-                              horizontal: "center",
-                            });
-                          }}
-                          sx={{
-                            width: 150,
-                            fontSize: 10,
-                            height: 30,
-                            mt: 2,
-                            backgroundColor: green[900],
-                          }}
-                        >
-                          Actua Amount
-                        </Button>
-                      ) : null}
                     </Grid>
                   )}
                 </Grid>

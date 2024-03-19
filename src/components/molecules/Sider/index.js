@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SummarizeIcon from "@mui/icons-material/Summarize";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 function Sider({ isOpen, onClose, height, width, onToggleText }) {
   const [selectedComponent, setSelectedComponent] = useState([]);
@@ -46,6 +47,11 @@ function Sider({ isOpen, onClose, height, width, onToggleText }) {
 
   const navigateToRentReport = () => {
     navigate("/rentReport");
+  };
+
+  const navigateToCheckerRentContract = () => {
+    navigate("/checkerRentContracts");
+    // navigate("/")
   };
 
   const OpenSidebar = () => {
@@ -134,9 +140,7 @@ function Sider({ isOpen, onClose, height, width, onToggleText }) {
               </ListItemIcon>
               <ListItemText primary="Dashboard" sx={{ color: "#000000" }} />
             </ListItem>
-            {/* </Link>
-            <Link to={"./RentalDetails"}> */}
-            {/* {selectedComponent ? ( */}
+
             <ListItem
               button
               sx={{
@@ -156,10 +160,30 @@ function Sider({ isOpen, onClose, height, width, onToggleText }) {
               <ListItemIcon>
                 <TableViewIcon sx={{ color: "#000000" }} />
               </ListItemIcon>
-              <ListItemText primary="RentContracts" sx={{ color: "#000000" }} />
+              <ListItemText primary="Rent Contract" sx={{ color: "#000000" }} />
             </ListItem>
-            {/* // ):null} */}
-            {/* </Link> */}
+
+            <ListItem
+              button
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                "& .MuiListItemIcon-root": {
+                  minWidth: "31px",
+                },
+              }}
+              onClick={() => {
+                handleListItem("/checkerRentContracts");
+                navigateToCheckerRentContract();
+              }}
+            >
+              <ListItemIcon>
+                <FactCheckIcon sx={{ color: "#000000" }} />
+              </ListItemIcon>
+              <ListItemText primary="Checker" sx={{ color: "#000000" }} />
+            </ListItem>
 
             <ListItem
               button
@@ -180,7 +204,7 @@ function Sider({ isOpen, onClose, height, width, onToggleText }) {
               <ListItemIcon>
                 <SummarizeIcon sx={{ color: "#000000" }} />
               </ListItemIcon>
-              <ListItemText primary="RentReport" sx={{ color: "#000000" }} />
+              <ListItemText primary="Rent Report" sx={{ color: "#000000" }} />
             </ListItem>
 
             <ListItem

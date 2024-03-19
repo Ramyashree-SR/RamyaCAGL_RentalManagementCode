@@ -41,6 +41,8 @@ const ProvisionsDetails = (props) => {
     setRefreshKey,
     monthlyRent,
     refreshKey,
+    selectedValue,
+    setSelectedValue,
   } = props;
   const [state, setState] = useState({
     open: false,
@@ -52,9 +54,7 @@ const ProvisionsDetails = (props) => {
   const [selectedYear, setSelectedYear] = useState(null);
   const { vertical, horizontal, open } = state;
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedValue, setSelectedValue] = useState(
-    "Reversed in Between the month"
-  );
+  // const [selectedValue, setSelectedValue] = useState("Paid");
 
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
@@ -363,11 +363,9 @@ const ProvisionsDetails = (props) => {
                 {typeProvisionsData === "Reversed" ? (
                   <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
                     <Radio
-                      checked={
-                        selectedValue === "Reversed in Between the month"
-                      }
+                      checked={selectedValue === "Paid"}
                       onChange={handleRadioChange}
-                      value="Reversed in Between the month"
+                      value="Paid"
                       name="radio-buttons"
                       slotProps={{ input: { "aria-label": "A" } }}
                     />
@@ -375,9 +373,9 @@ const ProvisionsDetails = (props) => {
                       Reversed in Between the month
                     </Typography>
                     <Radio
-                      checked={selectedValue === "Not Reversed"}
+                      checked={selectedValue === "NotPaid"}
                       onChange={handleRadioChange}
-                      value="Not Reversed"
+                      value="NotPaid"
                       name="radio-buttons"
                       slotProps={{ input: { "aria-label": "B" } }}
                     />

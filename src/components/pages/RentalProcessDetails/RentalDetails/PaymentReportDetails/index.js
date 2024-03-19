@@ -217,7 +217,7 @@ const PaymentReportDetails = (props) => {
         monthRent: getPaymentReport?.monthRent,
       },
     ];
-    const { data, errRes } = await AddRentActualDetails(payload);
+    const { data, errRes } = await AddRentActualDetails("NotConfirm", payload);
     // console.log(data, "data");
     if (data) {
       setSettlementAmt(data);
@@ -534,7 +534,7 @@ const PaymentReportDetails = (props) => {
                     onChange={(e) => {
                       updatedChange(e);
                     }}
-                    disabled
+                    // disabled
                   />
 
                   {settlementAmt?.amount ? (

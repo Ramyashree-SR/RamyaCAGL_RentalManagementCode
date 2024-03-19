@@ -10,6 +10,7 @@ import Home from "./components/pages/RentalProcessDetails/HomeScreen";
 import RentReport from "./components/pages/RentalProcessDetails/RentReport";
 import { ToastProvider } from "react-toast-notifications";
 import ToasterComponent from "./components/atoms/ToasterComponent";
+import CheckerRentalDetails from "./components/pages/RentalProcessDetails/CheckerRentalDetails";
 
 function App() {
   // const gender = [
@@ -58,6 +59,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="rentContracts" element={<RentalDetails />} />
+            <Route path="checkerRentContracts" element={<CheckerRentalDetails />} />
             <Route path="rentReport" element={<RentReport />} />
           </Routes>
         </ToastProvider>

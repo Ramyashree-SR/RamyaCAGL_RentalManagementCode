@@ -15,6 +15,7 @@ import { Gradient, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { dummyUsers } from "../../../constants/LoginCredentials";
 import { blue, green } from "@mui/material/colors";
+import InputBoxComponent from "../../atoms/InputBoxComponent";
 // import { useToasts } from "react-toast-notifications";
 
 function LoginScreen() {
@@ -149,6 +150,7 @@ function LoginScreen() {
     borderRadius: "0px",
     width: "100%",
     height: "100%",
+    background:"#FFFFFF"
   };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -185,7 +187,8 @@ function LoginScreen() {
           src="./assets/wallcagl.jpeg"
           alt="caglimage"
           width="100%"
-          height="100%"
+          height="900px"
+          
           style={imgStyle}
         />
         <Box
@@ -202,15 +205,15 @@ function LoginScreen() {
             sx={{
               width: 400,
               height: 400,
-              background: blue[50], //"#0d47a1",    //#E4FA9E  #E8FAAF
+              background: "#106E33", //"#0d47a1",   //blue[50] //#E4FA9E  #E8FAAF
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-around",
               // zIndex: -1,
+              borderRadius: 10,
             }}
-            elevation={10}
-            
+            elevation={20}
           >
             <Box>
               <img
@@ -221,7 +224,12 @@ function LoginScreen() {
               />
             </Box>
             <Typography
-              sx={{ fontSize: 20, fontWeight: 700, textAlign: "center" }}
+              sx={{
+                fontSize: 20,
+                fontWeight: 700,
+                textAlign: "center",
+                color: "#FFFFFF",
+              }}
             >
               LOGIN
             </Typography>
@@ -234,9 +242,13 @@ function LoginScreen() {
                 flexDirection: "column",
               }}
             >
-              <Typography sx={{ fontSize: 15, fontWeight: 600 }}>
+              <Typography
+                sx={{ fontSize: 15, fontWeight: 600, color: "#FFFFFF" }}
+              >
                 UserName
               </Typography>
+
+              {/* <InputBoxComponent sx={{ width: 200 }} /> */}
               <TextField
                 placeholder="EnterUserName"
                 // name="userName"
@@ -247,6 +259,7 @@ function LoginScreen() {
                 size="small"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                sx={{ background: "#FFFFFF", borderRadius: 2 }}
               />
               {/* {userNameErr && (
             <Typography sx={{ color: "red" }}>{userNameErr}</Typography>
@@ -261,9 +274,16 @@ function LoginScreen() {
                 flexDirection: "column",
               }}
             >
-              <Typography sx={{ fontSize: 15, fontWeight: 600 }}>
+              <Typography
+                sx={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "#FFFFFF",
+                }}
+              >
                 Password
               </Typography>
+
               <TextField
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter Password"
@@ -273,6 +293,7 @@ function LoginScreen() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 size="small"
+                sx={{ background: "#FFFFFF", borderRadius: 2 }}
                 InputProps={{
                   endAdornment: (
                     <IconButton onClick={() => setShowPassword(!showPassword)}>
@@ -311,8 +332,8 @@ function LoginScreen() {
                 onClick={() => Submit()}
                 sx={{
                   fontSize: 12,
-                  background: "#249506",
-                  paddingX: "15px",
+                  background: "#0C377A ", //#249506
+                  paddingX: "20px",
                   paddingY: "10px",
                 }}
               >

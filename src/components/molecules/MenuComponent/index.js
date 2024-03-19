@@ -91,7 +91,7 @@ export default function MenuComponent({
     remark: "",
     dateTime: "",
   });
-
+  const [selectedValue, setSelectedValue] = useState("Paid");
   const [typeProvisionsData, setTypeProvisionsData] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -140,6 +140,7 @@ export default function MenuComponent({
       provisionAmount: addProvisions?.provisionAmount,
       remark: addProvisions?.remark,
       dateTime: addProvisions.dateTime,
+      paymentFlag: selectedValue
     };
     const { data, errRes } = await AddRentProvisionDetails(
       typeProvisionsData,
@@ -341,6 +342,8 @@ export default function MenuComponent({
           typeProvisionsData={typeProvisionsData}
           setRefreshKey={setRefreshKey}
           refreshKey={refreshKey}
+          selectedValue={selectedValue}
+          setSelectedValue={setSelectedValue}
         />
       )}
 
