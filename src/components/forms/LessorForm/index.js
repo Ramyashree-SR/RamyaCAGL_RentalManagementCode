@@ -34,9 +34,7 @@ const LessorForm = (props) => {
           props.refreshKey && (
               <TableReusable data={props.checkRentContractDetails} column={columns} />))}
         </Grid>
-        {/* <Grid item sx={{ display: "flex" }}>
-          
-        </Grid> */}
+     
       </Grid>
     </ModalComponent>
   );

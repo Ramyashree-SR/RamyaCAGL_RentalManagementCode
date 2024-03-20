@@ -92,10 +92,8 @@ const RentalDetails = (props) => {
   const [openLessorModal, setOpenLessorModal] = useState(false);
   const [openEditLessorModal, setOpenEditLessorModal] = useState(false);
   const [EditLessorData, setEditLessorData] = useState({});
-  // console.log(EditLessorData, "EditLessorData ");
   const [EditLessorRenewData, setEditLessorRenewData] = useState({});
   const [modalType, setModalType] = useState("");
-  // console.log("modalType", modalType);
   const [searchText, setSearchText] = useState("");
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [openPaymentReportData, setOpenPaymentReportData] = useState(false);

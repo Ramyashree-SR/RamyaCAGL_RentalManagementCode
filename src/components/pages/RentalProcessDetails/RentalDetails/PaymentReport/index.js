@@ -272,8 +272,6 @@ const PaymentReport = (props) => {
     }
   };
 
-  
-
   const handleRefresh = async () => {
     setLoading(true);
     try {

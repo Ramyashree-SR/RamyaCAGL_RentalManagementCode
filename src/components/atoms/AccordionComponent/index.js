@@ -13,6 +13,7 @@ import React from "react";
 import { useState } from "react";
 import { Box } from "@mui/material";
 //   import MultiSelectDropDown from "../MultiSelectDropDown";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const AccordionComponent = ({
   children,
@@ -44,13 +45,24 @@ const AccordionComponent = ({
               isExpand ? (
                 <Tooltip title="Collapse">
                   <IconButton onClick={handleChangeExpand}>
-                    <RemoveIcon fontSize="large" sx={{ color: "#1181B2" }} />
+                    {/* <RemoveIcon fontSize="large" sx={{ color: "#1181B2" }} /> */}
+                    <ExpandMoreIcon
+                      fontSize="large"
+                      sx={{ color: "#1181B2" }}
+                    />
                   </IconButton>
                 </Tooltip>
               ) : (
                 <Tooltip title="Expand">
                   <IconButton onClick={handleChangeExpand}>
-                    <AddIcon
+                    {/* <AddIcon
+                      fontSize="large"
+                      sx={{
+                        color: "#1181B2",
+                        transitionDuration: "ease",
+                      }}
+                    /> */}
+                    <ExpandMoreIcon
                       fontSize="large"
                       sx={{
                         color: "#1181B2",
@@ -61,6 +73,7 @@ const AccordionComponent = ({
                 </Tooltip>
               )
             }
+            // expandIcon={<ExpandMoreIcon />}
             sx={{
               borderBottom: 1,
               borderColor: "#70B3D1",
@@ -73,7 +86,10 @@ const AccordionComponent = ({
           >
             <Grid container>
               <Grid item sm={3} className="align-self-center">
-                <Typography className="fs-22 fw-500" sx={{ color: "#1181B2" }}>
+                <Typography
+                  className="fs-22 fw-500"
+                  sx={{ color: "#1181B2", fontWeight: 700 }}
+                >
                   {AccordionTitle}
                 </Typography>
               </Grid>

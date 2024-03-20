@@ -7,20 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import AccordionComponent from "../../atoms/AccordionComponent";
-import InputBoxComponent from "../../atoms/InputBoxComponent";
-import LessorForm from "./../../forms/LessorForm/index";
-import DropDownComponent from "../../atoms/DropDownComponent";
-import TableReusable from "../../molecules/TableReusable";
-import { columns } from "../../../constants/masterTable";
-import EditMasterDetails from "../EditMasterDetails";
+import AccordionComponent from "../../../../atoms/AccordionComponent";
+import InputBoxComponent from "../../../../atoms/InputBoxComponent";
+import LessorForm from "../../../../forms/LessorForm/index";
+import DropDownComponent from "../../../../atoms/DropDownComponent";
+import TableReusable from "../../../../molecules/TableReusable";
+import { columns } from "../../../../../constants/masterTable";
+import EditMasterDetails from "../../../EditMasterDetails";
 import { blue, green } from "@mui/material/colors";
 import {
   getAllRentContractDetailsByBranchID,
   getBranchID,
   getBranchNameDetails,
   getRentContractDetailsByBranchName,
-} from "../../services/RentContractsApi";
+} from "../../../../services/RentContractsApi";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
@@ -56,7 +56,8 @@ const useStyles = makeStyles({
 });
 const AddDetails = () => {
   const [checkRentContractDetails, setCheckRentContractDetails] = useState([]);
-  const [openLessorModal, setopenLessorModal] = useState(false);
+  const [fullscreen, setFullscreen] = useState(true);
+  const [uniqueID, setUniqueID] = useState(null);
   const [filterBranch, setFilterBranch] = useState([]);
   const [filterBranchName, setFilterBranchName] = useState([]);
   const [branchFilter, setBranchFilter] = useState("");
@@ -84,7 +85,7 @@ const AddDetails = () => {
       ...filterBranch,
       branchID: value.target.outerText,
     });
-
+    getAllContractDetails(value.target.outerText);
     setRefreshKey((prevKey) => prevKey + 1);
     // getAllRentDueDetailsByBranchID(value.target.outerText);
   };
@@ -103,6 +104,7 @@ const AddDetails = () => {
       }
     }
   };
+  console.log(checkRentContractDetails, "checkRentContractDetails");
 
   const getAllContractDetails = async (branchID) => {
     const { data } = await getAllRentContractDetailsByBranchID(branchID);
@@ -171,137 +173,160 @@ const AddDetails = () => {
     <>
       <Box
         sx={{
-          // margin: "5% auto auto 15%",
           width: "100%",
           flexBasis: "100%",
+          height: "100%",
           background: "#fff",
-          overflow: "scroll",
-          // height: "calc(100% - 80px) !important",
         }}
       >
-        <AccordionComponent AccordionTitle="Rent Contract">
-          <Grid container spacing={2}>
+        <AccordionComponent
+          AccordionTitle="Rent Contract"
+          sx={{ width: "100%", flexBasis: "100%", height: "100%" }}
+        >
+          <Grid container spacing={2} sx={{ m: 2 }}>
             <Grid
-              sx={{
-                m: 2,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                mt: 4,
-              }}
+              item
+              className="d-flex flex-row align-items-center justify-content-center "
             >
-              <Grid className="d-flex flex-row align-items-center justify-content-around m-1">
-                <Autocomplete
-                  size="small"
-                  sx={{
-                    // backgroundColor: "#FAFAFA",
-                    background: "#C5EBF6 ", //#C5EBF6
-                    borderRadius: "100px",
-                    "& .MuiOutlinedInput-root:hover": {
-                      "& > fieldset": {
-                        borderColor: green[900],
-                      },
+              <Autocomplete
+                size="small"
+                sx={{
+                  // backgroundColor: "#FAFAFA",
+                  background: "#C5EBF6 ", //#C5EBF6
+                  borderRadius: "100px",
+                  "& .MuiOutlinedInput-root:hover": {
+                    "& > fieldset": {
+                      borderColor: green[900],
                     },
-                    "& .MuiOutlinedInput-root:focus": {
-                      "& > fieldset": {
-                        // outline: "none",
-                        borderColor: "#E4E7EB",
-                      },
+                  },
+                  "& .MuiOutlinedInput-root:focus": {
+                    "& > fieldset": {
+                      // outline: "none",
+                      borderColor: "#E4E7EB",
                     },
-                    "& .MuiOutlinedInput-root": {
-                      "& > fieldset": {
-                        borderColor: "#E4E7EB",
-                        borderRadius: "100px",
-                      },
-                      width: 200,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: "#E4E7EB",
+                      borderRadius: "100px",
                     },
-                  }}
-                  classes={{ paper: classes.listBox }}
-                  options={Array.isArray(branchFilter) ? branchFilter : []}
-                  getOptionLabel={(option) =>
-                    option?.label ? option?.label : option || ""
-                  }
-                  isOptionEqualToValue={(option, value) =>
-                    value === undefined ||
-                    value === "" ||
-                    option?.label === value?.label
-                  }
-                  value={filterBranch?.branchID}
-                  onChange={handleBranchID}
-                  renderOption={(props, option) => renderOption(props, option)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Branch ID"
-                      variant="outlined"
-                      classes={{ root: classes.customTextField }}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid className="d-flex flex-row align-items-center justify-content-around m-1">
-                <Autocomplete
-                  size="small"
-                  // sx={{ width: 200, background: "#E4E7EB" }}
-                  sx={{
-                    // backgroundColor: "#FAFAFA",
-                    background: "#C5EBF6", //background: "#D5F7DC",
-                    borderRadius: "100px",
-                    "& .MuiOutlinedInput-root:hover": {
-                      "& > fieldset": {
-                        borderColor: green[900],
-                      },
-                    },
-                    "& .MuiOutlinedInput-root:focus": {
-                      "& > fieldset": {
-                        outline: "none",
-                        borderColor: green[900],
-                      },
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& > fieldset": {
-                        borderColor: "#E4E7EB",
-                        borderRadius: "100px",
-                      },
-                      width: 200,
-                    },
-                  }}
-                  classes={{ paper: classes.listBox }}
-                  options={
-                    Array.isArray(branchNameFilter) ? branchNameFilter : []
-                  }
-                  getOptionLabel={(option) =>
-                    option?.label ? option?.label : option || ""
-                  }
-                  isOptionEqualToValue={(option, value) =>
-                    value === undefined ||
-                    value === "" ||
-                    option?.label === value?.label
-                  }
-                  value={filterBranchName?.branchName}
-                  onChange={handleBranchName}
-                  renderOption={(props, option) => renderOption(props, option)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Branch Name"
-                      variant="outlined"
-                      classes={{ root: classes.customTextField }}
-                    />
-                  )}
-                />
-              </Grid>
+                    width: 200,
+                  },
+                }}
+                classes={{ paper: classes.listBox }}
+                options={Array.isArray(branchFilter) ? branchFilter : []}
+                getOptionLabel={(option) =>
+                  option?.label ? option?.label : option || ""
+                }
+                isOptionEqualToValue={(option, value) =>
+                  value === undefined ||
+                  value === "" ||
+                  option?.label === value?.label
+                }
+                value={filterBranch?.branchID}
+                onChange={handleBranchID}
+                renderOption={(props, option) => renderOption(props, option)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Branch ID"
+                    variant="outlined"
+                    classes={{ root: classes.customTextField }}
+                  />
+                )}
+              />
             </Grid>
             <Grid
+              item
+              className="d-flex flex-row align-items-center justify-content-around "
+            >
+              <Autocomplete
+                size="small"
+                // sx={{ width: 200, background: "#E4E7EB" }}
+                sx={{
+                  // backgroundColor: "#FAFAFA",
+                  background: "#C5EBF6", //background: "#D5F7DC",
+                  borderRadius: "100px",
+                  "& .MuiOutlinedInput-root:hover": {
+                    "& > fieldset": {
+                      borderColor: green[900],
+                    },
+                  },
+                  "& .MuiOutlinedInput-root:focus": {
+                    "& > fieldset": {
+                      outline: "none",
+                      borderColor: green[900],
+                    },
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: "#E4E7EB",
+                      borderRadius: "100px",
+                    },
+                    width: 200,
+                  },
+                }}
+                classes={{ paper: classes.listBox }}
+                options={
+                  Array.isArray(branchNameFilter) ? branchNameFilter : []
+                }
+                getOptionLabel={(option) =>
+                  option?.label ? option?.label : option || ""
+                }
+                isOptionEqualToValue={(option, value) =>
+                  value === undefined ||
+                  value === "" ||
+                  option?.label === value?.label
+                }
+                value={filterBranchName?.branchName}
+                onChange={handleBranchName}
+                renderOption={(props, option) => renderOption(props, option)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Branch Name"
+                    variant="outlined"
+                    classes={{ root: classes.customTextField }}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid
+              item
               sx={{
-                m: 2,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                mt: 4,
+                background: "#fff",
+                height: "100%",
+                width: "96%",
               }}
             >
-              <Button onClick={() => setopenLessorModal(true)}>Lessor</Button>
+              {loading ? (
+                <div className="d-flex align-items-center justify-content-center flex-column ">
+                  <div
+                    className="spinner-border text-primary "
+                    role="status"
+                    style={{
+                      width: "2rem",
+                      height: "2rem",
+                      margin: "10px",
+                    }}
+                  ></div>
+                  <span className="visible text-primary">Loading...</span>{" "}
+                </div>
+              ) : (
+                refreshKey && (
+                  <TableReusable
+                    data={checkRentContractDetails}
+                    columns={columns}
+                    setUniqueID={setUniqueID}
+                    fullscreen={fullscreen}
+                    setFullscreen={setFullscreen}
+                  />
+                )
+              )}
+            </Grid>
+          </Grid>
+          {/* <Button onClick={() => setopenLessorModal(true)}>Lessor</Button>
               <LessorForm
                 openLessorModal={openLessorModal}
                 close={() => setopenLessorModal(false)}
@@ -309,10 +334,9 @@ const AddDetails = () => {
                 setCheckRentContractDetails={setCheckRentContractDetails}
                 refreshKey={refreshKey}
                 loading={loading}
-              />
-            </Grid>
-          </Grid>
+              /> */}
         </AccordionComponent>
+
         <AccordionComponent AccordionTitle="Contract Management">
           <Grid container spacing={2}>
             <Grid

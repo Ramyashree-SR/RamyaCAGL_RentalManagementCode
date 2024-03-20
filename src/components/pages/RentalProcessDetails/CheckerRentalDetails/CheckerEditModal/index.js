@@ -12,26 +12,30 @@ import {
 } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { IFSCCodeDetails } from "../../services/IfscCodeApi";
+
 import moment from "moment/moment";
-import DatePickerComponent from "../../atoms/DatePickerComponent";
+
 import { deepOrange, green } from "@mui/material/colors";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloseIcon from "@mui/icons-material/Close";
 import { useToasts } from "react-toast-notifications";
-import InputBoxComponent from "../../atoms/InputBoxComponent";
-import DropDownComponent from "../../atoms/DropDownComponent";
-import SwitchComponent from "../../atoms/SwitchComponent";
-import SimpleDropDown from "../../atoms/SimpleDropDown";
+
+import { Modal } from "react-bootstrap";
+
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import InputBoxComponent from "../../../../atoms/InputBoxComponent";
+import SimpleDropDown from "../../../../atoms/SimpleDropDown";
+import DropDownComponent from "../../../../atoms/DropDownComponent";
+import DatePickerComponent from "../../../../atoms/DatePickerComponent";
+import SwitchComponent from "../../../../atoms/SwitchComponent";
+import { IFSCCodeDetails } from "../../../../services/IfscCodeApi";
+import { uploadFileApi } from "../../../../services/UploadDoucmentApi";
 import {
   getBranchIDForBranchDetails,
   getRentContractDetailsOnBranchID,
-} from "../../services/BranchDetails";
-import { uploadFileApi } from "../../services/UploadDoucmentApi";
-import { Modal } from "react-bootstrap";
-import { EditRentContractDetails } from "../../services/EditContractApi";
-import { formatDateToBackEndReqirement } from "../../CommonFunction/CommonFunction";
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+} from "../../../../services/BranchDetails";
+import { formatDateToBackEndReqirement } from "../../../../CommonFunction/CommonFunction";
+import { EditRentContractDetails } from "../../../../services/EditContractApi";
 
 const ColorIcon = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[300]),
@@ -41,11 +45,9 @@ const ColorIcon = styled(Button)(({ theme }) => ({
     color: deepOrange[700],
   },
 }));
-const EditMasterDetails = (props) => {
+const CheckerEditModal = (props) => {
   const {
     type,
-    handleAddRentContractInformationError,
-    contractStatus,
     ifscCodes,
     setIFSCCodes,
     bankAndBranch,
@@ -213,7 +215,6 @@ const EditMasterDetails = (props) => {
   const [currentRent, setCurrentRent] = useState(
     editAllNewContractDetails?.lessorRentAmount
   );
-  const [tdsRate, setTdsRate] = useState(null);
 
   const [originalData, setOriginalData] = useState([
     editAllNewContractDetails?.recipiants?.lessorAccountNumber,
@@ -1360,14 +1361,14 @@ const EditMasterDetails = (props) => {
               </Grid>
 
               {/* {selectedBranchType &&
-              selectedBranchType?.label !== "HO-Office" &&
-              selectedBranchType?.label !== "HO-Maintenance" &&
-              selectedBranchType?.label !== "DO / RO-Office" &&
-              selectedBranchType?.label !== "DO / RO-Maintenance" &&
-              selectedBranchType?.label !== "StoreRoom-Office" &&
-              selectedBranchType?.label !== "StoreRoom-Maintenance" &&
-              selectedBranchType?.label !== "Training Center" &&
-              selectedBranchType?.label !== "Training Center-Maintainence" ? ( */}
+                selectedBranchType?.label !== "HO-Office" &&
+                selectedBranchType?.label !== "HO-Maintenance" &&
+                selectedBranchType?.label !== "DO / RO-Office" &&
+                selectedBranchType?.label !== "DO / RO-Maintenance" &&
+                selectedBranchType?.label !== "StoreRoom-Office" &&
+                selectedBranchType?.label !== "StoreRoom-Maintenance" &&
+                selectedBranchType?.label !== "Training Center" &&
+                selectedBranchType?.label !== "Training Center-Maintainence" ? ( */}
               <Grid container spacing={2} className="px-2 py-2 mt-1">
                 <Grid item className="d-flex m-2" lg={12}>
                   {showInputComponent ? (
@@ -1504,28 +1505,28 @@ const EditMasterDetails = (props) => {
             </Box>
 
             {/* {(selectedBranchType &&
-              selectedBranchType?.label === "HO-Office") ||
-            selectedBranchType?.label === "HO-Maintenance" ||
-            selectedBranchType?.label === "DO / RO-Office" ||
-            selectedBranchType?.label === "DO / RO-Maintenance" ||
-            selectedBranchType?.label === "StoreRoom-Office" ||
-            selectedBranchType?.label === "StoreRoom-Maintenance" ||
-            selectedBranchType?.label === "Training Center" ||
-            selectedBranchType?.label === "Training Center-Maintainence" ? ( */}
+                selectedBranchType?.label === "HO-Office") ||
+              selectedBranchType?.label === "HO-Maintenance" ||
+              selectedBranchType?.label === "DO / RO-Office" ||
+              selectedBranchType?.label === "DO / RO-Maintenance" ||
+              selectedBranchType?.label === "StoreRoom-Office" ||
+              selectedBranchType?.label === "StoreRoom-Maintenance" ||
+              selectedBranchType?.label === "Training Center" ||
+              selectedBranchType?.label === "Training Center-Maintainence" ? ( */}
             {/* <Grid container spacing={2} className="px-2 py-2 mt-1">
-                <Grid item className="d-flex m-2" lg={12}>
-                  <DropDownComponent
-                    label="Office Name"
-                    options={premesisName}
-                    sx={{ width: 300 }}
-                    name="premesisOfficeName"
-                    value={editAllNewContractDetails?.premesisOfficeName}
-                    onChange={(val) =>
-                      handleHeadOfficeChange("premesisOfficeName", val)
-                    }
-                  />
-                </Grid>
-              </Grid> */}
+                  <Grid item className="d-flex m-2" lg={12}>
+                    <DropDownComponent
+                      label="Office Name"
+                      options={premesisName}
+                      sx={{ width: 300 }}
+                      name="premesisOfficeName"
+                      value={editAllNewContractDetails?.premesisOfficeName}
+                      onChange={(val) =>
+                        handleHeadOfficeChange("premesisOfficeName", val)
+                      }
+                    />
+                  </Grid>
+                </Grid> */}
             {/* ) : null} */}
             <Box
               className="d-flex justify-content-center w-100"
@@ -1538,35 +1539,35 @@ const EditMasterDetails = (props) => {
                 <Grid container spacing={2} className="px-2 py-2 mt-1">
                   <Grid item className="d-flex " lg={12}>
                     {/* {contractStatus === "Renewal" ? ( */}
-                      <InputBoxComponent
-                        label="Previous Contract ID."
-                        placeholder="Enter contract Id."
-                        sx={{ width: 300, mt: -5, ml: 3 }}
-                        name="priviousContractID"
-                        value={editAllNewContractDetails?.priviousContractID}
-                        onChange={(e) => updateChange(e)}
-                        required={true}
-                      />
+                    <InputBoxComponent
+                      label="Previous Contract ID."
+                      placeholder="Enter contract Id."
+                      sx={{ width: 300, mt: -5, ml: 3 }}
+                      name="priviousContractID"
+                      value={editAllNewContractDetails?.priviousContractID}
+                      onChange={(e) => updateChange(e)}
+                      required={true}
+                    />
                     {/* ) : null} */}
                   </Grid>
                   <Grid item className="d-flex m-2" lg={12}>
                     {/* <DropDownComponent
-                    label="Entity Details "
-                    sx={{ width: 300 }}
-                    options={EntityDetails}
-                    getOptionLabel={(option) =>
-                      option?.label || editAllNewContractDetails?.lesseeEntityDetails
-                    }
-                    name="lesseeEntityDetails"
-                    value={
-                      type === "edit"
-                        ? editAllNewContractDetails?.lesseeEntityDetails || null
-                        : editAllNewContractDetails?.lesseeEntityDetails || null
-                    }
-                    // onSelect={handleEntityDetails}
-                    onChange={handleEntityDetails}
-                    required={true}
-                  /> */}
+                      label="Entity Details "
+                      sx={{ width: 300 }}
+                      options={EntityDetails}
+                      getOptionLabel={(option) =>
+                        option?.label || editAllNewContractDetails?.lesseeEntityDetails
+                      }
+                      name="lesseeEntityDetails"
+                      value={
+                        type === "edit"
+                          ? editAllNewContractDetails?.lesseeEntityDetails || null
+                          : editAllNewContractDetails?.lesseeEntityDetails || null
+                      }
+                      // onSelect={handleEntityDetails}
+                      onChange={handleEntityDetails}
+                      required={true}
+                    /> */}
 
                     <SimpleDropDown
                       options={EntityDetails}
@@ -1583,21 +1584,21 @@ const EditMasterDetails = (props) => {
                       required={true}
                     />
                     {/* 
-                    <DropDownComponent
-                      label="Location"
-                      sx={{ width: 300 }}
-                      options={location}
-                      getOptionLabel={(option) =>
-                        option?.label ||
-                        editAllNewContractDetails?.premesisLocation
-                      }
-                      // name="premesisLocation"
-                      value={
-                        editAllNewContractDetails?.premesisLocation || null
-                      }
-                      onChange={handleLocationChange}
-                      required={true}
-                    /> */}
+                      <DropDownComponent
+                        label="Location"
+                        sx={{ width: 300 }}
+                        options={location}
+                        getOptionLabel={(option) =>
+                          option?.label ||
+                          editAllNewContractDetails?.premesisLocation
+                        }
+                        // name="premesisLocation"
+                        value={
+                          editAllNewContractDetails?.premesisLocation || null
+                        }
+                        onChange={handleLocationChange}
+                        required={true}
+                      /> */}
 
                     <SimpleDropDown
                       options={location}
@@ -1615,20 +1616,20 @@ const EditMasterDetails = (props) => {
                     />
 
                     {/* <DropDownComponent
-                      label="Building Type"
-                      sx={{ width: 300 }}
-                      options={typeOfBuliding}
-                      getOptionLabel={(option) =>
-                        option?.label ||
-                        editAllNewContractDetails?.premesisBuildingType
-                      }
-                      value={
-                        editAllNewContractDetails?.premesisBuildingType || null
-                      }
-                      // onSelect={handleBulidingType}
-                      onChange={handleBulidingType}
-                      required={true}
-                    /> */}
+                        label="Building Type"
+                        sx={{ width: 300 }}
+                        options={typeOfBuliding}
+                        getOptionLabel={(option) =>
+                          option?.label ||
+                          editAllNewContractDetails?.premesisBuildingType
+                        }
+                        value={
+                          editAllNewContractDetails?.premesisBuildingType || null
+                        }
+                        // onSelect={handleBulidingType}
+                        onChange={handleBulidingType}
+                        required={true}
+                      /> */}
                     <SimpleDropDown
                       options={typeOfBuliding}
                       label="Building Type"
@@ -1935,22 +1936,22 @@ const EditMasterDetails = (props) => {
                 />
 
                 {/* <DropDownComponent
-                  label="ActivationStatus"
-                  placeholder="Enter Activation Status"
-                  sx={{ width: 300, ml: 0 }}
-                  size="small"
-                  options={activationStatus}
-                  getOptionLabel={(option) =>
-                    option?.label ||
-                    editAllNewContractDetails?.agreementActivationStatus
-                  }
-                  // name="agreementActivationStatus"
-                  value={
-                    editAllNewContractDetails?.agreementActivationStatus || null
-                  }
-                  onChange={handleActivationStatus}
-                  required
-                /> */}
+                    label="ActivationStatus"
+                    placeholder="Enter Activation Status"
+                    sx={{ width: 300, ml: 0 }}
+                    size="small"
+                    options={activationStatus}
+                    getOptionLabel={(option) =>
+                      option?.label ||
+                      editAllNewContractDetails?.agreementActivationStatus
+                    }
+                    // name="agreementActivationStatus"
+                    value={
+                      editAllNewContractDetails?.agreementActivationStatus || null
+                    }
+                    onChange={handleActivationStatus}
+                    required
+                  /> */}
                 <SimpleDropDown
                   options={activationStatus}
                   label="ActivationStatus"
@@ -2247,23 +2248,23 @@ const EditMasterDetails = (props) => {
 
               <Grid item className="d-flex " md={12}>
                 {/* <DropDownComponent
-                  label="Lockin Period"
-                  sx={{ width: 300, mt: 2, ml: -2 }}
-                  options={LockinPeriod}
-                  getOptionLabel={(option) =>
-                    option?.label ||
-                    editAllNewContractDetails?.securityDepositLockinPeriod
-                  }
-                  name="securityDepositLockinPeriod"
-                  value={
-                    editAllNewContractDetails?.securityDepositLockinPeriod ||
-                    null
-                  }
-                  onChange={(value) =>
-                    handleLockinPeriod("securityDepositLockinPeriod", value)
-                  }
-                  required
-                /> */}
+                    label="Lockin Period"
+                    sx={{ width: 300, mt: 2, ml: -2 }}
+                    options={LockinPeriod}
+                    getOptionLabel={(option) =>
+                      option?.label ||
+                      editAllNewContractDetails?.securityDepositLockinPeriod
+                    }
+                    name="securityDepositLockinPeriod"
+                    value={
+                      editAllNewContractDetails?.securityDepositLockinPeriod ||
+                      null
+                    }
+                    onChange={(value) =>
+                      handleLockinPeriod("securityDepositLockinPeriod", value)
+                    }
+                    required
+                  /> */}
 
                 <SimpleDropDown
                   options={LockinPeriod}
@@ -2281,23 +2282,23 @@ const EditMasterDetails = (props) => {
                 />
 
                 {/* <DropDownComponent
-                  label="Notice Period"
-                  sx={{ width: 300, mt: 2, ml: 0 }}
-                  options={noticePeriod}
-                  getOptionLabel={(option) =>
-                    option?.label ||
-                    editAllNewContractDetails?.securityDepositnoticePeriod
-                  }
-                  name="securityDepositnoticePeriod"
-                  value={
-                    editAllNewContractDetails?.securityDepositnoticePeriod ||
-                    null
-                  }
-                  onChange={(value) =>
-                    handleNoticePeriod("securityDepositnoticePeriod", value)
-                  }
-                  required
-                /> */}
+                    label="Notice Period"
+                    sx={{ width: 300, mt: 2, ml: 0 }}
+                    options={noticePeriod}
+                    getOptionLabel={(option) =>
+                      option?.label ||
+                      editAllNewContractDetails?.securityDepositnoticePeriod
+                    }
+                    name="securityDepositnoticePeriod"
+                    value={
+                      editAllNewContractDetails?.securityDepositnoticePeriod ||
+                      null
+                    }
+                    onChange={(value) =>
+                      handleNoticePeriod("securityDepositnoticePeriod", value)
+                    }
+                    required
+                  /> */}
 
                 <SimpleDropDown
                   options={noticePeriod}
@@ -2721,15 +2722,15 @@ const EditMasterDetails = (props) => {
               >
                 <Grid item className="d-flex m-2" md={6}>
                   {/* <InputBoxComponent
-                    label="Enter Renewal Tenure (in months)"
-                    type="number"
-                    name="agreementTenure"
-                    value={editAllNewContractDetails?.agreementTenure}
-                    onChange={(e) => updateChange(e)}
-                    sx={{ width: 300 }}
-                    readOnly
-                    required
-                  /> */}
+                      label="Enter Renewal Tenure (in months)"
+                      type="number"
+                      name="agreementTenure"
+                      value={editAllNewContractDetails?.agreementTenure}
+                      onChange={(e) => updateChange(e)}
+                      sx={{ width: 300 }}
+                      readOnly
+                      required
+                    /> */}
 
                   <DropDownComponent
                     label="Escalation Months (in months)"
@@ -3451,4 +3452,4 @@ const EditMasterDetails = (props) => {
   );
 };
 
-export default EditMasterDetails;
+export default CheckerEditModal;
