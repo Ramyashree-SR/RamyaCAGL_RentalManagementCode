@@ -1288,6 +1288,9 @@ const EditMasterDetails = (props) => {
   const handleBack = () => {
     props.close();
   };
+
+
+  
   return (
     <>
       <Modal

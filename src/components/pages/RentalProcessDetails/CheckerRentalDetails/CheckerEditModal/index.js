@@ -63,6 +63,11 @@ const CheckerEditModal = (props) => {
   });
   const { vertical, horizontal, open } = state;
 
+  const CheckerStatus = [
+    { id: "Approved", label: "Approved" },
+    { id: "Rejected", label: "Rejected" },
+  ];
+
   const handleClick = (newState) => {
     setState({ ...newState, open: true });
   };
@@ -255,6 +260,13 @@ const CheckerEditModal = (props) => {
     }));
   };
 
+  const handleCheckerStatus = (value) => {
+    setEditAllNewContractDetails((prevDetails) => ({
+      ...prevDetails,
+      checkerStatus: value ? value?.label : null,
+    }));
+  };
+
   let BranchType = [
     { id: "GL-Office", label: "GL-Office" },
     { id: "GL-Hostel", label: "GL-Hostel" },
@@ -360,7 +372,7 @@ const CheckerEditModal = (props) => {
       setShowBranchID(true);
       setBranchData([]);
     }
-  };
+  };  
 
   const getBranchIdDetails = async (branchID) => {
     const { data } = await getRentContractDetailsOnBranchID(branchID);
@@ -3433,6 +3445,18 @@ const CheckerEditModal = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <Box className="d-flex  justify-content-end w-100">
+            <SimpleDropDown
+              label="Checker Status"
+              options={CheckerStatus}
+              value={
+                CheckerStatus?.find(
+                  (option) =>
+                    option?.label === editAllNewContractDetails?.checkerStatus
+                ) || null
+              }
+              onChange={handleCheckerStatus}
+              sx={{ width: 200 }}
+            />
             <Button
               onClick={() => {
                 handleSubmit();

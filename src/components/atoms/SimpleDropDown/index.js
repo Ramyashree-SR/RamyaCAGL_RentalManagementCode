@@ -15,6 +15,7 @@ const useStyles = makeStyles({
   },
   input: {
     color: "#B3B3B3",
+    // background: "#cccccc",
   },
   clearIndicator: {
     color: "red",
@@ -25,6 +26,8 @@ const useStyles = makeStyles({
     margin: "0px 5px",
     padding: "6px 5px",
     borderBottom: "0.5px solid #DDEDF4",
+    background: "#cccccc",
+    borderRadius: "10px",
     cursor: "pointer",
     "&:hover": {
       background: "#9FCCE066 !important",
@@ -71,10 +74,17 @@ const SimpleDropDown = ({
   };
   const renderOption = (props, option) => {
     return (
-      <li {...props} style={{ padding: 0, margin: 0, width: "100%" }}>
+      <li
+        {...props}
+        style={{ padding: 0, margin: 0, width: "100%",}}
+      >
         <Box className={classes.optionStyle}>
           <Typography
-            sx={{ color: "#4a4a4a", fontSize: "14px", fontWeight: "400" }}
+            sx={{
+              color: "#4a4a4a",
+              fontSize: "14px",
+              fontWeight: "400",
+            }}
           >
             {option && option?.label ? option?.label : ""}
           </Typography>
@@ -140,6 +150,7 @@ const SimpleDropDown = ({
               outline: "none",
               borderColor: "#A6A6A6",
               borderRadius: "6px",
+              background: "#cccccc",
             },
           },
           "& .MuiOutlinedInput-root:active": {

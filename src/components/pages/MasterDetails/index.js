@@ -165,7 +165,8 @@ const MasterDetails = (props) => {
   const { addToast } = useToasts();
   const [activeStep, setActiveStep] = useState(0);
   const [serialNumber, setSerialNumber] = useState(1);
-
+  const [plusCode, setPlusCode] = useState("");
+  const [decoded, setDecoded] = useState("");
   const [stepData1, setStepData1] = useState("");
   const [stepData2, setStepData2] = useState("");
   const [stepData3, setStepData3] = useState("");
@@ -285,6 +286,7 @@ const MasterDetails = (props) => {
     remarks: "",
     schedulePrimesis: "",
   });
+  const [draftSaved, setDraftSaved] = useState(false);
 
   const [allNewContractDetailsErr, setAllNewContractDetailsErr] =
     useState(errObj);
@@ -961,20 +963,12 @@ const MasterDetails = (props) => {
       case 2:
         setStepData3(stepData);
         break;
-      case 3:
-        setStepData4(stepData);
-        break;
-      case 4:
-        setStepData5(stepData);
-        break;
-      case 5:
-        setStepData6(stepData);
-        break;
       default:
         break;
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
+
   const RentContractStatus = [
     { id: "New/Relocate", label: "New/Relocate" },
     { id: "Renewal", label: "Renewal" },
@@ -1108,7 +1102,7 @@ const MasterDetails = (props) => {
 
       lattitude: allNewContractDetails?.lattitude,
       longitude: allNewContractDetails?.longitude,
-      gpsCoordinates: allNewContractDetails?.gpsCoordinates,
+      gpsCoordinates: decoded, //decoded  or plusCode
 
       firstRentDate: allNewContractDetails?.rentStartDate,
       lastRentDate: allNewContractDetails?.lastRentDate,
@@ -1596,7 +1590,7 @@ const MasterDetails = (props) => {
       label: (
         <Button
           onClick={handleClick}
-          sx={{ fontSize: 12, color: "#2F7A99    ", fontWeight: 700 }}
+          sx={{ fontSize: 12, color: "#1181B2", fontWeight: 700 }}
         >
           Branch Information
         </Button>
@@ -1616,6 +1610,11 @@ const MasterDetails = (props) => {
           branchDetails={branchDetails}
           setBranchDetails={setBranchDetails}
           contractStatus={allNewContractDetails?.contractStatus}
+          setDraftSaved={setDraftSaved}
+          plusCode={plusCode}
+          setPlusCode={setPlusCode}
+          decoded={decoded}
+          setDecoded={setDecoded}
         />
       ),
     },
@@ -1623,40 +1622,7 @@ const MasterDetails = (props) => {
       label: (
         <Button
           onClick={handleClick}
-          sx={{ fontSize: 12, color: "#2F7A99  ", fontWeight: 700 }}
-        >
-          Agreement Information
-        </Button>
-      ),
-      content: (
-        <AgreementDetails
-          setActiveStep={setActiveStep}
-          activeStep={activeStep}
-          onSave={handleSaveData}
-          close={props.close}
-          allNewContractDetailsErr={allNewContractDetailsErr}
-          allNewContractDetails={allNewContractDetails}
-          setAllNewContractDetails={setAllNewContractDetails}
-          AddAllNewRentContactInformation={AddAllNewRentContactInformation}
-          type={props.type}
-          handleAddRentContractInformationError={
-            handleAddRentContractInformationError
-          }
-          ifscCodes={ifscCodes}
-          setIFSCCodes={setIFSCCodes}
-          bankAndBranch={bankAndBranch}
-          setBankAndBranch={setBankAndBranch}
-          recipientCount={recipientCount}
-          setRecipientCount={setRecipientCount}
-          contractStatus={allNewContractDetails?.contractStatus}
-        />
-      ),
-    },
-    {
-      label: (
-        <Button
-          onClick={handleClick}
-          sx={{ fontSize: 12, color: "#2F7A99  ", fontWeight: 700 }}
+          sx={{ fontSize: 12, color: "#1181B2", fontWeight: 700 }}
         >
           Vendor/Owner Information
         </Button>
@@ -1682,6 +1648,41 @@ const MasterDetails = (props) => {
           contractStatus={allNewContractDetails?.contractStatus?.label}
           // EditLessorRenewData={props.EditLessorRenewData?.uniqueID}
           AddAllRenewRentContractDetails={AddAllRenewRentContractDetails}
+          setDraftSaved={setDraftSaved}
+        />
+      ),
+    },
+    {
+      label: (
+        <Button
+          onClick={handleClick}
+          sx={{ fontSize: 12, color: "#1181B2", fontWeight: 700 }}
+        >
+          Agreement Information
+        </Button>
+      ),
+      content: (
+        <AgreementDetails
+          setActiveStep={setActiveStep}
+          activeStep={activeStep}
+          onSave={handleSaveData}
+          close={props.close}
+          allNewContractDetailsErr={allNewContractDetailsErr}
+          allNewContractDetails={allNewContractDetails}
+          setAllNewContractDetails={setAllNewContractDetails}
+          AddAllNewRentContactInformation={AddAllNewRentContactInformation}
+          type={props.type}
+          handleAddRentContractInformationError={
+            handleAddRentContractInformationError
+          }
+          ifscCodes={ifscCodes}
+          setIFSCCodes={setIFSCCodes}
+          bankAndBranch={bankAndBranch}
+          setBankAndBranch={setBankAndBranch}
+          recipientCount={recipientCount}
+          setRecipientCount={setRecipientCount}
+          contractStatus={allNewContractDetails?.contractStatus}
+          setDraftSaved={setDraftSaved}
         />
       ),
     },

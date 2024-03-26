@@ -150,7 +150,7 @@ function LoginScreen() {
     borderRadius: "0px",
     width: "100%",
     height: "100%",
-    background:"#FFFFFF"
+    background: "#FFFFFF",
   };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -165,6 +165,7 @@ function LoginScreen() {
       // setErrorMessage("");
       alert("Login successful");
       navigate("/home");
+      navigate("/dashboard");
     } else {
       // Failed login
       alert("Invalid username or password");
@@ -188,7 +189,6 @@ function LoginScreen() {
           alt="caglimage"
           width="100%"
           height="900px"
-          
           style={imgStyle}
         />
         <Box
@@ -210,7 +210,6 @@ function LoginScreen() {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-around",
-              // zIndex: -1,
               borderRadius: 10,
             }}
             elevation={20}

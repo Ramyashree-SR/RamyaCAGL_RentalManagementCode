@@ -44,6 +44,7 @@ const GeneralInformation = ({
   contractStatus,
   EditLessorData,
   EditLessorRenewData,
+  setDraftSaved,
 }) => {
   // const [address, setAddress] = useState(
   //   allNewContractDetails?.joinaddress_Vendor
@@ -74,6 +75,7 @@ const GeneralInformation = ({
       ...allNewContractDetails,
       [e.target.name]: e.target.value,
     });
+    setDraftSaved(false);
   };
 
   const ElectricityBillInput = useRef();
@@ -208,23 +210,37 @@ const GeneralInformation = ({
     }
   };
 
-  const handleSubmit = () => {
-    const ValidateError = handleAddRentContractInformationError();
-    const isEmptyField = Object.values(allNewContractDetails).some(
-      (value) => value === ""
-    );
-    if (!ValidateError && !isEmptyField) {
-      // console.log("ValidateError", ValidateError);
-      setAllNewContractDetails(allNewContractDetails, type);
-      AddAllNewRentContactInformation();
-      close();
-    }
-  };
+  // const handleSubmit = () => {
+  //   const ValidateError = handleAddRentContractInformationError();
+  //   const isEmptyField = Object.values(allNewContractDetails).some(
+  //     (value) => value === ""
+  //   );
+  //   if (!ValidateError && !isEmptyField) {
+  //     // console.log("ValidateError", ValidateError);
+  //     setAllNewContractDetails(allNewContractDetails, type);
+  //     AddAllNewRentContactInformation();
+  //     close();
+  //   }
+  // };
+
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleNext = () => {
+    const ValidateError = handleAddRentContractInformationError();
+    const isEmptyField = Object.values(allNewContractDetails).some(
+      (value) => value === ""
+    );
+    if (!ValidateError && !isEmptyField) {
+      onSave(allNewContractDetails, type);
+    }
+    setDraftSaved(true)
+  };
   // console.log(allNewContractDetails, "all");
   return (
     <>
@@ -867,7 +883,7 @@ const GeneralInformation = ({
 
         <hr style={{ border: "2px solid", borderStyle: "dashed" }} />
       </Box>
-      <Box className="d-flex  justify-content-end w-100">
+      {/* <Box className="d-flex  justify-content-end w-100">
         <Button
           disabled={activeStep && activeStep === 0}
           onClick={handleBack}
@@ -900,6 +916,25 @@ const GeneralInformation = ({
             Add Finish
           </Button>
         )}
+      </Box> */}
+      <Box className="d-flex justify-content-end w-100">
+        <Button
+          disabled={activeStep && activeStep === 0}
+          onClick={handleBack}
+          variant="contained"
+          sx={{ m: 1, background: "#238520" }}
+        >
+          Back
+        </Button>
+
+        <Button
+          // disabled={activeStep && activeStep === 0}
+          onClick={handleNext}
+          variant="contained"
+          sx={{ m: 1, background: "#238520" }}
+        >
+          Next
+        </Button>
       </Box>
     </>
   );

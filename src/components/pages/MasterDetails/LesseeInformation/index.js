@@ -17,6 +17,8 @@ import ReusableTable from "../../../molecules/ReusableTable";
 import { columns } from "../../../../constants/ScheduleTable";
 import AddIcon from "@mui/icons-material/Add";
 import SimpleDropDown from "../../../atoms/SimpleDropDown";
+import { OpenLocationCode } from "open-location-code";
+import { decode, encode } from "pluscodes";
 
 const LesseeInformation = ({
   activeStep,
@@ -30,10 +32,12 @@ const LesseeInformation = ({
   branchDetails,
   setBranchDetails,
   contractStatus,
+  setDraftSaved,
+  plusCode,
+  setDecoded,
+  setPlusCode,
+  decoded,
 }) => {
-  // const [address, setAddress] = useState(
-  //   allNewContractDetails?.joinaddress_Premesis
-  // );
   const [branchData, setBranchData] = useState([]);
   // console.log(type, "type");
   const [showBranchID, setShowBranchID] = useState(false);
@@ -48,6 +52,7 @@ const LesseeInformation = ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    setDraftSaved(false);
   };
   let EntityDetails = [
     { id: "Commercial", label: "Commercial" },
@@ -122,10 +127,14 @@ const LesseeInformation = ({
   ];
 
   let typeOfBuliding = [
-    { id: "Duplex", label: "Duplex" },
     { id: "Apartment", label: "Apartment" },
     { id: "Complex", label: "Complex" },
-    { id: "Individual", label: "Individual" },
+    { id: "Independent", label: "Independent" },
+  ];
+
+  let StoresOfBuilding = [
+    { id: "Single", label: "Single" },
+    { id: "Multi", label: "Multi" },
   ];
 
   const premesisName = [
@@ -200,8 +209,11 @@ const LesseeInformation = ({
     );
     if (!ValidateError && !isEmptyField) {
       // console.log("ValidateError", ValidateError);
+      // Save the draft data to a backend or other storage solution
       onSave(allNewContractDetails, type);
     }
+
+    setDraftSaved(true);
   };
 
   const handleBack = () => {
@@ -210,6 +222,23 @@ const LesseeInformation = ({
 
   const addButtonClick = () => {
     setShowInputComponent(true);
+  };
+
+  const encodePlusCode = () => {
+    if (allNewContractDetails.lattitude && allNewContractDetails.longitude) {
+      const code = encode({
+        latitude: parseFloat(allNewContractDetails.lattitude),
+        longitude: parseFloat(allNewContractDetails.longitude),
+      });
+      setPlusCode(code);
+    }
+  };
+
+  const decodePlusCode = () => {
+    if (plusCode) {
+      const { latitude, longitude } = decode(plusCode);
+      setDecoded(`${latitude},  ${longitude}`);
+    }
   };
 
   return (
@@ -241,7 +270,7 @@ const LesseeInformation = ({
 
               <SimpleDropDown
                 options={BranchType}
-                label="Select an option"
+                label="Branch Type"
                 onChange={handleBranchType}
                 value={
                   BranchType?.find(
@@ -704,7 +733,7 @@ const LesseeInformation = ({
                     errorText={allNewContractDetailsErr?.plotNumber}
                     required={true}
                   />
-                  <InputBoxComponent
+                  {/* <InputBoxComponent
                     label="Buit-Up Area"
                     placeholder="Enter Bulit-Up Area ."
                     sx={{ width: 300 }}
@@ -712,6 +741,31 @@ const LesseeInformation = ({
                     value={allNewContractDetails?.builtupArea}
                     onChange={(e) => updateChange(e)}
                     errorText={allNewContractDetailsErr?.builtupArea}
+                    required={true}
+                  /> */}
+                  <InputBoxComponent
+                    label="Carpet Area"
+                    placeholder="Enter Bulit-Up Area ."
+                    sx={{ width: 300 }}
+                    name="builtupArea"
+                    value={allNewContractDetails?.builtupArea}
+                    onChange={(e) => updateChange(e)}
+                    errorText={allNewContractDetailsErr?.builtupArea}
+                    required={true}
+                  />
+
+                  <SimpleDropDown
+                    options={StoresOfBuilding}
+                    label="Building Floors"
+                    onChange={handleEntityDetails}
+                    value={
+                      StoresOfBuilding?.find(
+                        (option) =>
+                          option?.label ===
+                          allNewContractDetails?.lesseeEntityDetails
+                      ) || null
+                    }
+                    sx={{ width: 300, mt: 4 }}
                     required={true}
                   />
                 </Grid>
@@ -845,13 +899,21 @@ const LesseeInformation = ({
                           label="GPS Co-ordinates"
                           placeholder="Enter GPS Co-ordinates"
                           sx={{ width: 300 }}
-                          name="gpsCoordinates"
-                          value={allNewContractDetails?.gpsCoordinates}
+                          name="decoded"
+                          value={decoded}
                           onChange={(e) => updateChange(e)}
                           errorText={allNewContractDetailsErr?.gpsCoordinates}
                           required={true}
                         />
+
+                        <Button onClick={encodePlusCode}>
+                          Encode Plus Code
+                        </Button>
+                        <Button onClick={decodePlusCode}>
+                          Decode Plus Code
+                        </Button>
                       </Grid>
+                      <Typography>{plusCode}</Typography>
                     </Grid>
                   </Box>
                 </Box>

@@ -22,10 +22,13 @@ const useStyles = makeStyles({
     display: "flex",
     margin: "0px 5px",
     padding: "6px 5px",
+    background: "#cccccc",
+    borderRadius: "10px",
     borderBottom: "0.5px solid #DDEDF4",
     cursor: "pointer",
     "&:hover": {
       background: "#9FCCE066 !important",
+      borderRadius: "10px",
     },
   },
   listBox: {

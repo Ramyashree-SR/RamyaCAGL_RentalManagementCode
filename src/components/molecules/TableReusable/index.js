@@ -87,7 +87,7 @@ const useStyles = makeStyles({
   },
 });
 
-function TableReusable({ data, columns, fullScreen, setFullscreen }) {
+function TableReusable({ data, columns, fullscreen, setFullscreen }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -187,7 +187,7 @@ function TableReusable({ data, columns, fullScreen, setFullscreen }) {
                             setOpenCheckerEditLessorModal={
                               setOpenCheckerEditLessorModal
                             }
-                            // fullscreen={fullscreen}
+                            fullscreen={fullscreen}
                             setFullscreen={setFullscreen}
                           />
                         </StyledTableCell>

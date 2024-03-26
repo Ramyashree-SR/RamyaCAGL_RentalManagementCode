@@ -51,6 +51,7 @@ const AgreementDetails = ({
   recipientCount,
   setRecipientCount,
   contractStatus,
+  setDraftSaved,
 }) => {
   const [checked, setChecked] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -102,12 +103,12 @@ const AgreementDetails = ({
   ];
 
   let LockinPeriod = [
-    { id: "1", label: "1months" },
-    { id: "2", label: "2months" },
-    { id: "3", label: "3months" },
-    { id: "4", label: "1years" },
-    { id: "5", label: "2years" },
-    { id: "6", label: "3years" },
+    { id: "1", label: "1" },
+    { id: "2", label: "2" },
+    { id: "3", label: "3" },
+    // { id: "4", label: "1years" },
+    // { id: "5", label: "2years" },
+    // { id: "6", label: "3years" },
   ];
 
   let DocumentType = [{ id: "1", label: "Rental Agreement" }];
@@ -158,7 +159,7 @@ const AgreementDetails = ({
       ...prevDetails,
       [name]: value,
     }));
-
+    setDraftSaved(false);
     // Assuming e.target.name is 'escalationRate' for setEscalationRate
   };
 
@@ -655,14 +656,29 @@ const AgreementDetails = ({
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleNext = () => {
+  // const handleNext = () => {
+  //   const ValidateError = handleAddRentContractInformationError();
+  //   const isEmptyField = Object.values(allNewContractDetails).some(
+  //     (value) => value === ""
+  //   );
+  //   if (!ValidateError && !isEmptyField) {
+  //     onSave(allNewContractDetails, type);
+  //   }
+  // };
+
+  const handleSubmit = () => {
     const ValidateError = handleAddRentContractInformationError();
     const isEmptyField = Object.values(allNewContractDetails).some(
       (value) => value === ""
     );
     if (!ValidateError && !isEmptyField) {
+      // console.log("ValidateError", ValidateError);
       onSave(allNewContractDetails, type);
+      setAllNewContractDetails(allNewContractDetails, type);
+      AddAllNewRentContactInformation();
+      close();
     }
+    setDraftSaved(true);
   };
 
   return (
@@ -1061,7 +1077,7 @@ const AgreementDetails = ({
           >
             {/* <Box> */}
             <Typography className="fs-20 fw-500 pt-4 px-3 py-4">
-              Rent Term Details
+              Owner/Lessor Bank Details
             </Typography>
             {type === "add" && ( //|| contractStatus==="Renewal"
               <Grid
@@ -1070,8 +1086,8 @@ const AgreementDetails = ({
                 className="d-flex align-items-start justify-content-start py-3 px-0"
               >
                 <DropDownComponent
-                  label="Recipiants"
-                  placeholder="Enter Recipiant"
+                  label="Recipients"
+                  placeholder="Enter Recipient"
                   sx={{ width: 300, ml: 1 }}
                   options={recipents}
                   getOptionLabel={(option) => option?.label || recipientCount}
@@ -1087,14 +1103,14 @@ const AgreementDetails = ({
                       className="d-flex px-3"
                       key={index}
                     >
-                      <Typography className="px-2 py-2">{`Recipiant - ${
+                      <Typography className="px-2 py-2">{`Recipient - ${
                         index + 1
                       }`}</Typography>
                       <Grid item className="d-flex flex-row m-1 py-1" md={12}>
                         {type === "edit" ? (
                           <InputBoxComponent
-                            label="Recipiants ID"
-                            placeholder={`Enter Recipiant ID ${index + 1}...`}
+                            label="Recipient ID"
+                            placeholder={`Enter Recipient ID ${index + 1}...`}
                             sx={{ width: 300 }}
                             name={`recipiantsID-${index}`}
                             value={
@@ -1658,24 +1674,40 @@ const AgreementDetails = ({
           </Box>
         </Box>
       </Box>
-      <Box className="d-flex justify-content-end w-100">
+
+      <Box className="d-flex  justify-content-end w-100">
         <Button
           disabled={activeStep && activeStep === 0}
           onClick={handleBack}
           variant="contained"
-          sx={{ m: 1, background: "#238520" }}
+          sx={{ m: 1 }}
         >
           Back
         </Button>
-
-        <Button
-          // disabled={activeStep && activeStep === 0}
-          onClick={handleNext}
-          variant="contained"
-          sx={{ m: 1, background: "#238520" }}
-        >
-          Next
-        </Button>
+        {type === "edit" || type === "edit" ? (
+          <Button
+            // disabled={activeStep && activeStep === 0}
+            onClick={() => {
+              editAllNewRentContractDetails(EditLessorData);
+              console.log("Onclick", EditLessorData);
+            }}
+            variant="contained"
+            sx={{ m: 1, background: "#238520" }}
+          >
+            Edit Finish
+          </Button>
+        ) : (
+          <Button
+            disabled={activeStep && activeStep === 0}
+            onClick={() => {
+              handleSubmit();
+            }}
+            variant="contained"
+            sx={{ m: 1, background: "#238520" }}
+          >
+            Add Finish
+          </Button>
+        )}
       </Box>
     </>
   );
